@@ -25,17 +25,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using digectsoft;
+using UnityEngine;
 using Zenject;
 
-public class GameInstaller : MonoInstaller
+namespace digectsoft 
 {
-	public GameManager gameManager;
-	public MockServerAdapter serverAdapter;
-
-	public override void InstallBindings()
+	public class GameInstaller : MonoInstaller
 	{
-		Container.Bind<GameManager>().FromInstance(gameManager).AsSingle();
-		Container.Bind<IServerAdapter>().To<MockServerAdapter>().FromInstance(serverAdapter).AsSingle();
+		[SerializeField]
+		private MockServerAdapter serverAdapter;
+		[SerializeField]
+		private GameManager gameManager;
+		[SerializeField]
+		private Character player;
+		[SerializeField]
+		private Character enemy;
+
+		public override void InstallBindings()
+		{
+			Container.Bind<IServerAdapter>().To<MockServerAdapter>().FromInstance(serverAdapter).AsSingle();
+			Container.Bind<GameManager>().FromInstance(gameManager).AsSingle();
+			Container.Bind<Character>().WithId(CharacterType.PLAYER).FromInstance(player).AsCached();
+			Container.Bind<Character>().WithId(CharacterType.ENEMY).FromInstance(enemy).AsCached();
+		}
 	}
 }

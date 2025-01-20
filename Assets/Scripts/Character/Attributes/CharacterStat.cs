@@ -25,48 +25,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
-
 namespace digectsoft
 {
-	public class MockServerAdapter : MonoBehaviour, IServerAdapter
+	public struct CharacterStat
 	{
-		[SerializeField]
-		[Min(0)]
-		private int delayMs = 1000; //Delay in milliseconds
-		[SerializeField]
-		[Min(0)]
-		private int health = 100;
-		[SerializeField]
-		private List<EffectAction> _effectActions = new List<EffectAction>();
+		public CharacterType type;
+		public CharacterValue value;
 		
-		private Dictionary<EffectType, EffectValue> effectActions = new Dictionary<EffectType, EffectValue>();
-		
-		private void Awake()
+		public CharacterStat(CharacterType type, CharacterValue value)
 		{
-			foreach (EffectAction effectAction in _effectActions) 
-			{
-				effectActions.Add(effectAction.type, effectAction.value);
-			}
-		}
-
-		public async UniTask<Dictionary<CharacterType, CharacterValue>> Init()
-		{
-			await UniTask.Delay(delayMs);
-			Dictionary<CharacterType, CharacterValue> characterValues = new Dictionary<CharacterType, CharacterValue>();
-			characterValues.Add(CharacterType.PLAYER, new CharacterValue(health));
-			characterValues.Add(CharacterType.ENEMY, new CharacterValue(health));
-			return characterValues;
-		}
-
-		public async UniTask<EffectAction> Action(EffectType type)
-		{
-			await UniTask.Delay(delayMs);
-			EffectValue effectValue = effectActions[type];
-			EffectAction effectAction = new EffectAction(type, effectValue);
-			return effectAction;
+			this.type = type;
+			this.value = value;
 		}
 	}
 }

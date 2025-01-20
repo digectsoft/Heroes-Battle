@@ -25,12 +25,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
 namespace digectsoft
 {
 	public interface IServerAdapter
 	{
+		UniTask<Dictionary<CharacterType, CharacterValue>> Init();
+		
 		UniTask<EffectAction> Action(EffectType type);
 	}
 }

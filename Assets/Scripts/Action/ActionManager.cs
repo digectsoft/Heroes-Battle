@@ -49,11 +49,11 @@ namespace digectsoft
 		
 		private void Awake()
 		{
-			buttonAttack.onClick.AddListener(async () => await gameManager.ActionAsync(EffectType.ATTACK));
-			buttonShield.onClick.AddListener(async () => await gameManager.ActionAsync(EffectType.SHIELD));
-			buttonRegeneration.onClick.AddListener(async () => await gameManager.ActionAsync(EffectType.REGENERATION));
-			buttonFireball.onClick.AddListener(async () => await gameManager.ActionAsync(EffectType.FIREBALL));
-			buttonCleanup.onClick.AddListener(async () => await gameManager.ActionAsync(EffectType.CLEANUP));
+			buttonAttack.onClick.AddListener(async () => await gameManager.Action(EffectType.ATTACK));
+			buttonShield.onClick.AddListener(async () => await gameManager.Action(EffectType.SHIELD));
+			buttonRegeneration.onClick.AddListener(async () => await gameManager.Action(EffectType.REGENERATION));
+			buttonFireball.onClick.AddListener(async () => await gameManager.Action(EffectType.FIREBALL));
+			buttonCleanup.onClick.AddListener(async () => await gameManager.Action(EffectType.CLEANUP));
 		}
 		
 		void Start()

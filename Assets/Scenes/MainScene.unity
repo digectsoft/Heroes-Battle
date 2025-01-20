@@ -199,8 +199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2b26dbea294b4aecb6fd2ad22bab920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 5763302061357293444}
   serverAdapter: {fileID: 498502835}
+  gameManager: {fileID: 5763302061357293444}
+  player: {fileID: 265015225}
+  enemy: {fileID: 1507692393}
 --- !u!1 &29287772
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +533,7 @@ GameObject:
   - component: {fileID: 216256750}
   - component: {fileID: 216256749}
   m_Layer: 8
-  m_Name: Value
+  m_Name: HealthValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -576,9 +578,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '100
-
-'
+  m_text: 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -855,7 +855,7 @@ Animator:
   m_GameObject: {fileID: 257604728}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 89f5fcec121fb274f8f2ecd3feb61d32, type: 2}
+  m_Controller: {fileID: 9100000, guid: f406e19ab174b4c4aa1ecb7dbfc94933, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -875,9 +875,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 257604728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d92574a37a5b8492abb59b736bc64de1, type: 3}
+  m_Script: {fileID: 11500000, guid: 342fe2b445936468d94d1c3a80ed05bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: {fileID: 1499382943}
+  effect: {fileID: 873206771}
+  attackValue: Attack
+  hitValue: Hit
+  deathValue: Death
 --- !u!1 &277307196
 GameObject:
   m_ObjectHideFlags: 0
@@ -1240,6 +1245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delayMs: 1000
+  health: 50
   _effectActions:
   - type: 0
     value:
@@ -1296,6 +1302,7 @@ GameObject:
   m_Component:
   - component: {fileID: 502318474}
   - component: {fileID: 502318476}
+  - component: {fileID: 502318477}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -1376,6 +1383,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &502318477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502318473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 364fe30663b2e4759b132a7dc0932c0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 502318476}
+  healthValue: {fileID: 216256749}
 --- !u!1 &507835516
 GameObject:
   m_ObjectHideFlags: 0
@@ -1388,7 +1409,7 @@ GameObject:
   - component: {fileID: 507835519}
   - component: {fileID: 507835518}
   m_Layer: 8
-  m_Name: Value
+  m_Name: HealthValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2491,8 +2512,8 @@ Tilemap:
   - first: {x: -4, y: -2, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 43
-      m_TileSpriteIndex: 39
+      m_TileIndex: 23
+      m_TileSpriteIndex: 23
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -2871,8 +2892,8 @@ Tilemap:
   - first: {x: -2, y: 0, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 23
-      m_TileSpriteIndex: 23
+      m_TileIndex: 43
+      m_TileSpriteIndex: 39
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -4480,6 +4501,7 @@ GameObject:
   - component: {fileID: 873206768}
   - component: {fileID: 873206769}
   - component: {fileID: 873206770}
+  - component: {fileID: 873206771}
   m_Layer: 8
   m_Name: StatusEffects
   m_TagString: Untagged
@@ -4549,6 +4571,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 1
   m_VerticalFit: 0
+--- !u!114 &873206771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873206767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a7d395820694f23983659cbe1de1db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &884723306
 GameObject:
   m_ObjectHideFlags: 0
@@ -5668,6 +5702,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1499382940}
   - component: {fileID: 1499382942}
+  - component: {fileID: 1499382943}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -5748,6 +5783,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1499382943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499382939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 364fe30663b2e4759b132a7dc0932c0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 1499382942}
+  healthValue: {fileID: 507835518}
 --- !u!1 &1507464008
 GameObject:
   m_ObjectHideFlags: 0
@@ -5759,6 +5808,7 @@ GameObject:
   - component: {fileID: 1507692392}
   - component: {fileID: 1486416232}
   - component: {fileID: 1498112136}
+  - component: {fileID: 1507692393}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -5782,6 +5832,23 @@ Transform:
   - {fileID: 252066389}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1507692393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507464008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 342fe2b445936468d94d1c3a80ed05bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 502318477}
+  effect: {fileID: 1550031028}
+  attackValue: 
+  hitValue: 
+  deathValue: 
 --- !u!1 &1525658982
 GameObject:
   m_ObjectHideFlags: 0
@@ -5927,6 +5994,7 @@ GameObject:
   - component: {fileID: 1550031025}
   - component: {fileID: 1550031026}
   - component: {fileID: 1550031027}
+  - component: {fileID: 1550031028}
   m_Layer: 8
   m_Name: StatusEffects
   m_TagString: Untagged
@@ -5996,6 +6064,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 1
   m_VerticalFit: 0
+--- !u!114 &1550031028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1550031024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a7d395820694f23983659cbe1de1db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1570140307
 GameObject:
   m_ObjectHideFlags: 0

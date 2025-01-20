@@ -30,19 +30,56 @@ using Zenject;
 
 namespace digectsoft
 {
-	public class Player : MonoBehaviour
+	public class Character : MonoBehaviour
 	{
+		[SerializeField]
+		private CharacterHealth health;
+		[SerializeField]
+		private CharacterEffect effect;
+		[SerializeField]
+		private string attackValue;
+		[SerializeField]
+		private string hitValue;
+		[SerializeField]
+		private string deathValue;
+		
 		[Inject]
 		private GameManager gameManager;
+		private Animator animator;
 		
+		private void Awake()
+		{
+			animator = GetComponent<Animator>();
+		}
+		
+		public void Init(int healthValue) 
+		{
+			health.Init(healthValue);
+		}
+
 		void Start()
 		{
-			
+		
 		}
 
 		void Update()
 		{
 		
+		}
+		
+		public void Attack() 
+		{
+			animator.SetBool(attackValue, true);
+		}
+		
+		public void Regeneration(int value) 
+		{
+			health.Increase(value);
+		}
+		
+		public void Damage(int value) 
+		{
+			health.Decrease(value);
 		}
 	}
 }

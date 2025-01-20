@@ -25,48 +25,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
+using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace digectsoft
 {
-	public class MockServerAdapter : MonoBehaviour, IServerAdapter
+	public class CharacterHealth : MonoBehaviour
 	{
 		[SerializeField]
-		[Min(0)]
-		private int delayMs = 1000; //Delay in milliseconds
+		private Slider healthBar;
 		[SerializeField]
-		[Min(0)]
-		private int health = 100;
-		[SerializeField]
-		private List<EffectAction> _effectActions = new List<EffectAction>();
+		private TextMeshProUGUI healthValue;
 		
-		private Dictionary<EffectType, EffectValue> effectActions = new Dictionary<EffectType, EffectValue>();
+		private int maxValue;
+		private int currentValue;
 		
-		private void Awake()
+		public void Init(int maxValue) 
 		{
-			foreach (EffectAction effectAction in _effectActions) 
-			{
-				effectActions.Add(effectAction.type, effectAction.value);
-			}
+			this.maxValue = currentValue = maxValue;
+			UpdateBar(this.maxValue);
 		}
-
-		public async UniTask<Dictionary<CharacterType, CharacterValue>> Init()
+		
+		public void Increase(int value) 
 		{
-			await UniTask.Delay(delayMs);
-			Dictionary<CharacterType, CharacterValue> characterValues = new Dictionary<CharacterType, CharacterValue>();
-			characterValues.Add(CharacterType.PLAYER, new CharacterValue(health));
-			characterValues.Add(CharacterType.ENEMY, new CharacterValue(health));
-			return characterValues;
+			ChangeHealth(value);
 		}
-
-		public async UniTask<EffectAction> Action(EffectType type)
+		
+		public void Decrease(int value) 
 		{
-			await UniTask.Delay(delayMs);
-			EffectValue effectValue = effectActions[type];
-			EffectAction effectAction = new EffectAction(type, effectValue);
-			return effectAction;
+			ChangeHealth(-value);
+		}
+		
+		private void ChangeHealth(int value)
+		{
+			int updateValue = currentValue + value;
+			UpdateBar(updateValue);
+		}
+		
+		private void UpdateBar(int value) 
+		{
+			currentValue = Math.Clamp(value, 0, maxValue);
+			healthBar.value = currentValue * healthBar.maxValue / maxValue;
+			healthValue.text = currentValue.ToString();
 		}
 	}
 }

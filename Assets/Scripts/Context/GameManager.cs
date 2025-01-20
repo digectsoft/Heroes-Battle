@@ -25,6 +25,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using digectsoft;
@@ -34,26 +35,37 @@ using Zenject;
 public class GameManager : MonoBehaviour
 {
 	private IServerAdapter serverAdapter;
-	private bool inAction;
+	private bool initialized = false;
+	private bool inAction = false;
+	private Character player;
+	private Character enemy;
 
 	[Inject]
-	public void Init(IServerAdapter serverAdapter)
+	public void Init(IServerAdapter serverAdapter, 
+					 [Inject(Id = CharacterType.PLAYER)] Character player,
+					 [Inject(Id = CharacterType.ENEMY)] Character enemy)
 	{
 		this.serverAdapter = serverAdapter;
-		DOTween.Init(true, true, LogBehaviour.Verbose);
+		this.player = player;
+		this.enemy = enemy;
 	}
 	
-	void Start()
+	async void Start()
 	{
+		DOTween.Init(true, true, LogBehaviour.Verbose);
+		Dictionary<CharacterType, CharacterValue> characterValues = await serverAdapter.Init();
+		initialized = true;
+		player.Init(characterValues[CharacterType.PLAYER].health);
+		enemy.Init(characterValues[CharacterType.ENEMY].health);
 	}
 
 	void Update()
 	{
 	}
 	
-	public async UniTask ActionAsync(EffectType actionType) 
+	public async UniTask Action(EffectType actionType)
 	{
-		if (inAction) 
+		if (!initialized || inAction) 
 		{
 			return;
 		}
@@ -65,6 +77,8 @@ public class GameManager : MonoBehaviour
 		switch (effectAction.type) 
 		{
 			case EffectType.ATTACK:
+				player.Attack();
+				enemy.Damage(effectAction.value.action);
 			break;
 		}
 	}
