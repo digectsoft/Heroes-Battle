@@ -25,69 +25,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using UnityEngine;
-using Zenject;
+using System.Collections.Generic;
 
 namespace digectsoft
 {
-	public class Character : MonoBehaviour
+	public struct CharacterAction
 	{
-		[SerializeField]
-		private CharacterType type;
-		[SerializeField]
-		private CharacterHealth health;
-		[SerializeField]
-		private CharacterEffect effect;
-		[SerializeField]
-		private string attackValue;
-		[SerializeField]
-		private string hitValue;
-		[SerializeField]
-		private string deathValue;
+		public int health;
+		public EffectType effectType;		
+		public Dictionary<EffectType, EffectValue> effects;
 		
-		[Inject]
-		private GameManager gameManager;
-		private Animator animator;
-		
-		private void Awake()
+		public CharacterAction(int health) 
 		{
-			animator = GetComponent<Animator>();
-		}
-		
-		public void Init(int healthValue) 
-		{
-			health.Init(healthValue);
-		}
-
-		void Start()
-		{
-		
-		}
-
-		void Update()
-		{
-		
-		}
-		
-		public void Attack() 
-		{
-			animator.SetBool(attackValue, true);
-		}
-		
-		public void Regeneration(int value) 
-		{
-			health.Increase(value);
-		}
-		
-		public void Hit(int value) 
-		{
-			health.Set(value);
-			animator.SetBool(hitValue, true);
-		}
-		
-		public CharacterType GetCharacterType() 
-		{
-			return type;
+			this.health = health;
+			effectType = EffectType.DEFAULT;
+			effects = new Dictionary<EffectType, EffectValue>();
 		}
 	}
 }

@@ -48,6 +48,11 @@ namespace digectsoft
 			UpdateBar(this.maxValue);
 		}
 		
+		public void Set(int value) 
+		{
+			UpdateBar(value);
+		}
+		
 		public void Increase(int value) 
 		{
 			ChangeHealth(value);

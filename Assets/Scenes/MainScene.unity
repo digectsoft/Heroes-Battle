@@ -878,6 +878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 342fe2b445936468d94d1c3a80ed05bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   health: {fileID: 1499382943}
   effect: {fileID: 873206771}
   attackValue: Attack
@@ -1244,34 +1245,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3685524bb2004ada8190ba4fdc1d1a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayMs: 1000
-  health: 50
+  delayMs: 200
+  health: 100
   _effectActions:
-  - type: 0
+  - type: 1
     value:
       action: 8
       rate: 0
       duration: 0
       recharge: 0
-  - type: 1
+  - type: 2
     value:
       action: 0
       rate: 5
       duration: 2
       recharge: 4
-  - type: 2
+  - type: 3
     value:
       action: 0
       rate: 2
       duration: 3
       recharge: 5
-  - type: 3
+  - type: 4
     value:
       action: 5
       rate: 1
       duration: 5
       recharge: 6
-  - type: 4
+  - type: 5
     value:
       action: 0
       rate: 0
@@ -5681,7 +5682,7 @@ Animator:
   m_GameObject: {fileID: 1507464008}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 70eef6b32d130a44ea08cbab757bed2d, type: 2}
+  m_Controller: {fileID: 9100000, guid: f406e19ab174b4c4aa1ecb7dbfc94933, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -5844,11 +5845,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 342fe2b445936468d94d1c3a80ed05bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   health: {fileID: 502318477}
   effect: {fileID: 1550031028}
-  attackValue: 
-  hitValue: 
-  deathValue: 
+  attackValue: Attack
+  hitValue: Hit
+  deathValue: Death
 --- !u!1 &1525658982
 GameObject:
   m_ObjectHideFlags: 0
@@ -7227,6 +7229,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba59178b657e489392a8c5fba73dfc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitInterval: 1
+  stepInterval: 2
 --- !u!1 &5894500087589491653
 GameObject:
   m_ObjectHideFlags: 0

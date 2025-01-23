@@ -34,6 +34,6 @@ namespace digectsoft
 	{
 		UniTask<Dictionary<CharacterType, CharacterValue>> Init();
 		
-		UniTask<EffectAction> Action(EffectType type);
+		UniTask<Dictionary<CharacterType, CharacterAction>> Action(EffectType type);
 	}
 }

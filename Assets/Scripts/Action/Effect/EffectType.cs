@@ -29,6 +29,7 @@ namespace digectsoft
 {
 	public enum EffectType
 	{
+		DEFAULT,
 		ATTACK,
 		SHIELD,
 		REGENERATION,

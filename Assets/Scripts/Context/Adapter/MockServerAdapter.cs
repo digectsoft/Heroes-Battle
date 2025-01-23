@@ -25,6 +25,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -42,31 +43,76 @@ namespace digectsoft
 		[SerializeField]
 		private List<EffectAction> _effectActions = new List<EffectAction>();
 		
+		//Configuration effects.
 		private Dictionary<EffectType, EffectValue> effectActions = new Dictionary<EffectType, EffectValue>();
+		//Effects for characters during a battle.
+		private Dictionary<CharacterType, CharacterAction> charachterActions = new Dictionary<CharacterType, CharacterAction>();
 		
 		private void Awake()
 		{
+			charachterActions.Add(CharacterType.PLAYER, new CharacterAction(health));
+			charachterActions.Add(CharacterType.ENEMY, new CharacterAction(health));
 			foreach (EffectAction effectAction in _effectActions) 
 			{
 				effectActions.Add(effectAction.type, effectAction.value);
+				charachterActions[CharacterType.PLAYER].effects.Add(effectAction.type, new EffectValue());
+				charachterActions[CharacterType.ENEMY].effects.Add(effectAction.type, new EffectValue());
 			}
 		}
 
 		public async UniTask<Dictionary<CharacterType, CharacterValue>> Init()
 		{
 			await UniTask.Delay(delayMs);
-			Dictionary<CharacterType, CharacterValue> characterValues = new Dictionary<CharacterType, CharacterValue>();
-			characterValues.Add(CharacterType.PLAYER, new CharacterValue(health));
-			characterValues.Add(CharacterType.ENEMY, new CharacterValue(health));
+			Dictionary<CharacterType, CharacterValue> characterValues = new Dictionary<CharacterType, CharacterValue>
+			{
+				{ CharacterType.PLAYER, new CharacterValue(health) },
+				{ CharacterType.ENEMY, new CharacterValue(health) }
+			};
 			return characterValues;
 		}
 
-		public async UniTask<EffectAction> Action(EffectType type)
+		public async UniTask<Dictionary<CharacterType, CharacterAction>> Action(EffectType type)
 		{
 			await UniTask.Delay(delayMs);
 			EffectValue effectValue = effectActions[type];
-			EffectAction effectAction = new EffectAction(type, effectValue);
-			return effectAction;
+			switch (type) 
+			{
+				case EffectType.ATTACK:
+					//Player action.
+					CharacterAction playerAction = charachterActions[CharacterType.PLAYER];
+					DecreaseHealth(ref playerAction, effectActions[type].action);
+					playerAction.effectType = EffectType.ATTACK;
+					charachterActions[CharacterType.PLAYER] = playerAction;
+					EffectValue playerEffectValue = charachterActions[CharacterType.PLAYER].effects[EffectType.ATTACK];
+					playerEffectValue.action = effectActions[type].action;
+					charachterActions[CharacterType.PLAYER].effects[EffectType.ATTACK] = playerEffectValue;
+					//Enemy action.
+					CharacterAction enemyAction = charachterActions[CharacterType.ENEMY];
+					DecreaseHealth(ref enemyAction, effectActions[type].action);
+					enemyAction.effectType = EffectType.ATTACK;
+					charachterActions[CharacterType.ENEMY] = enemyAction;
+					EffectValue enemyEffectValue = charachterActions[CharacterType.ENEMY].effects[EffectType.ATTACK];
+					enemyEffectValue.action = effectActions[type].action;
+					charachterActions[CharacterType.ENEMY].effects[EffectType.ATTACK] = enemyEffectValue;
+					break;
+			}
+			return charachterActions;
+		}
+		
+		private void IncreaseHealth(ref CharacterAction characterAction, int value) 
+		{
+			ChangeHealth(ref characterAction, value);
+		}
+		
+		private void DecreaseHealth(ref CharacterAction characterAction, int value) 
+		{
+			ChangeHealth(ref characterAction, -value);
+		}
+		
+		private void ChangeHealth(ref CharacterAction characterAction, int value) 
+		{
+			int currentHealth = characterAction.health + value;
+			characterAction.health = Math.Clamp(currentHealth, 0, health);
 		}
 	}
 }

@@ -37,7 +37,7 @@ namespace digectsoft
 		public int duration;
 		public int recharge;
 		
-		public EffectValue(int action, int rate, int duration, int recharge) 
+		public EffectValue(int action, int rate, int duration, int recharge)
 		{
 			this.action = action;
 			this.rate = rate;

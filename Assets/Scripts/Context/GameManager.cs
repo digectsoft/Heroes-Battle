@@ -34,6 +34,11 @@ using Zenject;
 
 public class GameManager : MonoBehaviour
 {
+	[SerializeField]
+	private int hitInterval = 1;
+	[SerializeField]
+	private int stepInterval = 2;
+	
 	private IServerAdapter serverAdapter;
 	private bool initialized = false;
 	private bool inAction = false;
@@ -65,26 +70,58 @@ public class GameManager : MonoBehaviour
 	
 	public async UniTask Action(EffectType actionType)
 	{
-		if (!initialized || inAction) 
+		if (!initialized || inAction)
 		{
 			return;
 		}
 		inAction = true;
 		Debug.Log("GameManager: " + actionType);
-		EffectAction effectAction = await serverAdapter.Action(actionType);
-		inAction = false;
-		Debug.Log(effectAction.type);
-		switch (effectAction.type) 
-		{
-			case EffectType.ATTACK:
-				player.Attack();
-				enemy.Damage(effectAction.value.action);
-			break;
-		}
+		Dictionary<CharacterType, CharacterAction> effectActions = await serverAdapter.Action(actionType);		
+		//Get active actions and apply them.
+		//For Player.
+		CharacterAction playerAction = effectActions[CharacterType.PLAYER];
+		Dictionary<EffectType, EffectValue> playerEffects = playerAction.effects;
+		EffectValue playerEffect = playerEffects[playerAction.effectType];
+		//For Enemy.
+		CharacterAction enemyAction = effectActions[CharacterType.ENEMY];
+		Dictionary<EffectType, EffectValue> enemyEffects = enemyAction.effects;
+		EffectValue enemyEffect = enemyEffects[enemyAction.effectType];
+		//TODO: Apply active actions.
+
+		//Get current actions and apply them.
+		//For Player.
+
+		//For Enemy.
+
+		Action(effectActions, player, enemy);
 	}
 	
-	public void ActionListener()
+	private void Action(Dictionary<CharacterType, CharacterAction> effectActions, Character player, Character enemy)
 	{
-		
+		CharacterAction playerAction = effectActions[player.GetCharacterType()];
+		CharacterAction enemyAction = effectActions[enemy.GetCharacterType()];
+		Sequence sequence = DOTween.Sequence();
+		sequence.AppendCallback(() => Action(effectActions, playerAction.effectType, player, enemy));
+		sequence.AppendInterval(stepInterval);
+		sequence.AppendCallback(() => Action(effectActions, enemyAction.effectType, enemy, player));
+		sequence.AppendInterval(stepInterval);
+		sequence.AppendCallback(() => inAction = false);
+	}
+	
+	private void Action(Dictionary<CharacterType, CharacterAction> effectActions, 
+						EffectType effectType, 
+						Character character1,
+						Character character2)
+	{
+		CharacterAction characterAction = effectActions[character2.GetCharacterType()];
+		switch (effectType)
+		{
+			case EffectType.ATTACK:
+				Sequence sequence = DOTween.Sequence();
+				sequence.AppendCallback(() => character1.Attack());
+				sequence.AppendInterval(hitInterval);
+				sequence.AppendCallback(() => character2.Hit(characterAction.health));
+				break;
+		}
 	}
 }
