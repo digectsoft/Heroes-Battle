@@ -44,5 +44,11 @@ namespace digectsoft
 			this.duration = duration;
 			this.recharge = recharge;
 		}
+		
+		public EffectValue Clone() 
+		{
+			EffectValue cloneEffectValue = new EffectValue(action, rate, duration, recharge);
+			return cloneEffectValue;
+		}
 	}
 }

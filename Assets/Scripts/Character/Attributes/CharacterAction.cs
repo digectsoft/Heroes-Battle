@@ -31,13 +31,13 @@ namespace digectsoft
 {
 	public struct CharacterAction
 	{
-		public int health;
-		public EffectType effectType;		
+		public CharacterValue characterValue;
+		public EffectType effectType;
 		public Dictionary<EffectType, EffectValue> effects;
 		
 		public CharacterAction(int health) 
 		{
-			this.health = health;
+			characterValue = new CharacterValue(health);
 			effectType = EffectType.DEFAULT;
 			effects = new Dictionary<EffectType, EffectValue>();
 		}

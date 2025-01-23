@@ -35,9 +35,11 @@ using Zenject;
 public class GameManager : MonoBehaviour
 {
 	[SerializeField]
-	private int hitInterval = 1;
+	[Min(0)]
+	private float hitInterval = 1;
 	[SerializeField]
-	private int stepInterval = 2;
+	[Min(0)]
+	private float stepInterval = 2;
 	
 	private IServerAdapter serverAdapter;
 	private bool initialized = false;
@@ -81,11 +83,16 @@ public class GameManager : MonoBehaviour
 		//For Player.
 		CharacterAction playerAction = effectActions[CharacterType.PLAYER];
 		Dictionary<EffectType, EffectValue> playerEffects = playerAction.effects;
-		EffectValue playerEffect = playerEffects[playerAction.effectType];
+		if (EffectType.DEFAULT == playerAction.effectType) 
+		{
+			inAction = false;
+			return;
+		}
+		// EffectValue playerEffect = playerEffects[playerAction.effectType];
 		//For Enemy.
 		CharacterAction enemyAction = effectActions[CharacterType.ENEMY];
 		Dictionary<EffectType, EffectValue> enemyEffects = enemyAction.effects;
-		EffectValue enemyEffect = enemyEffects[enemyAction.effectType];
+		// EffectValue enemyEffect = enemyEffects[enemyAction.effectType];
 		//TODO: Apply active actions.
 
 		//Get current actions and apply them.
@@ -113,14 +120,22 @@ public class GameManager : MonoBehaviour
 						Character character1,
 						Character character2)
 	{
-		CharacterAction characterAction = effectActions[character2.GetCharacterType()];
 		switch (effectType)
 		{
 			case EffectType.ATTACK:
-				Sequence sequence = DOTween.Sequence();
-				sequence.AppendCallback(() => character1.Attack());
-				sequence.AppendInterval(hitInterval);
-				sequence.AppendCallback(() => character2.Hit(characterAction.health));
+				{
+					Sequence sequence = DOTween.Sequence();
+					sequence.AppendCallback(() => character1.Attack());
+					sequence.AppendInterval(hitInterval);
+					sequence.AppendCallback(() => character2.Hit(effectActions[character2.GetCharacterType()].characterValue.health));
+				}
+				break;
+			case EffectType.REGENERATION:
+				{
+					EffectValue effectValue = effectActions[character2.GetCharacterType()].effects[EffectType.REGENERATION];
+					Sequence sequence = DOTween.Sequence();
+					sequence.AppendCallback(() => character1.Regeneration(effectValue.rate));
+				}
 				break;
 		}
 	}

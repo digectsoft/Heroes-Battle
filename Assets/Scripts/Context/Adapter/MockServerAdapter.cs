@@ -42,7 +42,7 @@ namespace digectsoft
 		private int health = 100;
 		[SerializeField]
 		private List<EffectAction> _effectActions = new List<EffectAction>();
-		
+
 		//Configuration effects.
 		private Dictionary<EffectType, EffectValue> effectActions = new Dictionary<EffectType, EffectValue>();
 		//Effects for characters during a battle.
@@ -54,9 +54,18 @@ namespace digectsoft
 			charachterActions.Add(CharacterType.ENEMY, new CharacterAction(health));
 			foreach (EffectAction effectAction in _effectActions) 
 			{
-				effectActions.Add(effectAction.type, effectAction.value);
-				charachterActions[CharacterType.PLAYER].effects.Add(effectAction.type, new EffectValue());
-				charachterActions[CharacterType.ENEMY].effects.Add(effectAction.type, new EffectValue());
+				if (EffectType.DEFAULT != effectAction.type)
+				{
+					effectActions.Add(effectAction.type, effectAction.value);
+					if (effectAction.value.duration > 0)
+					{
+						EffectValue effectValue = effectAction.value.Clone();
+						effectValue.duration = 0;
+						effectValue.recharge = 0;
+						charachterActions[CharacterType.PLAYER].effects.Add(effectAction.type, effectValue);
+						charachterActions[CharacterType.ENEMY].effects.Add(effectAction.type, effectValue);
+					}
+				}
 			}
 		}
 
@@ -75,33 +84,91 @@ namespace digectsoft
 		{
 			await UniTask.Delay(delayMs);
 			EffectValue effectValue = effectActions[type];
+			CharacterAction playerAction = charachterActions[CharacterType.PLAYER];
+			playerAction.effectType = EffectType.DEFAULT;
+			CharacterAction enemyAction = charachterActions[CharacterType.ENEMY];
+			enemyAction.effectType = EffectType.DEFAULT;
 			switch (type) 
 			{
 				case EffectType.ATTACK:
-					//Player action.
-					CharacterAction playerAction = charachterActions[CharacterType.PLAYER];
-					DecreaseHealth(ref playerAction, effectActions[type].action);
-					playerAction.effectType = EffectType.ATTACK;
-					charachterActions[CharacterType.PLAYER] = playerAction;
-					EffectValue playerEffectValue = charachterActions[CharacterType.PLAYER].effects[EffectType.ATTACK];
-					playerEffectValue.action = effectActions[type].action;
-					charachterActions[CharacterType.PLAYER].effects[EffectType.ATTACK] = playerEffectValue;
-					//Enemy action.
-					CharacterAction enemyAction = charachterActions[CharacterType.ENEMY];
-					DecreaseHealth(ref enemyAction, effectActions[type].action);
-					enemyAction.effectType = EffectType.ATTACK;
-					charachterActions[CharacterType.ENEMY] = enemyAction;
-					EffectValue enemyEffectValue = charachterActions[CharacterType.ENEMY].effects[EffectType.ATTACK];
-					enemyEffectValue.action = effectActions[type].action;
-					charachterActions[CharacterType.ENEMY].effects[EffectType.ATTACK] = enemyEffectValue;
+					{
+						//Player action.
+						DecreaseHealth(ref enemyAction, ref playerAction, EffectType.ATTACK);
+						//Enemy action.
+						DecreaseHealth(ref playerAction, ref enemyAction, EffectType.ATTACK);
+					}
+					break;
+				case EffectType.SHIELD:
+					{
+						if (SetEffect(ref playerAction, EffectType.SHIELD))
+						{
+							//Enemy action.
+							DecreaseHealth(ref playerAction, ref enemyAction, EffectType.ATTACK);
+						}
+					}
+					break;
+				case EffectType.REGENERATION:
+					{
+						if (SetEffect(ref playerAction, EffectType.REGENERATION))
+						{
+							//Enemy action.
+							DecreaseHealth(ref playerAction, ref enemyAction, EffectType.ATTACK);
+						}
+					}
 					break;
 			}
+			UpdateEffects(ref playerAction);
+			UpdateEffects(ref enemyAction);
+			charachterActions[CharacterType.PLAYER] = playerAction;
+			charachterActions[CharacterType.ENEMY] = enemyAction;
 			return charachterActions;
 		}
 		
-		private void IncreaseHealth(ref CharacterAction characterAction, int value) 
+		private bool SetEffect(ref CharacterAction characterAction, EffectType effectType) 
+		{
+			EffectValue effectValue = characterAction.effects[effectType];
+			if (effectValue.duration == 0 && effectValue.recharge == 0)
+			{
+				characterAction.effectType = effectType;
+				effectValue.duration = effectActions[effectType].duration;
+				effectValue.recharge = effectActions[effectType].recharge;
+				characterAction.effects[effectType] = effectValue;
+				return true;
+			}
+			return false;
+		}
+		
+		private void UpdateEffects(ref CharacterAction characterAction) 
+		{
+			Dictionary<EffectType, EffectValue> effects = new Dictionary<EffectType, EffectValue>(characterAction.effects);
+			foreach (KeyValuePair<EffectType, EffectValue> keyValues in effects) 
+			{
+				EffectType effectType = keyValues.Key;
+				EffectValue effectValue = keyValues.Value;
+				if (effectValue.duration > 0)
+				{
+					effectValue.duration--;
+					ChangeHealth(ref characterAction, effectActions[effectType].rate);
+				}
+				if (effectValue.recharge > 0) 
+				{
+					effectValue.recharge--;
+				}
+				characterAction.effects[effectType] = effectValue;
+			}
+		}
+		
+		private void IncreaseHealth(ref CharacterAction characterAction, int value)
 		{
 			ChangeHealth(ref characterAction, value);
+		}
+		
+		private void DecreaseHealth(ref CharacterAction characterAction1, 
+									ref CharacterAction characterAction2,
+									EffectType effectType) 
+		{
+			DecreaseHealth(ref characterAction1, effectActions[effectType].action);
+			characterAction2.effectType = effectType;
 		}
 		
 		private void DecreaseHealth(ref CharacterAction characterAction, int value) 
@@ -109,10 +176,10 @@ namespace digectsoft
 			ChangeHealth(ref characterAction, -value);
 		}
 		
-		private void ChangeHealth(ref CharacterAction characterAction, int value) 
+		private void ChangeHealth(ref CharacterAction characterAction, int value)
 		{
-			int currentHealth = characterAction.health + value;
-			characterAction.health = Math.Clamp(currentHealth, 0, health);
+			int currentHealth = characterAction.characterValue.health + value;
+			characterAction.characterValue.health = Math.Clamp(currentHealth, 0, health);
 		}
 	}
 }
