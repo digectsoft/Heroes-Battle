@@ -45,8 +45,10 @@ namespace digectsoft
 		[SerializeField]
 		private string deathValue;
 		
+		public CharacterType CharacterType { get {return type; } private set { } }
+		
 		[Inject]
-		private GameManager gameManager;
+		private ActionPresenter actionPresenter;
 		private Animator animator;
 		
 		private void Awake()
@@ -74,20 +76,35 @@ namespace digectsoft
 			animator.SetBool(attackValue, true);
 		}
 		
+		public void Effect(EffectType effectType, int duration) 
+		{
+			effect.SetStatus(effectType, duration);
+		}
+		
 		public void Regeneration(int value) 
 		{
 			health.Increase(value);
 		}
 		
-		public void Hit(int value) 
+		public void Damage(int value) 
 		{
-			health.Set(value);
-			animator.SetBool(hitValue, true);
+			health.Decrease(value);
 		}
 		
-		public CharacterType GetCharacterType() 
+		public void Recovery(int value) 
 		{
-			return type;
+			health.Set(value);
+		}
+		
+		public void UpdateHealth(int value) 
+		{
+			health.Set(value);
+		}
+		
+		public void Hit(int value) 
+		{
+			UpdateHealth(value);
+			animator.SetBool(hitValue, true);
 		}
 	}
 }

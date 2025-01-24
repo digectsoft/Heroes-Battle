@@ -88,37 +88,53 @@ namespace digectsoft
 			playerAction.effectType = EffectType.DEFAULT;
 			CharacterAction enemyAction = charachterActions[CharacterType.ENEMY];
 			enemyAction.effectType = EffectType.DEFAULT;
+			UpdateEffects(ref playerAction);
+			UpdateEffects(ref enemyAction);
 			switch (type) 
 			{
 				case EffectType.ATTACK:
+				{
+					//Player action.
+					DecreaseHealth(ref enemyAction, ref playerAction, EffectType.ATTACK);
+					//Enemy action.
+					InvokeEnemyAction(ref playerAction, ref enemyAction);
+					break;
+				}
+				case EffectType.SHIELD:
+				case EffectType.REGENERATION:
+				{
+					if (SetEffect(ref playerAction, type))
+					{
+						//Enemy action.
+						InvokeEnemyAction(ref playerAction, ref enemyAction);
+					}
+					break;
+				}
+				case EffectType.FIREBALL:
+				{
+					if (SetEffect(ref enemyAction, type))
 					{
 						//Player action.
-						DecreaseHealth(ref enemyAction, ref playerAction, EffectType.ATTACK);
+						DecreaseHealth(ref enemyAction, playerAction.effects[type].action);
 						//Enemy action.
-						DecreaseHealth(ref playerAction, ref enemyAction, EffectType.ATTACK);
+						InvokeEnemyAction(ref playerAction, ref enemyAction);
+						enemyAction.effectType = EffectType.ATTACK;
+						playerAction.effectType = EffectType.FIREBALL;
 					}
 					break;
-				case EffectType.SHIELD:
+				}
+				case EffectType.CLEANUP:
+				{
+					if (SetEffect(ref playerAction, EffectType.CLEANUP))
 					{
-						if (SetEffect(ref playerAction, EffectType.SHIELD))
-						{
-							//Enemy action.
-							DecreaseHealth(ref playerAction, ref enemyAction, EffectType.ATTACK);
-						}
+						//Enemy action.
+						InvokeEnemyAction(ref playerAction, ref enemyAction);
 					}
 					break;
-				case EffectType.REGENERATION:
-					{
-						if (SetEffect(ref playerAction, EffectType.REGENERATION))
-						{
-							//Enemy action.
-							DecreaseHealth(ref playerAction, ref enemyAction, EffectType.ATTACK);
-						}
-					}
-					break;
+				}
 			}
-			UpdateEffects(ref playerAction);
-			UpdateEffects(ref enemyAction);
+			ApplyEffects(ref playerAction);
+			ApplyEffects(ref enemyAction);
 			charachterActions[CharacterType.PLAYER] = playerAction;
 			charachterActions[CharacterType.ENEMY] = enemyAction;
 			return charachterActions;
@@ -138,6 +154,38 @@ namespace digectsoft
 			return false;
 		}
 		
+		private void ApplyEffects(ref CharacterAction characterAction) 
+		{
+			foreach (KeyValuePair<EffectType, EffectValue> keyValues in characterAction.effects) 
+			{
+				EffectType effectType = keyValues.Key;
+				EffectValue effectValue = keyValues.Value;
+				int effectRate = characterAction.effects[effectType].rate;
+				if (effectValue.duration > 0)
+				{	
+					switch (effectType) 
+					{
+						case EffectType.SHIELD:
+						{
+							//TODO: block damage.
+							IncreaseHealth(ref characterAction, effectRate);
+							break;
+						}
+						case EffectType.REGENERATION:
+						{
+							IncreaseHealth(ref characterAction, effectRate);
+							break;
+						}
+						case EffectType.FIREBALL:
+						{
+							DecreaseHealth(ref characterAction, effectRate);
+							break;
+						}
+					}
+				}
+			}
+		}
+		
 		private void UpdateEffects(ref CharacterAction characterAction) 
 		{
 			Dictionary<EffectType, EffectValue> effects = new Dictionary<EffectType, EffectValue>(characterAction.effects);
@@ -148,9 +196,8 @@ namespace digectsoft
 				if (effectValue.duration > 0)
 				{
 					effectValue.duration--;
-					ChangeHealth(ref characterAction, effectActions[effectType].rate);
 				}
-				if (effectValue.recharge > 0) 
+				if (effectValue.duration == 0 && effectValue.recharge > 0) 
 				{
 					effectValue.recharge--;
 				}
@@ -180,6 +227,12 @@ namespace digectsoft
 		{
 			int currentHealth = characterAction.characterValue.health + value;
 			characterAction.characterValue.health = Math.Clamp(currentHealth, 0, health);
+		}
+		
+		private void InvokeEnemyAction(ref CharacterAction playerAction, ref CharacterAction enemyAction) 
+		{
+			//Enemy action.
+			DecreaseHealth(ref playerAction, ref enemyAction, EffectType.ATTACK);
 		}
 	}
 }

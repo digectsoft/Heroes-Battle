@@ -25,22 +25,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
+using TMPro;
 using UnityEngine;
 
 namespace digectsoft
 {
-	public class CharacterEffect : MonoBehaviour
+	public class CharacterEffectStatus : MonoBehaviour
 	{
-		// Start is called before the first frame update
-		void Start()
-		{
+		[SerializeField]
+		public EffectType effectType;
+		[SerializeField]
+		private TextMeshProUGUI textDuration;
 		
-		}
-
-		// Update is called once per frame
-		void Update()
+		public void UpdateDuration(int duration) 
 		{
-		
+			textDuration.text = duration.ToString();
 		}
 	}
 }

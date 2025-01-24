@@ -31,7 +31,7 @@ using Zenject;
 
 namespace digectsoft
 {
-	public class ActionManager : MonoBehaviour
+	public class ActionAdapter : MonoBehaviour
 	{
 		[SerializeField]
 		private Button buttonAttack;
@@ -43,27 +43,17 @@ namespace digectsoft
 		private Button buttonFireball;
 		[SerializeField]
 		private Button buttonCleanup;
-		
+
 		[Inject]
 		private GameManager gameManager;
-		
+
 		private void Awake()
 		{
-			buttonAttack.onClick.AddListener(async () => await gameManager.Action(EffectType.ATTACK));
-			buttonShield.onClick.AddListener(async () => await gameManager.Action(EffectType.SHIELD));
-			buttonRegeneration.onClick.AddListener(async () => await gameManager.Action(EffectType.REGENERATION));
-			buttonFireball.onClick.AddListener(async () => await gameManager.Action(EffectType.FIREBALL));
-			buttonCleanup.onClick.AddListener(async () => await gameManager.Action(EffectType.CLEANUP));
-		}
-		
-		void Start()
-		{
-		
-		}
-
-		void Update()
-		{
-		
+			buttonAttack.onClick.AddListener(async () => await gameManager.OnRequestStart(EffectType.ATTACK));
+			buttonShield.onClick.AddListener(async () => await gameManager.OnRequestStart(EffectType.SHIELD));
+			buttonRegeneration.onClick.AddListener(async () => await gameManager.OnRequestStart(EffectType.REGENERATION));
+			buttonFireball.onClick.AddListener(async () => await gameManager.OnRequestStart(EffectType.FIREBALL));
+			buttonCleanup.onClick.AddListener(async () => await gameManager.OnRequestStart(EffectType.CLEANUP));
 		}
 	}
 }

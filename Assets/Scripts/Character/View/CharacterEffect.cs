@@ -25,30 +25,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace digectsoft
 {
-	[Serializable]
-	public struct EffectValue
+	public class CharacterEffect : MonoBehaviour
 	{
-		public int action;
-		public int rate;
-		public int duration;
-		public int recharge;
+		[SerializeField]
+		private List<CharacterEffectStatus> _characterEffects;
 		
-		public EffectValue(int action, int rate, int duration, int recharge)
+		private Dictionary<EffectType, CharacterEffectStatus> characterEffects = new Dictionary<EffectType, CharacterEffectStatus>();
+		
+		private void Awake()
 		{
-			this.action = action;
-			this.rate = rate;
-			this.duration = duration;
-			this.recharge = recharge;
+			foreach (CharacterEffectStatus characterEffect in _characterEffects) 
+			{
+				characterEffects.Add(characterEffect.effectType, characterEffect);
+				characterEffect.gameObject.SetActive(false);
+			}
 		}
 		
-		public EffectValue Clone() 
+		public void SetStatus(EffectType effectType, int duration) 
 		{
-			EffectValue cloneEffectValue = new EffectValue(action, rate, duration, recharge);
-			return cloneEffectValue;
+			if (characterEffects.ContainsKey(effectType)) 
+			{
+				CharacterEffectStatus characterEffect = characterEffects[effectType];
+				characterEffect.UpdateDuration(duration);
+				bool status = duration > 0;
+				characterEffect.gameObject.SetActive(status);
+			}
 		}
 	}
 }
