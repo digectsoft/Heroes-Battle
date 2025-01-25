@@ -185,9 +185,12 @@ namespace digectsoft
 						case EffectType.CLEANUP:
 						{
 							EffectValue fireballValue = characterAction.effects[EffectType.FIREBALL];
-							fireballValue.duration = 0;
-							characterAction.effects[EffectType.FIREBALL] = fireballValue;
-							IncreaseHealth(ref characterAction, characterAction.effects[EffectType.FIREBALL].rate);
+							if (fireballValue.duration > 0) 
+							{
+								fireballValue.duration = 0;
+								characterAction.effects[EffectType.FIREBALL] = fireballValue;
+								IncreaseHealth(ref characterAction, characterAction.effects[EffectType.FIREBALL].rate);
+							}
 							break;
 						}
 					}
