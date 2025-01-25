@@ -5555,7 +5555,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitInterval: 1
-  stepInterval: 2
+  stepInterval: 1.5
   actionAdapter: {fileID: 29287778}
 --- !u!1 &1959795092
 GameObject:

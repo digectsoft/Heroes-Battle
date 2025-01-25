@@ -41,6 +41,9 @@ namespace digectsoft
 		[Min(0)]
 		private float stepInterval = 2;
 		[SerializeField]
+		[Min(0)]
+		private float completeInterval = 1;
+		[SerializeField]
 		private ActionAdapter actionAdapter;
 
 		private GameManager gameManager;
@@ -77,7 +80,7 @@ namespace digectsoft
 			sequence.AppendCallback(() => Action(effectActions, playerAction.effectType, player, enemy));
 			sequence.AppendInterval(stepInterval);
 			sequence.AppendCallback(() => Action(effectActions, enemyAction.effectType, enemy, player));
-			sequence.AppendInterval(stepInterval);
+			sequence.AppendInterval(completeInterval);
 			sequence.AppendCallback(gameManager.OnRequestComplete);
 		}
 
@@ -127,7 +130,7 @@ namespace digectsoft
 				//Update action effects.
 				bool updateAdapter = (CharacterType.PLAYER == character.CharacterType) ||
 									 ((CharacterType.ENEMY == character.CharacterType) && (EffectType.FIREBALL == effectType));
-				if (updateAdapter) 
+				if (updateAdapter)
 				{
 					actionAdapter.SetStatus(effectType, effectValue);
 				}

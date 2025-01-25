@@ -65,7 +65,14 @@ namespace digectsoft
 			inAction = true;
 			Debug.Log("GameManager: " + actionType);
 			Dictionary<CharacterType, CharacterAction> effectActions = await serverAdapter.Action(actionType);
-			actionPresenter.OnAction(effectActions);
+			if (EffectType.DEFAULT != effectActions[CharacterType.PLAYER].effectType) 
+			{
+				actionPresenter.OnAction(effectActions);
+			}
+			else 
+			{
+				OnRequestComplete();
+			}
 		}
 
 		public void OnRequestComplete()

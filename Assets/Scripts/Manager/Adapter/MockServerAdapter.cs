@@ -83,58 +83,66 @@ namespace digectsoft
 		public async UniTask<Dictionary<CharacterType, CharacterAction>> Action(EffectType type)
 		{
 			await UniTask.Delay(delayMs);
-			EffectValue effectValue = effectActions[type];
 			CharacterAction playerAction = charachterActions[CharacterType.PLAYER];
 			playerAction.effectType = EffectType.DEFAULT;
 			CharacterAction enemyAction = charachterActions[CharacterType.ENEMY];
 			enemyAction.effectType = EffectType.DEFAULT;
-			UpdateEffects(ref playerAction);
-			UpdateEffects(ref enemyAction);
-			switch (type) 
+			bool inAction = playerAction.effects.ContainsKey(type) &&
+							(playerAction.effects[type].duration > 0 || playerAction.effects[type].recharge > 0);
+			if (!inAction)
 			{
-				case EffectType.ATTACK:
+				UpdateEffects(ref playerAction);
+				UpdateEffects(ref enemyAction);
+				switch (type)
 				{
-					//Player action.
-					DecreaseHealth(ref enemyAction, ref playerAction, EffectType.ATTACK);
-					//Enemy action.
-					InvokeEnemyAction(ref playerAction, ref enemyAction);
-					break;
-				}
-				case EffectType.SHIELD:
-				case EffectType.REGENERATION:
-				{
-					if (SetEffect(ref playerAction, type))
-					{
-						//Enemy action.
-						InvokeEnemyAction(ref playerAction, ref enemyAction);
-					}
-					break;
-				}
-				case EffectType.FIREBALL:
-				{
-					if (SetEffect(ref enemyAction, type))
+					case EffectType.ATTACK:
 					{
 						//Player action.
-						DecreaseHealth(ref enemyAction, playerAction.effects[type].action);
+						DecreaseHealth(ref enemyAction, ref playerAction, EffectType.ATTACK);
 						//Enemy action.
 						InvokeEnemyAction(ref playerAction, ref enemyAction);
-						enemyAction.effectType = EffectType.ATTACK;
-						playerAction.effectType = EffectType.FIREBALL;
+						break;
 					}
-					break;
-				}
-				case EffectType.CLEANUP:
-				{
-					if (SetEffect(ref playerAction, type))
+					case EffectType.SHIELD:
+					case EffectType.REGENERATION:
 					{
-						//Enemy action.
-						InvokeEnemyAction(ref playerAction, ref enemyAction);
+						if (SetEffect(ref playerAction, type))
+						{
+							//Enemy action.
+							InvokeEnemyAction(ref playerAction, ref enemyAction);
+						}
+						break;
 					}
-					break;
+					case EffectType.FIREBALL:
+					{
+						if (SetEffect(ref enemyAction, type))
+						{
+							//Player action.
+							DecreaseHealth(ref enemyAction, playerAction.effects[type].action);
+							//Enemy action.
+							InvokeEnemyAction(ref playerAction, ref enemyAction);
+							enemyAction.effectType = EffectType.ATTACK;
+							playerAction.effectType = EffectType.FIREBALL;
+						}
+						break;
+					}
+					case EffectType.CLEANUP:
+					{
+						EffectValue effectValue = playerAction.effects[EffectType.FIREBALL];
+						if (effectValue.duration + effectValue.recharge > 0) 
+						{
+							if (SetEffect(ref playerAction, type))
+							{
+								//Enemy action.
+								InvokeEnemyAction(ref playerAction, ref enemyAction);
+							}
+						}
+						break;
+					}
 				}
+				ApplyEffects(ref playerAction);
+				ApplyEffects(ref enemyAction);
 			}
-			ApplyEffects(ref playerAction);
-			ApplyEffects(ref enemyAction);
 			charachterActions[CharacterType.PLAYER] = playerAction;
 			charachterActions[CharacterType.ENEMY] = enemyAction;
 			return charachterActions;
