@@ -74,8 +74,8 @@ namespace digectsoft
 		{
 			CharacterAction playerAction = effectActions[player.CharacterType];
 			CharacterAction enemyAction = effectActions[enemy.CharacterType];
-			UpdateEffects(effectActions, player);
-			UpdateEffects(effectActions, enemy);
+			UpdateEffects(effectActions, player, enemy);
+			UpdateEffects(effectActions, enemy, player);
 			Sequence sequence = DOTween.Sequence();
 			sequence.AppendCallback(() => Action(effectActions, playerAction.effectType, player, enemy));
 			sequence.AppendInterval(stepInterval);
@@ -107,29 +107,35 @@ namespace digectsoft
 			}
 		}
 
-		private void UpdateEffects(Dictionary<CharacterType, CharacterAction> effectActions, Character character) 
+		private void UpdateEffects(Dictionary<CharacterType, CharacterAction> effectActions,
+								   Character character1,
+								   Character character2) 
 		{
-			CharacterAction characterAction = effectActions[character.CharacterType];
-			foreach (KeyValuePair<EffectType, EffectValue> keyValues in characterAction.effects) 
+			CharacterAction characterAction1 = effectActions[character1.CharacterType];
+			CharacterAction characterAction2 = effectActions[character2.CharacterType];
+			foreach (KeyValuePair<EffectType, EffectValue> keyValues in characterAction1.effects) 
 			{
 				//Update character effects.
 				EffectType effectType = keyValues.Key;
 				EffectValue effectValue = keyValues.Value;
-				character.Effect(effectType, effectValue.duration);
+				character1.Effect(effectType, effectValue.duration);
 				if (effectValue.duration > 0)
 				{
 					if (EffectType.REGENERATION == effectType)
 					{
-						character.Regeneration(effectValue.rate);
+						character1.Regeneration(effectValue.rate);
 					}
 					if (EffectType.FIREBALL == effectType)
 					{
-						character.Damage(effectValue.rate);
+						if (characterAction2.effectType != effectType) 
+						{
+							character1.Damage(effectValue.rate);
+						}
 					}
 				}
 				//Update action effects.
-				bool updateAdapter = (CharacterType.PLAYER == character.CharacterType) ||
-									 ((CharacterType.ENEMY == character.CharacterType) && (EffectType.FIREBALL == effectType));
+				bool updateAdapter = (CharacterType.PLAYER == character1.CharacterType) ||
+									 ((CharacterType.ENEMY == character1.CharacterType) && (EffectType.FIREBALL == effectType));
 				if (updateAdapter)
 				{
 					actionAdapter.SetStatus(effectType, effectValue);

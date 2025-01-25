@@ -87,8 +87,14 @@ namespace digectsoft
 			playerAction.effectType = EffectType.DEFAULT;
 			CharacterAction enemyAction = charachterActions[CharacterType.ENEMY];
 			enemyAction.effectType = EffectType.DEFAULT;
-			bool inAction = playerAction.effects.ContainsKey(type) &&
-							(playerAction.effects[type].duration > 0 || playerAction.effects[type].recharge > 0);
+			CharacterAction testAction = (EffectType.FIREBALL == type) ? enemyAction : playerAction;
+			bool inAction = testAction.effects.ContainsKey(type) &&
+					   		(testAction.effects[type].duration > 0 || testAction.effects[type].recharge > 0);
+			if (EffectType.CLEANUP == type)
+			{
+				EffectValue effectValue = testAction.effects[EffectType.FIREBALL];
+				inAction = (effectValue.duration + effectValue.recharge) == 0;
+			}
 			if (!inAction)
 			{
 				UpdateEffects(ref playerAction);
@@ -97,49 +103,35 @@ namespace digectsoft
 				{
 					case EffectType.ATTACK:
 					{
-						//Player action.
-						DecreaseHealth(ref enemyAction, ref playerAction, EffectType.ATTACK);
 						//Enemy action.
 						InvokeEnemyAction(ref playerAction, ref enemyAction);
+						//Player action.
+						DecreaseHealth(ref enemyAction, effectActions[type].action);
 						break;
 					}
 					case EffectType.SHIELD:
 					case EffectType.REGENERATION:
+					case EffectType.CLEANUP:
 					{
-						if (SetEffect(ref playerAction, type))
-						{
-							//Enemy action.
-							InvokeEnemyAction(ref playerAction, ref enemyAction);
-						}
+						//Player action.
+						SetEffect(ref playerAction, type);
+						//Enemy action.
+						InvokeEnemyAction(ref playerAction, ref enemyAction);
 						break;
 					}
 					case EffectType.FIREBALL:
 					{
+						//Enemy action.
+						InvokeEnemyAction(ref playerAction, ref enemyAction);
+						//Player action
 						if (SetEffect(ref enemyAction, type))
 						{
-							//Player action.
-							DecreaseHealth(ref enemyAction, playerAction.effects[type].action);
-							//Enemy action.
-							InvokeEnemyAction(ref playerAction, ref enemyAction);
-							enemyAction.effectType = EffectType.ATTACK;
-							playerAction.effectType = EffectType.FIREBALL;
-						}
-						break;
-					}
-					case EffectType.CLEANUP:
-					{
-						EffectValue effectValue = playerAction.effects[EffectType.FIREBALL];
-						if (effectValue.duration + effectValue.recharge > 0) 
-						{
-							if (SetEffect(ref playerAction, type))
-							{
-								//Enemy action.
-								InvokeEnemyAction(ref playerAction, ref enemyAction);
-							}
+							DecreaseHealth(ref enemyAction, effectActions[type].action);
 						}
 						break;
 					}
 				}
+				playerAction.effectType = type;
 				ApplyEffects(ref playerAction);
 				ApplyEffects(ref enemyAction);
 			}
@@ -153,7 +145,6 @@ namespace digectsoft
 			EffectValue effectValue = characterAction.effects[effectType];
 			if (effectValue.duration == 0 && effectValue.recharge == 0)
 			{
-				characterAction.effectType = effectType;
 				effectValue.duration = effectActions[effectType].duration;
 				effectValue.recharge = effectActions[effectType].recharge;
 				characterAction.effects[effectType] = effectValue;
@@ -230,14 +221,6 @@ namespace digectsoft
 			ChangeHealth(ref characterAction, value);
 		}
 		
-		private void DecreaseHealth(ref CharacterAction characterAction1, 
-									ref CharacterAction characterAction2,
-									EffectType effectType) 
-		{
-			DecreaseHealth(ref characterAction1, effectActions[effectType].action);
-			characterAction2.effectType = effectType;
-		}
-		
 		private void DecreaseHealth(ref CharacterAction characterAction, int value) 
 		{
 			int damage = value;
@@ -269,7 +252,15 @@ namespace digectsoft
 		private void InvokeEnemyAction(ref CharacterAction playerAction, ref CharacterAction enemyAction) 
 		{
 			//Enemy action.
-			DecreaseHealth(ref playerAction, ref enemyAction, EffectType.ATTACK);
+			enemyAction.effectType = EffectType.ATTACK;
+			DecreaseHealth(ref playerAction, effectActions[enemyAction.effectType].action);
+			// SetEffect(ref enemyAction, EffectType.SHIELD);
+			// SetEffect(ref enemyAction, EffectType.REGENERATION);
+			// if (SetEffect(ref playerAction, EffectType.FIREBALL))
+			// {
+			// 	enemyAction.effectType = EffectType.FIREBALL;
+			// 	DecreaseHealth(ref playerAction, effectActions[EffectType.FIREBALL].action);
+			// }
 		}
 	}
 }
