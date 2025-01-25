@@ -25,40 +25,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using Zenject;
 
 namespace digectsoft
 {
-	public class ActionAdapter : MonoBehaviour
-	{		
+	public class ActionEffectStatus : MonoBehaviour
+	{
 		[SerializeField]
-		private List<ActionEffectStatus> actionEffects;
-
-		[Inject]
-		private GameManager gameManager;
-		private Dictionary<EffectType, ActionEffectStatus> effectTypes = new Dictionary<EffectType, ActionEffectStatus>();
-
+		private EffectType _effectType;
+		[SerializeField]
+		private TextMeshProUGUI textRecharge;
+		
+		public EffectType EffectType { get { return _effectType; } private set { } }
+		
 		private void Awake()
 		{
-			foreach (ActionEffectStatus actionEffect in actionEffects) 
-			{
-				Button button = actionEffect.GetComponent<Button>();
-				button.onClick.AddListener(async () => await gameManager.OnRequestStart(actionEffect.EffectType));
-				if (actionEffect.IsRechargable()) 
-				{
-					effectTypes.Add(actionEffect.EffectType, actionEffect);
-				}
-			}
+			Init();
 		}
 		
-		public void SetStatus(EffectType effectType, EffectValue effectValue) 
+		public void Init() 
 		{
-			int recharge = effectValue.recharge + effectValue.duration;
-			ActionEffectStatus actionEffect = effectTypes[effectType];
-			actionEffect.UpdateRecharge(recharge);
+			if (textRecharge != null) 
+			{
+				textRecharge.gameObject.SetActive(false);
+			}
+		}
+
+		public void UpdateRecharge(int recharge)
+		{
+			textRecharge.text = recharge.ToString();
+			bool status = recharge > 0;
+			textRecharge.gameObject.SetActive(status);
+		}
+		
+		public bool IsRechargable() 
+		{
+			return textRecharge != null;
 		}
 	}
 }

@@ -205,13 +205,13 @@ namespace digectsoft
 			{
 				EffectType effectType = keyValues.Key;
 				EffectValue effectValue = keyValues.Value;
+				if (effectValue.duration == 0 && effectValue.recharge > 0)
+				{
+					effectValue.recharge--;
+				}
 				if (effectValue.duration > 0)
 				{
 					effectValue.duration--;
-				}
-				if (effectValue.duration == 0 && effectValue.recharge > 0) 
-				{
-					effectValue.recharge--;
 				}
 				characterAction.effects[effectType] = effectValue;
 			}

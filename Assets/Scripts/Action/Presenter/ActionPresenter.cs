@@ -109,6 +109,7 @@ namespace digectsoft
 			CharacterAction characterAction = effectActions[character.CharacterType];
 			foreach (KeyValuePair<EffectType, EffectValue> keyValues in characterAction.effects) 
 			{
+				//Update character effects.
 				EffectType effectType = keyValues.Key;
 				EffectValue effectValue = keyValues.Value;
 				character.Effect(effectType, effectValue.duration);
@@ -122,6 +123,13 @@ namespace digectsoft
 					{
 						character.Damage(effectValue.rate);
 					}
+				}
+				//Update action effects.
+				bool updateAdapter = (CharacterType.PLAYER == character.CharacterType) ||
+									 ((CharacterType.ENEMY == character.CharacterType) && (EffectType.FIREBALL == effectType));
+				if (updateAdapter) 
+				{
+					actionAdapter.SetStatus(effectType, effectValue);
 				}
 			}
 		}

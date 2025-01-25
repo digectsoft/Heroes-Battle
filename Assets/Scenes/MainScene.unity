@@ -320,11 +320,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2eef1406a898480fa02134dc313155f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonAttack: {fileID: 831085247}
-  buttonShield: {fileID: 2011948701}
-  buttonRegeneration: {fileID: 1959795094}
-  buttonFireball: {fileID: 107811357}
-  buttonCleanup: {fileID: 1784463995}
+  actionEffects:
+  - {fileID: 831085250}
+  - {fileID: 2011948704}
+  - {fileID: 1959795097}
+  - {fileID: 107811360}
+  - {fileID: 1784463998}
 --- !u!1 &30024532
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,6 +429,7 @@ GameObject:
   - component: {fileID: 107811359}
   - component: {fileID: 107811358}
   - component: {fileID: 107811357}
+  - component: {fileID: 107811360}
   m_Layer: 5
   m_Name: Fireball
   m_TagString: Untagged
@@ -538,6 +540,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 107811355}
   m_CullTransparentMesh: 1
+--- !u!114 &107811360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107811355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d0a18f3557ce4685afc9f64a8972035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectType: 4
+  textRecharge: {fileID: 1525658984}
 --- !u!1 &216256747
 GameObject:
   m_ObjectHideFlags: 0
@@ -3536,6 +3552,7 @@ GameObject:
   - component: {fileID: 831085249}
   - component: {fileID: 831085248}
   - component: {fileID: 831085247}
+  - component: {fileID: 831085250}
   m_Layer: 5
   m_Name: Attack
   m_TagString: Untagged
@@ -3606,19 +3623,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 831085248}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5894500087589491653}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &831085248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3657,6 +3662,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 831085245}
   m_CullTransparentMesh: 1
+--- !u!114 &831085250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831085245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d0a18f3557ce4685afc9f64a8972035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectType: 1
+  textRecharge: {fileID: 0}
 --- !u!1 &847200676
 GameObject:
   m_ObjectHideFlags: 0
@@ -5299,6 +5318,7 @@ GameObject:
   - component: {fileID: 1784463997}
   - component: {fileID: 1784463996}
   - component: {fileID: 1784463995}
+  - component: {fileID: 1784463998}
   m_Layer: 5
   m_Name: Cleanup
   m_TagString: Untagged
@@ -5409,6 +5429,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1784463993}
   m_CullTransparentMesh: 1
+--- !u!114 &1784463998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1784463993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d0a18f3557ce4685afc9f64a8972035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectType: 5
+  textRecharge: {fileID: 1694100068}
 --- !u!1 &1800003268
 GameObject:
   m_ObjectHideFlags: 0
@@ -5535,6 +5569,7 @@ GameObject:
   - component: {fileID: 1959795096}
   - component: {fileID: 1959795095}
   - component: {fileID: 1959795094}
+  - component: {fileID: 1959795097}
   m_Layer: 5
   m_Name: Regeneration
   m_TagString: Untagged
@@ -5645,6 +5680,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1959795092}
   m_CullTransparentMesh: 1
+--- !u!114 &1959795097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959795092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d0a18f3557ce4685afc9f64a8972035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectType: 3
+  textRecharge: {fileID: 1765409051}
 --- !u!1 &1991922187
 GameObject:
   m_ObjectHideFlags: 0
@@ -5692,6 +5741,7 @@ GameObject:
   - component: {fileID: 2011948703}
   - component: {fileID: 2011948702}
   - component: {fileID: 2011948701}
+  - component: {fileID: 2011948704}
   m_Layer: 5
   m_Name: Shield
   m_TagString: Untagged
@@ -5802,6 +5852,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011948699}
   m_CullTransparentMesh: 1
+--- !u!114 &2011948704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011948699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d0a18f3557ce4685afc9f64a8972035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectType: 2
+  textRecharge: {fileID: 884723308}
 --- !u!1 &2027776182
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,13 +33,17 @@ namespace digectsoft
 	public class CharacterEffectStatus : MonoBehaviour
 	{
 		[SerializeField]
-		public EffectType effectType;
+		private EffectType effectType;
 		[SerializeField]
 		private TextMeshProUGUI textDuration;
+		
+		public EffectType EffectType { get { return effectType; } private set{}}
 		
 		public void UpdateDuration(int duration) 
 		{
 			textDuration.text = duration.ToString();
+			bool status = duration > 0;
+			gameObject.SetActive(status);
 		}
 	}
 }

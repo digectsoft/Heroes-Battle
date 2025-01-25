@@ -41,7 +41,7 @@ namespace digectsoft
 		{
 			foreach (CharacterEffectStatus characterEffect in _characterEffects) 
 			{
-				characterEffects.Add(characterEffect.effectType, characterEffect);
+				characterEffects.Add(characterEffect.EffectType, characterEffect);
 				characterEffect.gameObject.SetActive(false);
 			}
 		}
@@ -52,8 +52,6 @@ namespace digectsoft
 			{
 				CharacterEffectStatus characterEffect = characterEffects[effectType];
 				characterEffect.UpdateDuration(duration);
-				bool status = duration > 0;
-				characterEffect.gameObject.SetActive(status);
 			}
 		}
 	}
