@@ -156,7 +156,8 @@ namespace digectsoft
 		
 		private void ApplyEffects(ref CharacterAction characterAction) 
 		{
-			foreach (KeyValuePair<EffectType, EffectValue> keyValues in characterAction.effects) 
+			Dictionary<EffectType, EffectValue> effects = new Dictionary<EffectType, EffectValue>(characterAction.effects);
+			foreach (KeyValuePair<EffectType, EffectValue> keyValues in effects) 
 			{
 				EffectType effectType = keyValues.Key;
 				EffectValue effectValue = keyValues.Value;
@@ -167,8 +168,8 @@ namespace digectsoft
 					{
 						case EffectType.SHIELD:
 						{
-							//TODO: block damage.
-							IncreaseHealth(ref characterAction, effectRate);
+							effectValue.rate = effectActions[effectType].rate;
+							characterAction.effects[effectType] = effectValue;
 							break;
 						}
 						case EffectType.REGENERATION:
@@ -220,7 +221,24 @@ namespace digectsoft
 		
 		private void DecreaseHealth(ref CharacterAction characterAction, int value) 
 		{
-			ChangeHealth(ref characterAction, -value);
+			int damage = value;
+			EffectValue shieldValue = characterAction.effects[EffectType.SHIELD];
+			if (shieldValue.duration > 0) 
+			{
+				int rate = value - shieldValue.rate;
+				if (rate >= 0)
+				{
+					shieldValue.rate = 0;
+					damage = rate;
+				}
+				else
+				{
+					shieldValue.rate = -rate;
+					damage = 0;
+				}
+				characterAction.effects[EffectType.SHIELD] = shieldValue;
+			}
+			ChangeHealth(ref characterAction, -damage);
 		}
 		
 		private void ChangeHealth(ref CharacterAction characterAction, int value)
