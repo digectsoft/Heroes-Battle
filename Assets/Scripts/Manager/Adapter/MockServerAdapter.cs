@@ -125,7 +125,7 @@ namespace digectsoft
 				}
 				case EffectType.CLEANUP:
 				{
-					if (SetEffect(ref playerAction, EffectType.CLEANUP))
+					if (SetEffect(ref playerAction, type))
 					{
 						//Enemy action.
 						InvokeEnemyAction(ref playerAction, ref enemyAction);
@@ -180,6 +180,14 @@ namespace digectsoft
 						case EffectType.FIREBALL:
 						{
 							DecreaseHealth(ref characterAction, effectRate);
+							break;
+						}
+						case EffectType.CLEANUP:
+						{
+							EffectValue fireballValue = characterAction.effects[EffectType.FIREBALL];
+							fireballValue.duration = 0;
+							characterAction.effects[EffectType.FIREBALL] = fireballValue;
+							IncreaseHealth(ref characterAction, characterAction.effects[EffectType.FIREBALL].rate);
 							break;
 						}
 					}

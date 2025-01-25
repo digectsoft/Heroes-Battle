@@ -955,7 +955,7 @@ MonoBehaviour:
     value:
       action: 0
       rate: 0
-      duration: 0
+      duration: 1
       recharge: 5
 --- !u!4 &498502836
 Transform:
