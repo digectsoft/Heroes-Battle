@@ -47,7 +47,11 @@ namespace digectsoft
 		private Dictionary<EffectType, EffectValue> effectActions = new Dictionary<EffectType, EffectValue>();
 		//Effects for characters during a battle.
 		private Dictionary<CharacterType, CharacterAction> charachterActions = new Dictionary<CharacterType, CharacterAction>();
-		
+		//Delegate action for effects according player and enemy.
+		private delegate void ActionEffect(ref CharacterAction action1, ref CharacterAction action2);
+		//Enemy actions.
+		private List<EffectType> enemyActions = new List<EffectType>();
+
 		private void Awake()
 		{
 			charachterActions.Add(CharacterType.PLAYER, new CharacterAction(health));
@@ -65,6 +69,7 @@ namespace digectsoft
 						charachterActions[CharacterType.PLAYER].effects.Add(effectAction.type, effectValue);
 						charachterActions[CharacterType.ENEMY].effects.Add(effectAction.type, effectValue);
 					}
+					enemyActions.Add(effectAction.type);
 				}
 			}
 		}
@@ -80,17 +85,17 @@ namespace digectsoft
 			return characterValues;
 		}
 
-		public async UniTask<Dictionary<CharacterType, CharacterAction>> Action(EffectType type)
+		public async UniTask<Dictionary<CharacterType, CharacterAction>> Action(EffectType effectType)
 		{
 			await UniTask.Delay(delayMs);
 			CharacterAction playerAction = charachterActions[CharacterType.PLAYER];
 			playerAction.effectType = EffectType.DEFAULT;
 			CharacterAction enemyAction = charachterActions[CharacterType.ENEMY];
 			enemyAction.effectType = EffectType.DEFAULT;
-			CharacterAction testAction = (EffectType.FIREBALL == type) ? enemyAction : playerAction;
-			bool inAction = testAction.effects.ContainsKey(type) &&
-					   		(testAction.effects[type].duration > 0 || testAction.effects[type].recharge > 0);
-			if (EffectType.CLEANUP == type)
+			CharacterAction testAction = (EffectType.FIREBALL == effectType) ? enemyAction : playerAction;
+			bool inAction = testAction.effects.ContainsKey(effectType) &&
+					   		(testAction.effects[effectType].duration > 0 || testAction.effects[effectType].recharge > 0);
+			if (EffectType.CLEANUP == effectType)
 			{
 				EffectValue effectValue = testAction.effects[EffectType.FIREBALL];
 				inAction = (effectValue.duration + effectValue.recharge) == 0;
@@ -99,45 +104,54 @@ namespace digectsoft
 			{
 				UpdateEffects(ref playerAction);
 				UpdateEffects(ref enemyAction);
-				switch (type)
-				{
-					case EffectType.ATTACK:
-					{
-						//Enemy action.
-						InvokeEnemyAction(ref playerAction, ref enemyAction);
-						//Player action.
-						DecreaseHealth(ref enemyAction, effectActions[type].action);
-						break;
-					}
-					case EffectType.SHIELD:
-					case EffectType.REGENERATION:
-					case EffectType.CLEANUP:
-					{
-						//Player action.
-						SetEffect(ref playerAction, type);
-						//Enemy action.
-						InvokeEnemyAction(ref playerAction, ref enemyAction);
-						break;
-					}
-					case EffectType.FIREBALL:
-					{
-						//Enemy action.
-						InvokeEnemyAction(ref playerAction, ref enemyAction);
-						//Player action
-						if (SetEffect(ref enemyAction, type))
-						{
-							DecreaseHealth(ref enemyAction, effectActions[type].action);
-						}
-						break;
-					}
-				}
-				playerAction.effectType = type;
+				ApplyAction(effectType, ref playerAction, ref enemyAction,
+							(ref CharacterAction pl, ref CharacterAction en) => InvokeEnemyAction(ref pl, ref en));
 				ApplyEffects(ref playerAction);
 				ApplyEffects(ref enemyAction);
 			}
 			charachterActions[CharacterType.PLAYER] = playerAction;
 			charachterActions[CharacterType.ENEMY] = enemyAction;
 			return charachterActions;
+		}
+
+		private void ApplyAction(EffectType effectType,
+								ref CharacterAction character1,
+								ref CharacterAction character2,
+								ActionEffect OnAction = null) 
+		{
+			switch (effectType)
+			{
+				case EffectType.ATTACK:
+				{
+					//Character2 action.
+					OnAction?.Invoke(ref character1, ref character2);
+					//Character1 action.
+					DecreaseHealth(ref character2, effectActions[effectType].action);
+					break;
+				}
+				case EffectType.SHIELD:
+				case EffectType.REGENERATION:
+				case EffectType.CLEANUP:
+				{
+					//Character1 action.
+					SetEffect(ref character1, effectType);
+					//Character2 action.
+					OnAction?.Invoke(ref character1, ref character2);
+					break;
+				}
+				case EffectType.FIREBALL:
+				{
+					//Character2 action.
+					OnAction?.Invoke(ref character1, ref character2);
+					//Character1 action
+					if (SetEffect(ref character2, effectType))
+					{
+						DecreaseHealth(ref character2, effectActions[effectType].action);
+					}
+					break;
+				}
+			}
+			character1.effectType = effectType;
 		}
 		
 		private bool SetEffect(ref CharacterAction characterAction, EffectType effectType) 
@@ -249,18 +263,37 @@ namespace digectsoft
 			characterAction.characterValue.health = Math.Clamp(currentHealth, 0, health);
 		}
 		
+		private void AddEnemyAction(EffectType effectType) 
+		{
+			if (!enemyActions.Contains(effectType)) 
+			{
+				enemyActions.Add(effectType);
+			}
+		}
+		
+		private void RemoveEnemyAction(EffectType effectType) 
+		{
+			enemyActions.Remove(effectType);
+		}
+		
+		private void SetEnemyEffect(ref CharacterAction characterAction, EffectType effectType) 
+		{
+			if (SetEffect(ref characterAction, effectType)) 
+			{
+				RemoveEnemyAction(effectType);
+			}
+		}
+		
 		private void InvokeEnemyAction(ref CharacterAction playerAction, ref CharacterAction enemyAction) 
 		{
-			//Enemy action.
-			enemyAction.effectType = EffectType.ATTACK;
-			DecreaseHealth(ref playerAction, effectActions[enemyAction.effectType].action);
-			// SetEffect(ref enemyAction, EffectType.SHIELD);
-			// SetEffect(ref enemyAction, EffectType.REGENERATION);
-			// if (SetEffect(ref playerAction, EffectType.FIREBALL))
-			// {
-			// 	enemyAction.effectType = EffectType.FIREBALL;
-			// 	DecreaseHealth(ref playerAction, effectActions[EffectType.FIREBALL].action);
-			// }
+			if (enemyActions.Count == 0) 
+			{
+				return;
+			}
+			int enemyIndex = UnityEngine.Random.Range(0, enemyActions.Count - 1);
+			EffectType effectType = enemyActions[enemyIndex];
+			enemyActions.RemoveAt(enemyIndex);
+			ApplyAction(effectType, ref enemyAction, ref playerAction);
 		}
 	}
 }
