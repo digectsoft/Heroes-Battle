@@ -54,5 +54,10 @@ namespace digectsoft
 				characterEffect.UpdateDuration(duration);
 			}
 		}
+		
+		public CharacterEffectStatus GetCharacterEffectStatus(EffectType effectType) 
+		{
+			return characterEffects[effectType];
+		}
 	}
 }

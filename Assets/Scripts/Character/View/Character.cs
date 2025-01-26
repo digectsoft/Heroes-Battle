@@ -45,7 +45,8 @@ namespace digectsoft
 		[SerializeField]
 		private string deathValue;
 		
-		public CharacterType CharacterType { get {return type; } private set { } }
+		public CharacterType CharacterType { get { return type; } private set { } }
+		public CharacterEffect CharacterEffect { get { return effect; } private set { } }
 		
 		[Inject]
 		private ActionPresenter actionPresenter;

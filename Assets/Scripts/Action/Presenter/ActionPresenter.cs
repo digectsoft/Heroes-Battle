@@ -46,11 +46,10 @@ namespace digectsoft
 		[SerializeField]
 		private ActionAdapter actionAdapter;
 
+		public Character Player { get; private set; }
+		public Character Enemy { get; private set; }
+
 		private GameManager gameManager;
-		private Character player;
-		private Character enemy;
-		private CharacterValue playerValue;
-		private CharacterValue enemyValue;
 
 		[Inject]
 		public void Init(GameManager gameManager,
@@ -58,28 +57,26 @@ namespace digectsoft
 					 	 [Inject(Id = CharacterType.ENEMY)] Character enemy)
 		{
 			this.gameManager = gameManager;
-			this.player = player;
-			this.enemy = enemy;
+			Player = player;
+			Enemy = enemy;
 		}
 		
 		public void OnInit(CharacterValue playerValue, CharacterValue enemyValue) 
 		{
-			this.playerValue = playerValue;
-			this.enemyValue = enemyValue;
-			player.Init(this.playerValue.health);
-			enemy.Init(this.enemyValue.health);
+			Player.Init(playerValue.health);
+			Enemy.Init(enemyValue.health);
 		}
 
 		public void OnAction(Dictionary<CharacterType, CharacterAction> effectActions)
 		{
-			CharacterAction playerAction = effectActions[player.CharacterType];
-			CharacterAction enemyAction = effectActions[enemy.CharacterType];
-			UpdateEffects(effectActions, player, enemy);
-			UpdateEffects(effectActions, enemy, player);
+			CharacterAction playerAction = effectActions[Player.CharacterType];
+			CharacterAction enemyAction = effectActions[Enemy.CharacterType];
+			UpdateEffects(effectActions, Player, Enemy);
+			UpdateEffects(effectActions, Enemy, Player);
 			Sequence sequence = DOTween.Sequence();
-			sequence.AppendCallback(() => Action(effectActions, playerAction.effectType, player, enemy));
+			sequence.AppendCallback(() => Action(effectActions, playerAction.effectType, Player, Enemy));
 			sequence.AppendInterval(stepInterval);
-			sequence.AppendCallback(() => Action(effectActions, enemyAction.effectType, enemy, player));
+			sequence.AppendCallback(() => Action(effectActions, enemyAction.effectType, Enemy, Player));
 			sequence.AppendInterval(completeInterval);
 			sequence.AppendCallback(gameManager.OnRequestComplete);
 		}
@@ -134,8 +131,8 @@ namespace digectsoft
 					}
 				}
 				//Update action effects.
-				bool updateAdapter = (CharacterType.PLAYER == character1.CharacterType) ||
-									 ((CharacterType.ENEMY == character1.CharacterType) && (EffectType.FIREBALL == effectType));
+				bool updateAdapter = (CharacterType.PLAYER == character1.CharacterType && EffectType.FIREBALL != effectType) ||
+									 (CharacterType.ENEMY == character1.CharacterType && EffectType.FIREBALL == effectType);
 				if (updateAdapter)
 				{
 					actionAdapter.SetStatus(effectType, effectValue);

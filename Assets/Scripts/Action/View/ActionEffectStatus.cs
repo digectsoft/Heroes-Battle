@@ -27,6 +27,8 @@
 // ---------------------------------------------------------------------------
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace digectsoft
 {
@@ -38,25 +40,38 @@ namespace digectsoft
 		private TextMeshProUGUI textRecharge;
 		
 		public EffectType EffectType { get { return _effectType; } private set { } }
-		
+
+		private Button button;
+		private bool registered;
+
 		private void Awake()
 		{
-			Init();
+			button = GetComponent<Button>();
 		}
-		
-		public void Init() 
+
+		public void Init(UnityAction call)
 		{
-			if (textRecharge != null) 
+			if (!registered)
 			{
-				textRecharge.gameObject.SetActive(false);
+				button.onClick.AddListener(call);
+				registered = true;
 			}
+			UpdateRecharge(0);
+		}
+
+		public void Activate(bool status)
+		{
+			button.interactable = status;
 		}
 
 		public void UpdateRecharge(int recharge)
 		{
-			textRecharge.text = recharge.ToString();
-			bool status = recharge > 0;
-			textRecharge.gameObject.SetActive(status);
+			if (IsRechargable()) 
+			{
+				textRecharge.text = recharge.ToString();
+				bool status = recharge > 0;
+				textRecharge.gameObject.SetActive(status);
+			}
 		}
 		
 		public bool IsRechargable() 

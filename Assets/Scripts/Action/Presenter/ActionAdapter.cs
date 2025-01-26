@@ -27,7 +27,6 @@
 // ---------------------------------------------------------------------------
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace digectsoft
@@ -37,28 +36,48 @@ namespace digectsoft
 		[SerializeField]
 		private List<ActionEffectStatus> actionEffects;
 
-		[Inject]
+		
 		private GameManager gameManager;
+		private ActionPresenter actionPresenter;
 		private Dictionary<EffectType, ActionEffectStatus> effectTypes = new Dictionary<EffectType, ActionEffectStatus>();
 
-		private void Awake()
+		[Inject]
+		public void Init(GameManager gameManager, ActionPresenter actionPresenter) 
 		{
-			foreach (ActionEffectStatus actionEffect in actionEffects) 
+			this.gameManager = gameManager;
+			this.actionPresenter = actionPresenter;
+		}
+
+		private void Start()
+		{
+			Init();
+		}
+		
+		public void Init() 
+		{
+			foreach (ActionEffectStatus actionEffect in actionEffects)
 			{
-				Button button = actionEffect.GetComponent<Button>();
-				button.onClick.AddListener(async () => await gameManager.OnRequestStart(actionEffect.EffectType));
-				if (actionEffect.IsRechargable()) 
+				actionEffect.Init(async () => await gameManager.OnRequestStart(actionEffect.EffectType));
+				actionEffect.Activate(EffectType.CLEANUP != actionEffect.EffectType);
+				if (actionEffect.IsRechargable())
 				{
 					effectTypes.Add(actionEffect.EffectType, actionEffect);
 				}
 			}
 		}
 		
-		public void SetStatus(EffectType effectType, EffectValue effectValue) 
+		public void SetStatus(EffectType effectType, EffectValue effectValue)
 		{
 			int recharge = effectValue.recharge + effectValue.duration;
 			ActionEffectStatus actionEffect = effectTypes[effectType];
 			actionEffect.UpdateRecharge(recharge);
+			bool status = recharge == 0;
+			if (EffectType.CLEANUP == effectType)
+			{
+				CharacterEffectStatus effectStatus = actionPresenter.Player.CharacterEffect.GetCharacterEffectStatus(EffectType.FIREBALL);
+				status = effectStatus.Duration > 0;
+			}
+			actionEffect.Activate(status);
 		}
 	}
 }
