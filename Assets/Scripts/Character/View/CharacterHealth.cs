@@ -25,7 +25,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,7 +70,7 @@ namespace digectsoft
 		
 		private void UpdateBar(int value) 
 		{
-			currentValue = Math.Clamp(value, 0, maxValue);
+			currentValue = Mathf.Clamp(value, 0, maxValue);
 			healthBar.value = currentValue * healthBar.maxValue / maxValue;
 			healthValue.text = currentValue.ToString();
 		}
