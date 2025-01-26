@@ -98,7 +98,8 @@ namespace digectsoft
 			bool inAction = testAction.effects.ContainsKey(effectType) && !IsEffectComplete(testAction.effects[effectType]);
 			if (EffectType.CLEANUP == effectType)
 			{
-				inAction = !(!IsEffectComplete(testAction.effects[EffectType.FIREBALL]) && !inAction);
+				//For a cleanup it is required to check a fireball effect.
+				inAction = IsEffectComplete(testAction.effects[EffectType.FIREBALL]) || inAction;
 			}
 			if (!inAction)
 			{
