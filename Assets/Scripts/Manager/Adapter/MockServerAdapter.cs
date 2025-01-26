@@ -95,12 +95,10 @@ namespace digectsoft
 			enemyAction.effectType = EffectType.DEFAULT;
 			//Select an appropriate action depending on an effect type.
 			CharacterAction testAction = GetCharacterAction(CharacterType.PLAYER, effectType);
-			bool inAction = testAction.effects.ContainsKey(effectType) &&
-					   		(testAction.effects[effectType].duration > 0 || testAction.effects[effectType].recharge > 0);
+			bool inAction = testAction.effects.ContainsKey(effectType) && !IsEffectComplete(testAction.effects[effectType]);
 			if (EffectType.CLEANUP == effectType)
 			{
-				inAction = !(!IsEffectComplete(testAction.effects[EffectType.FIREBALL]) &&
-						   	  IsEffectComplete(testAction.effects[effectType]));
+				inAction = !(!IsEffectComplete(testAction.effects[EffectType.FIREBALL]) && !inAction);
 			}
 			if (!inAction)
 			{
@@ -290,23 +288,16 @@ namespace digectsoft
 			}
 			//Select a random effect.
 			int enemyIndex = Random.Range(0, effectTypes.Count);
-			// EffectType effectType = effectTypes[enemyIndex];
-			EffectType effectType = EffectType.FIREBALL;
+			EffectType effectType = effectTypes[enemyIndex];
 			Debug.Log("Enemy: " + effectType);
 			//The attack should always be in actions.
 			if (EffectType.ATTACK != effectType)
 			{
 				enemyActions.Remove(effectType);
 			}
-			if (!actionComplete) 
-			{
-				ApplyAction(effectType, ref enemyAction, ref playerAction);
-				actionComplete = true;
-			}
+			ApplyAction(effectType, ref enemyAction, ref playerAction);
 		}
 		
-		bool actionComplete = false;
-
 		private CharacterAction GetCharacterAction(CharacterType characterType, EffectType effectType)
 		{
 			CharacterAction characterAction;
