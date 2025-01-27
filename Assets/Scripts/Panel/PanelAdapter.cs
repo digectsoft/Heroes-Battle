@@ -25,43 +25,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
+using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
-namespace digectsoft 
+namespace digectsoft
 {
-	public class GameInstaller : MonoInstaller
+	public class PanelAdapter : MonoBehaviour
 	{
-		[Header("Model")]
 		[SerializeField]
-		private MockServerAdapter serverAdapter;
-		[SerializeField]
-		private GameManager gameManager;
+		private List<BasePanel> panels = new List<BasePanel>();
 		
-		[Header("View")]
-		[SerializeField]
-		private ActionAdapter actionAdapter;
-		[SerializeField]
-		private PanelAdapter panelAdapter;
-		[SerializeField]
-		private Character player;
-		[SerializeField]
-		private Character enemy;
+		private Dictionary<PanelType, BasePanel> panelTypes = new Dictionary<PanelType, BasePanel>();
 		
-		[Header("Presenter")]
-		[SerializeField]
-		private ActionPresenter actionPresenter;
-
-		public override void InstallBindings()
+		private void Awake()
 		{
-			Container.Bind<IServerAdapter>().To<MockServerAdapter>().FromInstance(serverAdapter).AsSingle();
-			//Container.Bind<IServerAdapter>().To<NetworkServerAdapter>().AsSingle(); //Implement NetworkServerAdapter for a backend server.
-			Container.Bind<GameManager>().FromInstance(gameManager).AsSingle();
-			Container.Bind<ActionAdapter>().FromInstance(actionAdapter).AsSingle();
-			Container.Bind<PanelAdapter>().FromInstance(panelAdapter).AsSingle();
-			Container.Bind<Character>().WithId(CharacterType.PLAYER).FromInstance(player).AsCached();
-			Container.Bind<Character>().WithId(CharacterType.ENEMY).FromInstance(enemy).AsCached();
-			Container.Bind<ActionPresenter>().FromInstance(actionPresenter).AsSingle();
+			foreach (BasePanel panel in panels) 
+			{
+				panelTypes.Add(panel.PanelType, panel);
+			}
+		}
+		
+		public void ShowPanel(PanelType panelType) 
+		{
+			panelTypes[panelType].Show();
+		}
+		
+		public void HidePanel(PanelType panelType) 
+		{
+			panelTypes[panelType].Hide();
 		}
 	}
 }

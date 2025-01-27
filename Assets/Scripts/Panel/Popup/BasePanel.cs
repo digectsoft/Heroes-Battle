@@ -25,43 +25,91 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
+using DG.Tweening;
 using UnityEngine;
-using Zenject;
 
-namespace digectsoft 
+namespace digectsoft
 {
-	public class GameInstaller : MonoInstaller
+	public abstract class BasePanel : MonoBehaviour
 	{
-		[Header("Model")]
+		[Header("Options")]
 		[SerializeField]
-		private MockServerAdapter serverAdapter;
+		protected PanelType type;
 		[SerializeField]
-		private GameManager gameManager;
-		
-		[Header("View")]
+		protected GameObject content;
 		[SerializeField]
-		private ActionAdapter actionAdapter;
+		protected float showDelay = 0f;
 		[SerializeField]
-		private PanelAdapter panelAdapter;
-		[SerializeField]
-		private Character player;
-		[SerializeField]
-		private Character enemy;
-		
-		[Header("Presenter")]
-		[SerializeField]
-		private ActionPresenter actionPresenter;
+		protected bool pauseGame = true;
 
-		public override void InstallBindings()
+		[Header("Scale")]
+		[SerializeField]
+		protected float startScale = 1.2f;
+		[SerializeField]
+		protected float endScale = 1f;
+		[SerializeField]
+		protected float scaleTime = 0.1f;
+
+		public PanelType PanelType { get { return type; } private set { }}
+		public bool Visible { get { return gameObject.activeSelf; } private set { } }
+
+		private bool initialized;
+		private float timeScale = 1f;
+
+		protected virtual void Init()
 		{
-			Container.Bind<IServerAdapter>().To<MockServerAdapter>().FromInstance(serverAdapter).AsSingle();
-			//Container.Bind<IServerAdapter>().To<NetworkServerAdapter>().AsSingle(); //Implement NetworkServerAdapter for a backend server.
-			Container.Bind<GameManager>().FromInstance(gameManager).AsSingle();
-			Container.Bind<ActionAdapter>().FromInstance(actionAdapter).AsSingle();
-			Container.Bind<PanelAdapter>().FromInstance(panelAdapter).AsSingle();
-			Container.Bind<Character>().WithId(CharacterType.PLAYER).FromInstance(player).AsCached();
-			Container.Bind<Character>().WithId(CharacterType.ENEMY).FromInstance(enemy).AsCached();
-			Container.Bind<ActionPresenter>().FromInstance(actionPresenter).AsSingle();
+			if (!initialized)
+			{
+				timeScale = Time.timeScale;
+				initialized = true;
+			}
 		}
+
+		public void Show()
+		{
+			Init();
+			if (!gameObject.activeSelf)
+			{
+				InitPanel();
+				DOTween.Sequence().AppendInterval(showDelay).OnComplete(() => 
+				{
+					gameObject.SetActive(true);
+					content.transform.DOScale(startScale, startScale);
+					content.transform.DOScale(endScale, scaleTime).OnComplete(() => 
+					{
+						Pause(true);
+						ShowComplete();
+					}).SetUpdate(true);
+				}).SetUpdate(true);
+			}
+		}
+
+		public void Hide()
+		{
+			Init();
+			if (gameObject.activeSelf)
+			{
+				content.transform.DOScale(startScale, scaleTime).OnComplete(() => 
+				{
+					Pause(false);
+					HideComplete();
+					gameObject.SetActive(false);
+				}).SetUpdate(true);
+			}
+		}
+
+		private void Pause(bool pause) 
+		{
+			if (pauseGame) 
+			{
+				Time.timeScale = pause ? 0 : timeScale;
+			}
+		}
+
+		protected abstract void InitPanel();
+
+		protected abstract void ShowComplete();
+
+		protected abstract void HideComplete();
 	}
 }

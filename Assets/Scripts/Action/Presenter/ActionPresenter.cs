@@ -34,6 +34,7 @@ namespace digectsoft
 {
 	public class ActionPresenter : MonoBehaviour
 	{
+		[Header("Gameplay")]
 		[SerializeField]
 		[Min(0)]
 		private float hitInterval = 1;
@@ -43,6 +44,8 @@ namespace digectsoft
 		[SerializeField]
 		[Min(0)]
 		private float completeInterval = 1;
+		
+		[Header("Control")]
 		[SerializeField]
 		private ActionAdapter actionAdapter;
 
@@ -50,19 +53,23 @@ namespace digectsoft
 		public Character Enemy { get; private set; }
 
 		private GameManager gameManager;
+		private PanelAdapter panelAdapter;
 
 		[Inject]
 		public void Init(GameManager gameManager,
+						 PanelAdapter panelAdapter,
 						 [Inject(Id = CharacterType.PLAYER)] Character player,
 					 	 [Inject(Id = CharacterType.ENEMY)] Character enemy)
 		{
 			this.gameManager = gameManager;
+			this.panelAdapter = panelAdapter;
 			Player = player;
 			Enemy = enemy;
 		}
 		
 		public void OnInit(CharacterValue playerValue, CharacterValue enemyValue) 
 		{
+			panelAdapter.ShowPanel(PanelType.PLAY);
 			Player.Init(playerValue.health, Enemy.transform.position);
 			Enemy.Init(enemyValue.health, Player.transform.position);
 		}

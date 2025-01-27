@@ -25,43 +25,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using UnityEngine;
-using Zenject;
-
-namespace digectsoft 
+namespace digectsoft
 {
-	public class GameInstaller : MonoInstaller
+	public enum PanelType 
 	{
-		[Header("Model")]
-		[SerializeField]
-		private MockServerAdapter serverAdapter;
-		[SerializeField]
-		private GameManager gameManager;
-		
-		[Header("View")]
-		[SerializeField]
-		private ActionAdapter actionAdapter;
-		[SerializeField]
-		private PanelAdapter panelAdapter;
-		[SerializeField]
-		private Character player;
-		[SerializeField]
-		private Character enemy;
-		
-		[Header("Presenter")]
-		[SerializeField]
-		private ActionPresenter actionPresenter;
-
-		public override void InstallBindings()
-		{
-			Container.Bind<IServerAdapter>().To<MockServerAdapter>().FromInstance(serverAdapter).AsSingle();
-			//Container.Bind<IServerAdapter>().To<NetworkServerAdapter>().AsSingle(); //Implement NetworkServerAdapter for a backend server.
-			Container.Bind<GameManager>().FromInstance(gameManager).AsSingle();
-			Container.Bind<ActionAdapter>().FromInstance(actionAdapter).AsSingle();
-			Container.Bind<PanelAdapter>().FromInstance(panelAdapter).AsSingle();
-			Container.Bind<Character>().WithId(CharacterType.PLAYER).FromInstance(player).AsCached();
-			Container.Bind<Character>().WithId(CharacterType.ENEMY).FromInstance(enemy).AsCached();
-			Container.Bind<ActionPresenter>().FromInstance(actionPresenter).AsSingle();
-		}
+		DEFAULT,
+		PLAY
 	}
 }
