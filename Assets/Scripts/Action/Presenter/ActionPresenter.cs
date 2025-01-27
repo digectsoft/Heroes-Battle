@@ -63,8 +63,8 @@ namespace digectsoft
 		
 		public void OnInit(CharacterValue playerValue, CharacterValue enemyValue) 
 		{
-			Player.Init(playerValue.health);
-			Enemy.Init(enemyValue.health);
+			Player.Init(playerValue.health, Enemy.transform.position);
+			Enemy.Init(enemyValue.health, Player.transform.position);
 		}
 
 		public void OnAction(Dictionary<CharacterType, CharacterAction> effectActions)

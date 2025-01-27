@@ -27,8 +27,6 @@
 // ---------------------------------------------------------------------------
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using Zenject;
 
 namespace digectsoft
 {
@@ -48,6 +46,11 @@ namespace digectsoft
 		private string hitValue;
 		[SerializeField]
 		private string deathValue;
+		[Header("Arrow")]
+		[SerializeField]
+		private CharacterArrow arrow;
+		[SerializeField]
+		private float flightDuration;
 		[Header("Impacts")]
 		[SerializeField]
 		private float scaleMultiplier;
@@ -75,9 +78,10 @@ namespace digectsoft
 			}
 		}
 		
-		public void Init(int healthValue) 
+		public void Init(int healthValue, Vector2 targetPosition) 
 		{
 			health.Init(healthValue);
+			arrow.Init(targetPosition, flightDuration);
 			foreach (CharacterImpact characterImpact in characterImpacts.Values) 
 			{
 				characterImpact.Init(scaleMultiplier, scaleDuration, fadeDuration);
@@ -97,6 +101,11 @@ namespace digectsoft
 		public void Attack() 
 		{
 			animator.SetBool(attackValue, true);
+		}
+		
+		public void Shot() 
+		{
+			arrow.Flight();
 		}
 		
 		public void Effect(EffectType effectType, int duration) 
