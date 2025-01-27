@@ -86,6 +86,7 @@ namespace digectsoft
 							Character character1,
 							Character character2)
 		{
+			Character characterEffect = character1;
 			switch (effectType)
 			{
 				case EffectType.ATTACK:
@@ -98,9 +99,14 @@ namespace digectsoft
 				}
 				case EffectType.FIREBALL:
 				{
+					characterEffect = character2;
 					character2.Hit(effectActions[character2.CharacterType].characterValue.health);
 					break;
 				}
+			}
+			if (EffectType.ATTACK != effectType) 
+			{
+				characterEffect.Apply(effectType);
 			}
 		}
 

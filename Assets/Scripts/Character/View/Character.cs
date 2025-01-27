@@ -25,41 +25,63 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace digectsoft
 {
 	public class Character : MonoBehaviour
 	{
+		[Header("Status")]
 		[SerializeField]
 		private CharacterType type;
 		[SerializeField]
 		private CharacterHealth health;
 		[SerializeField]
 		private CharacterEffect effect;
+		[Header("Animations")]
 		[SerializeField]
 		private string attackValue;
 		[SerializeField]
 		private string hitValue;
 		[SerializeField]
 		private string deathValue;
-		
+		[Header("Impacts")]
+		[SerializeField]
+		private float scaleMultiplier;
+		[SerializeField]
+		[Min(0)]
+		private float scaleDuration;
+		[SerializeField]
+		[Min(0)]
+		private float fadeDuration;
+		[SerializeField]
+		private List<CharacterImpact> impacts;
+
 		public CharacterType CharacterType { get { return type; } private set { } }
 		public CharacterEffect CharacterEffect { get { return effect; } private set { } }
 		
-		[Inject]
-		private ActionPresenter actionPresenter;
+		private Dictionary<EffectType, CharacterImpact> characterImpacts = new Dictionary<EffectType, CharacterImpact>();
 		private Animator animator;
 		
 		private void Awake()
 		{
 			animator = GetComponent<Animator>();
+			foreach (CharacterImpact characterImpact in impacts) 
+			{
+				characterImpacts.Add(characterImpact.EffectType, characterImpact);
+			}
 		}
 		
 		public void Init(int healthValue) 
 		{
 			health.Init(healthValue);
+			foreach (CharacterImpact characterImpact in characterImpacts.Values) 
+			{
+				characterImpact.Init(scaleMultiplier, scaleDuration, fadeDuration);
+			}
 		}
 
 		void Start()
@@ -106,6 +128,11 @@ namespace digectsoft
 		{
 			UpdateHealth(value);
 			animator.SetBool(hitValue, true);
+		}
+		
+		public void Apply(EffectType effectType) 
+		{
+			characterImpacts[effectType].Apply();
 		}
 	}
 }
