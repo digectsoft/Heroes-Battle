@@ -45,17 +45,17 @@ namespace digectsoft
 
 		private void Awake()
 		{
-			baseScale = transform.localScale;
 			spriteRenderer = GetComponent<SpriteRenderer>();
 		}
 		
 		public void Init(float scaleMultiplier, float scaleDuration, float fadeDuration) 
 		{
-			transform.localScale = baseScale;
-			gameObject.SetActive(false);
+			baseScale = transform.localScale;
 			targetScale = baseScale * scaleMultiplier;
+			transform.localScale = baseScale;
 			this.scaleDuration = scaleDuration;
 			this.fadeDuration = fadeDuration;
+			gameObject.SetActive(false);
 		}
 		
 		public void Apply() 
