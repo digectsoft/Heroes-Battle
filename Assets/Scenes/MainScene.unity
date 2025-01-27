@@ -483,7 +483,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0.9411765}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -552,7 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d0a18f3557ce4685afc9f64a8972035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectType: 4
+  effectType: 4
   textRecharge: {fileID: 1525658984}
 --- !u!1 &216256747
 GameObject:
@@ -3605,7 +3605,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0.9411765}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3674,7 +3674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d0a18f3557ce4685afc9f64a8972035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectType: 1
+  effectType: 1
   textRecharge: {fileID: 0}
 --- !u!1 &847200676
 GameObject:
@@ -5372,7 +5372,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0.9411765}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5441,7 +5441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d0a18f3557ce4685afc9f64a8972035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectType: 5
+  effectType: 5
   textRecharge: {fileID: 1694100068}
 --- !u!1 &1800003268
 GameObject:
@@ -5624,7 +5624,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0.9411765}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5693,7 +5693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d0a18f3557ce4685afc9f64a8972035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectType: 3
+  effectType: 3
   textRecharge: {fileID: 1765409051}
 --- !u!1 &1991922187
 GameObject:
@@ -5796,7 +5796,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0.9411765}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -5865,7 +5865,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d0a18f3557ce4685afc9f64a8972035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectType: 2
+  effectType: 2
   textRecharge: {fileID: 884723308}
 --- !u!1 &2027776182
 GameObject:

@@ -35,11 +35,11 @@ namespace digectsoft
 	public class ActionEffectStatus : MonoBehaviour
 	{
 		[SerializeField]
-		private EffectType _effectType;
+		private EffectType effectType;
 		[SerializeField]
 		private TextMeshProUGUI textRecharge;
 		
-		public EffectType EffectType { get { return _effectType; } private set { } }
+		public EffectType EffectType { get { return effectType; } private set { } }
 
 		private Button button;
 		private bool registered;
