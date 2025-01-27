@@ -35,8 +35,9 @@ namespace digectsoft
 {
 	public class GameManager : MonoBehaviour
 	{
-		public bool Initialized { get; private set; }
-
+		[SerializeField]
+		private GameObject processing;
+		
 		private IServerAdapter serverAdapter;
 		private ActionPresenter actionPresenter;
 		private bool inAction = false;
@@ -51,18 +52,19 @@ namespace digectsoft
 		async void Start()
 		{
 			DOTween.Init(true, true, LogBehaviour.Verbose);
+			OnRequestStart();
 			Dictionary<CharacterType, CharacterValue> characterValues = await serverAdapter.Init();
-			Initialized = true;
 			actionPresenter.OnInit(characterValues[CharacterType.PLAYER], characterValues[CharacterType.ENEMY]);
+			OnRequestComplete();
 		}
 
 		public async UniTask OnRequestStart(EffectType actionType)
 		{
-			if (!Initialized || inAction)
+			if (inAction)
 			{
 				return;
 			}
-			inAction = true;
+			OnRequestStart();
 			Debug.Log("GameManager: " + actionType);
 			Dictionary<CharacterType, CharacterAction> effectActions = await serverAdapter.Action(actionType);
 			if (EffectType.DEFAULT != effectActions[CharacterType.PLAYER].effectType) 
@@ -74,10 +76,17 @@ namespace digectsoft
 				OnRequestComplete();
 			}
 		}
+		
+		public void OnRequestStart() 
+		{
+			inAction = true;
+			processing.SetActive(inAction);
+		}
 
 		public void OnRequestComplete()
 		{
 			inAction = false;
+			processing.SetActive(inAction);
 		}
 	}
 }
