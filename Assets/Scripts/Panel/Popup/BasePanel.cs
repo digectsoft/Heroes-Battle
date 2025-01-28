@@ -30,7 +30,7 @@ using UnityEngine;
 
 namespace digectsoft
 {
-	public abstract class BasePanel : MonoBehaviour
+	public class BasePanel : MonoBehaviour
 	{
 		[Header("Options")]
 		[SerializeField]
@@ -74,7 +74,7 @@ namespace digectsoft
 				DOTween.Sequence().AppendInterval(showDelay).OnComplete(() => 
 				{
 					gameObject.SetActive(true);
-					content.transform.DOScale(startScale, startScale);
+					content.transform.localScale = new Vector3(startScale, startScale, startScale);
 					content.transform.DOScale(endScale, scaleTime).OnComplete(() => 
 					{
 						Pause(true);
@@ -106,10 +106,10 @@ namespace digectsoft
 			}
 		}
 
-		protected abstract void InitPanel();
+		protected virtual void InitPanel() {}
 
-		protected abstract void ShowComplete();
+		protected virtual void ShowComplete() {}
 
-		protected abstract void HideComplete();
+		protected virtual void HideComplete() {}
 	}
 }

@@ -39,6 +39,7 @@ namespace digectsoft
 		private CharacterHealth health;
 		[SerializeField]
 		private CharacterEffect effect;
+		
 		[Header("Animations")]
 		[SerializeField]
 		private string attackValue;
@@ -46,11 +47,13 @@ namespace digectsoft
 		private string hitValue;
 		[SerializeField]
 		private string deathValue;
+		
 		[Header("Arrow")]
 		[SerializeField]
 		private CharacterArrow arrow;
 		[SerializeField]
 		private float flightDuration;
+		
 		[Header("Impacts")]
 		[SerializeField]
 		private float scaleMultiplier;
@@ -86,16 +89,6 @@ namespace digectsoft
 			{
 				characterImpact.Init(scaleMultiplier, scaleDuration, fadeDuration);
 			}
-		}
-
-		void Start()
-		{
-		
-		}
-
-		void Update()
-		{
-		
 		}
 		
 		public void Attack() 

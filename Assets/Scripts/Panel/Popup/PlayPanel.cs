@@ -25,32 +25,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
+using Zenject;
+
 namespace digectsoft
 {
 	public class PlayPanel : BasePanel
 	{
-		protected override void InitPanel()
-		{
-		}
-
-		protected override void ShowComplete()
-		{
-		}
+		[Inject]
+		private ActionPresenter actionPresenter;
 
 		protected override void HideComplete()
 		{
-		}
-
-		// Start is called before the first frame update
-		void Start()
-		{
-		
-		}
-
-		// Update is called once per frame
-		void Update()
-		{
-		
+			actionPresenter.StartGame();
 		}
 	}
 }

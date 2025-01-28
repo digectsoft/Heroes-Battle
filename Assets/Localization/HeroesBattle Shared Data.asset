@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: HeroesBattle Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: HeroesBattle
+  m_TableCollectionNameGuidString: 5c5d7cec1c0a347c7959d4196f7a1cd8
+  m_Entries:
+  - m_Id: 18374189056
+    m_Key: app.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2125315694592
+    m_Key: action.attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2335043477504
+    m_Key: action.protection
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2554040672256
+    m_Key: action.regeneration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2718948122624
+    m_Key: action.fireball
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2862640783360
+    m_Key: action.cleanup
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3022884167680
+    m_Key: button.play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 82871543914496
+    m_Key: button.replay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 85265602306048
+    m_Key: pause
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 4849954128674684952
+  references:
+    version: 2
+    RefIds:
+    - rid: 4849954128674684952
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1738052274937

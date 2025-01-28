@@ -53,11 +53,15 @@ namespace digectsoft
 		//A delegate to update an effect.
 		private delegate void OnUpdateEffect(EffectType effectType);
 
-		private void Awake()
+		public async UniTask<Dictionary<CharacterType, CharacterAction>> Init()
 		{
+			await UniTask.Delay(delayMs);
+			effectActions.Clear();
+			charachterActions.Clear();
+			enemyActions.Clear();
 			charachterActions.Add(CharacterType.PLAYER, new CharacterAction(health));
 			charachterActions.Add(CharacterType.ENEMY, new CharacterAction(health));
-			foreach (EffectAction effectAction in _effectActions) 
+			foreach (EffectAction effectAction in _effectActions)
 			{
 				if (EffectType.DEFAULT != effectAction.type)
 				{
@@ -73,17 +77,7 @@ namespace digectsoft
 					enemyActions.Add(effectAction.type);
 				}
 			}
-		}
-
-		public async UniTask<Dictionary<CharacterType, CharacterValue>> Init()
-		{
-			await UniTask.Delay(delayMs);
-			Dictionary<CharacterType, CharacterValue> characterValues = new Dictionary<CharacterType, CharacterValue>
-			{
-				{ CharacterType.PLAYER, new CharacterValue(health) },
-				{ CharacterType.ENEMY, new CharacterValue(health) }
-			};
-			return characterValues;
+			return charachterActions;
 		}
 
 		public async UniTask<Dictionary<CharacterType, CharacterAction>> Action(EffectType effectType)
@@ -290,7 +284,6 @@ namespace digectsoft
 			//Select a random effect.
 			int enemyIndex = Random.Range(0, effectTypes.Count);
 			EffectType effectType = effectTypes[enemyIndex];
-			Debug.Log("Enemy: " + effectType);
 			//The attack should always be in actions.
 			if (EffectType.ATTACK != effectType)
 			{

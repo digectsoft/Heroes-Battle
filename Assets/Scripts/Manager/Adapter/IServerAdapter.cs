@@ -32,7 +32,7 @@ namespace digectsoft
 {
 	public interface IServerAdapter
 	{
-		UniTask<Dictionary<CharacterType, CharacterValue>> Init();
+		UniTask<Dictionary<CharacterType, CharacterAction>> Init();
 		
 		UniTask<Dictionary<CharacterType, CharacterAction>> Action(EffectType type);
 	}

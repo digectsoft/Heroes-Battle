@@ -30,6 +30,7 @@ namespace digectsoft
 	public enum PanelType 
 	{
 		DEFAULT,
-		PLAY
+		PLAY,
+		PAUSE
 	}
 }

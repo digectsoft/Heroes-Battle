@@ -50,7 +50,10 @@ namespace digectsoft
 		
 		public void Init(float scaleMultiplier, float scaleDuration, float fadeDuration) 
 		{
-			baseScale = transform.localScale;
+			if (Vector2.zero == baseScale) 
+			{
+				baseScale = transform.localScale;
+			}
 			targetScale = baseScale * scaleMultiplier;
 			transform.localScale = baseScale;
 			this.scaleDuration = scaleDuration;

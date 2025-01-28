@@ -27,6 +27,7 @@
 // ---------------------------------------------------------------------------
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace digectsoft
@@ -35,29 +36,31 @@ namespace digectsoft
 	{		
 		[SerializeField]
 		private List<ActionEffectStatus> actionEffects;
-
+		[SerializeField]
+		private Button pauseButton;
 		
-		private GameManager gameManager;
 		private ActionPresenter actionPresenter;
+		private PanelAdapter panelAdapter;
 		private Dictionary<EffectType, ActionEffectStatus> effectTypes = new Dictionary<EffectType, ActionEffectStatus>();
 
 		[Inject]
-		public void Init(GameManager gameManager, ActionPresenter actionPresenter) 
+		public void Init(ActionPresenter actionPresenter, PanelAdapter panelAdapter) 
 		{
-			this.gameManager = gameManager;
 			this.actionPresenter = actionPresenter;
+			this.panelAdapter = panelAdapter;
 		}
 
 		private void Start()
 		{
 			Init();
+			pauseButton.onClick.AddListener(() => panelAdapter.ShowPanel(PanelType.PAUSE));
 		}
 		
 		public void Init() 
 		{
 			foreach (ActionEffectStatus actionEffect in actionEffects)
 			{
-				actionEffect.Init(async () => await gameManager.OnRequestStart(actionEffect.EffectType));
+				actionEffect.Init(() => actionPresenter.TakeAction(actionEffect.EffectType));
 				actionEffect.Activate(EffectType.CLEANUP != actionEffect.EffectType);
 				if (actionEffect.IsRechargable())
 				{

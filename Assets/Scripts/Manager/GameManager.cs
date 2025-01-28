@@ -40,6 +40,7 @@ namespace digectsoft
 		
 		private IServerAdapter serverAdapter;
 		private ActionPresenter actionPresenter;
+		private bool initialized =  false;
 		private bool inAction = false;
 
 		[Inject]
@@ -49,41 +50,50 @@ namespace digectsoft
 			this.actionPresenter = actionPresenter;
 		}
 
-		async void Start()
+		void Start()
 		{
 			DOTween.Init(true, true, LogBehaviour.Verbose);
-			OnRequestStart();
-			Dictionary<CharacterType, CharacterValue> characterValues = await serverAdapter.Init();
-			actionPresenter.OnInit(characterValues[CharacterType.PLAYER], characterValues[CharacterType.ENEMY]);
-			OnRequestComplete();
+			processing.SetActive(false);
 		}
 
-		public async UniTask OnRequestStart(EffectType actionType)
+		public async UniTask OnStart() 
 		{
-			if (inAction)
+			initialized = false;
+			RequestStart();
+			Dictionary<CharacterType, CharacterAction> characterActoins = await serverAdapter.Init();
+			actionPresenter.OnInit(characterActoins);
+			initialized = true;
+			RequestComplete();
+		}
+
+		public async UniTask OnRequest(EffectType actionType)
+		{
+			if (!initialized || inAction)
 			{
 				return;
 			}
-			OnRequestStart();
-			Debug.Log("GameManager: " + actionType);
+			RequestStart();
 			Dictionary<CharacterType, CharacterAction> effectActions = await serverAdapter.Action(actionType);
-			if (EffectType.DEFAULT != effectActions[CharacterType.PLAYER].effectType) 
+			if (initialized) 
 			{
-				actionPresenter.OnAction(effectActions);
-			}
-			else 
-			{
-				OnRequestComplete();
+				if (EffectType.DEFAULT != effectActions[CharacterType.PLAYER].effectType)
+				{
+					actionPresenter.OnAction(effectActions);
+				}
+				else
+				{
+					RequestComplete();
+				}
 			}
 		}
 		
-		public void OnRequestStart() 
+		public void RequestStart() 
 		{
 			inAction = true;
 			processing.SetActive(inAction);
 		}
 
-		public void OnRequestComplete()
+		public void RequestComplete()
 		{
 			inAction = false;
 			processing.SetActive(inAction);

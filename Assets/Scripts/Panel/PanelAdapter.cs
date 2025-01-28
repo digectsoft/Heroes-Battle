@@ -33,6 +33,8 @@ namespace digectsoft
 	public class PanelAdapter : MonoBehaviour
 	{
 		[SerializeField]
+		private bool hidePanels = true;
+		[SerializeField]
 		private List<BasePanel> panels = new List<BasePanel>();
 		
 		private Dictionary<PanelType, BasePanel> panelTypes = new Dictionary<PanelType, BasePanel>();
@@ -42,6 +44,7 @@ namespace digectsoft
 			foreach (BasePanel panel in panels) 
 			{
 				panelTypes.Add(panel.PanelType, panel);
+				panel.gameObject.SetActive(!hidePanels);
 			}
 		}
 		

@@ -25,7 +25,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using Zenject;
@@ -67,28 +69,66 @@ namespace digectsoft
 			Enemy = enemy;
 		}
 		
-		public void OnInit(CharacterValue playerValue, CharacterValue enemyValue) 
+		void Start()
 		{
 			panelAdapter.ShowPanel(PanelType.PLAY);
-			Player.Init(playerValue.health, Enemy.transform.position);
-			Enemy.Init(enemyValue.health, Player.transform.position);
 		}
 
-		public void OnAction(Dictionary<CharacterType, CharacterAction> effectActions)
+		public async void StartGame()
 		{
-			CharacterAction playerAction = effectActions[Player.CharacterType];
-			CharacterAction enemyAction = effectActions[Enemy.CharacterType];
-			UpdateEffects(effectActions, Player, Enemy);
-			UpdateEffects(effectActions, Enemy, Player);
-			Sequence sequence = DOTween.Sequence();
-			sequence.AppendCallback(() => Action(effectActions, playerAction.effectType, Player, Enemy));
-			sequence.AppendInterval(stepInterval);
-			sequence.AppendCallback(() => Action(effectActions, enemyAction.effectType, Enemy, Player));
-			sequence.AppendInterval(completeInterval);
-			sequence.AppendCallback(gameManager.OnRequestComplete);
+			try 
+			{
+				await gameManager.OnStart();
+			}
+			catch (Exception ex) 
+			{
+				OnError(ex);
+			}
 		}
 
-		private void Action(Dictionary<CharacterType, CharacterAction> effectActions,
+		public async void TakeAction(EffectType effectType)
+		{
+			try 
+			{
+				await gameManager.OnRequest(effectType);
+			}
+			catch (Exception ex)
+			{
+				OnError(ex);
+			}
+		}
+
+		public void OnInit(Dictionary<CharacterType, CharacterAction> characterActoins) 
+		{
+			CharacterAction playerAction = characterActoins[Player.CharacterType];
+			CharacterAction enemyAction = characterActoins[Enemy.CharacterType];
+			Player.Init(playerAction.characterValue.health, Enemy.transform.position);
+			Enemy.Init(enemyAction.characterValue.health, Player.transform.position);
+			UpdateEffects(characterActoins, Player, Enemy);
+			UpdateEffects(characterActoins, Enemy, Player);
+		}
+
+		public void OnAction(Dictionary<CharacterType, CharacterAction> characterActoins)
+		{
+			CharacterAction playerAction = characterActoins[Player.CharacterType];
+			CharacterAction enemyAction = characterActoins[Enemy.CharacterType];
+			UpdateEffects(characterActoins, Player, Enemy);
+			UpdateEffects(characterActoins, Enemy, Player);
+			Sequence sequence = DOTween.Sequence();
+			sequence.AppendCallback(() => Action(characterActoins, playerAction.effectType, Player, Enemy));
+			sequence.AppendInterval(stepInterval);
+			sequence.AppendCallback(() => Action(characterActoins, enemyAction.effectType, Enemy, Player));
+			sequence.AppendInterval(completeInterval);
+			sequence.AppendCallback(gameManager.RequestComplete);
+		}
+		
+		public void OnError(Exception exception)
+		{
+			// Debug.Log(exception);
+			throw exception;
+		}
+
+		private void Action(Dictionary<CharacterType, CharacterAction> characterActoins,
 							EffectType effectType,
 							Character character1,
 							Character character2)
@@ -101,13 +141,13 @@ namespace digectsoft
 					Sequence sequence = DOTween.Sequence();
 					sequence.AppendCallback(() => character1.Attack());
 					sequence.AppendInterval(hitInterval);
-					sequence.AppendCallback(() => character2.Hit(effectActions[character2.CharacterType].characterValue.health));
+					sequence.AppendCallback(() => character2.Hit(characterActoins[character2.CharacterType].characterValue.health));
 					break;
 				}
 				case EffectType.FIREBALL:
 				{
 					characterEffect = character2;
-					character2.Hit(effectActions[character2.CharacterType].characterValue.health);
+					character2.Hit(characterActoins[character2.CharacterType].characterValue.health);
 					break;
 				}
 			}
