@@ -26,6 +26,8 @@
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
 using System.Collections.Generic;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -33,7 +35,8 @@ using Zenject;
 namespace digectsoft
 {
 	public class ActionAdapter : MonoBehaviour
-	{		
+	{	
+		[Header("Actions")]
 		[SerializeField]
 		private List<ActionEffectStatus> actionEffects;
 		[SerializeField]
@@ -41,9 +44,23 @@ namespace digectsoft
 		[SerializeField]
 		private GameObject processing;
 		
+		[Header("Battle notification")]
+		[SerializeField]
+		private TextMeshProUGUI fightText;
+		[SerializeField]
+		private float scaleMultiplier;
+		[SerializeField]
+		[Min(0)]
+		private float scaleDuration;
+		[SerializeField]
+		[Min(0)]
+		private float fadeDuration;
+
 		private ActionPresenter actionPresenter;
 		private PanelAdapter panelAdapter;
 		private Dictionary<EffectType, ActionEffectStatus> effectTypes = new Dictionary<EffectType, ActionEffectStatus>();
+		private Vector2 baseFightScale;
+		private Vector2 targetFightScale;
 
 		[Inject]
 		public void Init(ActionPresenter actionPresenter, PanelAdapter panelAdapter) 
@@ -57,6 +74,9 @@ namespace digectsoft
 			Init();
 			pauseButton.onClick.AddListener(() => panelAdapter.ShowPanel(PanelType.PAUSE));
 			ShowProcessing(false);
+			ShowFight(false);
+			baseFightScale = transform.localScale;
+			targetFightScale = baseFightScale * scaleMultiplier;
 		}
 		
 		public void Init() 
@@ -89,6 +109,25 @@ namespace digectsoft
 		public void ShowProcessing(bool active) 
 		{
 			processing.SetActive(active);
+		}
+		
+		public void ShowFight(bool active) 
+		{
+			fightText.gameObject.SetActive(active);
+			if (active) 
+			{
+				fightText.transform.localScale = baseFightScale;
+				Color color = fightText.color;
+				color.a = 1;
+				fightText.color = color;
+				fightText.transform.DOScale(targetFightScale, scaleDuration).OnComplete(() =>
+				{
+					fightText.DOFade(0, fadeDuration).OnComplete(() =>
+					{
+						fightText.gameObject.SetActive(false);
+					});
+				});
+			}
 		}
 	}
 }

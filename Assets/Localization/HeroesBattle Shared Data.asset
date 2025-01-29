@@ -51,6 +51,10 @@ MonoBehaviour:
     m_Key: pause
     m_Metadata:
       m_Items: []
+  - m_Id: 302362034954240
+    m_Key: fight.!
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

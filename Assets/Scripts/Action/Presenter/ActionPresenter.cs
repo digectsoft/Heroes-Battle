@@ -99,6 +99,7 @@ namespace digectsoft
 
 		public void OnInit(Dictionary<CharacterType, CharacterAction> characterActoins) 
 		{
+			actionAdapter.ShowFight(true);
 			CharacterAction playerAction = characterActoins[Player.CharacterType];
 			CharacterAction enemyAction = characterActoins[Enemy.CharacterType];
 			Player.Init(playerAction.characterValue.health, Enemy.transform.position);
