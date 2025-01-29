@@ -25,15 +25,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
+using Zenject;
+
 namespace digectsoft
 {
-	public enum PanelType 
-	{
-		DEFAULT,
-		PLAY,
-		PAUSE,
-		WIN,
-		GAME_OVER,
-		ERROR
-	}
+    public class ErrorPanel : BasePanel
+    {
+        [Inject]
+        private ActionPresenter acitonPresenter;
+
+        protected override void HideComplete()
+        {
+            acitonPresenter.BeginGame();
+        }
+    }
 }

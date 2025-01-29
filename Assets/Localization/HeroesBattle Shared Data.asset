@@ -76,7 +76,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 330750489518080
-    m_Key: loser..
+    m_Key: loser.!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 477330383298560
+    m_Key: error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 477511703060480
+    m_Key: wrong
     m_Metadata:
       m_Items: []
   m_Metadata:

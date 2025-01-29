@@ -79,7 +79,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 330750489518080
-    m_Localized: Your are the loser.
+    m_Localized: Your are the loser!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 477330383298560
+    m_Localized: Error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 477511703060480
+    m_Localized: Something wrong.
     m_Metadata:
       m_Items: []
   references:

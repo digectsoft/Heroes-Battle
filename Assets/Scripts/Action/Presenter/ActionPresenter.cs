@@ -214,8 +214,8 @@ namespace digectsoft
 		/// <param name="exception">The exception that occurred during the operation.</param>
 		public void OnError(Exception exception)
 		{
-			// Debug.Log(exception);
-			throw exception;
+			Debug.Log(exception);
+			panelAdapter.ShowPanel(PanelType.ERROR);
 		}
 
 		/// <summary>
