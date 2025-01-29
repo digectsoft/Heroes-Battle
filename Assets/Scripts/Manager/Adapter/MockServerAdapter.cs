@@ -256,7 +256,8 @@ namespace digectsoft
 		private void ChangeHealth(ref CharacterAction characterAction, int value)
 		{
 			int currentHealth = characterAction.characterValue.health + value;
-			characterAction.characterValue.health = currentHealth; //Mathf.Clamp(currentHealth, 0, health);
+			
+			characterAction.characterValue.health = currentHealth > health ? health : currentHealth;
 		}
 		
 		private void UpdateEnemyEffect(EffectType effectType) 

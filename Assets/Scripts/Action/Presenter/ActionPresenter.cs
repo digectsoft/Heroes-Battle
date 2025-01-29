@@ -142,14 +142,12 @@ namespace digectsoft
 			{
 				Enemy.Death();
 				panelAdapter.ShowPanel(PanelType.WIN);
-				audioManager.PlaySound(AudioSoundType.SOUND_WIN);
 				return;
 			}
 			if (!IsAlive(playerAction))
 			{
 				Player.Death();
 				panelAdapter.ShowPanel(PanelType.GAME_OVER);
-				audioManager.PlaySound(AudioSoundType.SOUND_GAME_OVER);
 			}
 		}
 		
