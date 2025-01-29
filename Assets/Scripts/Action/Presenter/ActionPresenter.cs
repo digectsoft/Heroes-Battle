@@ -70,6 +70,11 @@ namespace digectsoft
 		
 		void Start()
 		{
+			BeginGame();
+		}
+		
+		public void BeginGame() 
+		{
 			panelAdapter.ShowPanel(PanelType.PLAY);
 		}
 

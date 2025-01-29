@@ -55,6 +55,30 @@ MonoBehaviour:
     m_Key: fight.!
     m_Metadata:
       m_Items: []
+  - m_Id: 318980190363648
+    m_Key: win
+    m_Metadata:
+      m_Items: []
+  - m_Id: 319821722935296
+    m_Key: congratulations.!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 320610323390464
+    m_Key: winner.!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 328457589350400
+    m_Key: button.continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 330309341011968
+    m_Key: game.over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 330750489518080
+    m_Key: loser..
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

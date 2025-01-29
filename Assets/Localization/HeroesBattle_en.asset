@@ -58,6 +58,30 @@ MonoBehaviour:
     m_Localized: Fight!
     m_Metadata:
       m_Items: []
+  - m_Id: 318980190363648
+    m_Localized: Win
+    m_Metadata:
+      m_Items: []
+  - m_Id: 319821722935296
+    m_Localized: Congratulations!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 320610323390464
+    m_Localized: You are the winner!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 328457589350400
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 330309341011968
+    m_Localized: Game over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 330750489518080
+    m_Localized: Your are the loser.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
