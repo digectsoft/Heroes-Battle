@@ -303,6 +303,7 @@ RectTransform:
   m_Children:
   - {fileID: 1800003269}
   - {fileID: 1209954978}
+  - {fileID: 777843634}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -329,6 +330,7 @@ MonoBehaviour:
   - {fileID: 107811360}
   - {fileID: 1784463998}
   pauseButton: {fileID: 1209954981}
+  processing: {fileID: 777843631}
 --- !u!1 &29910568
 GameObject:
   m_ObjectHideFlags: 0
@@ -5450,21 +5452,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!4 &777843634
-Transform:
+--- !u!224 &777843634
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 777843631}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.37, y: -3.73, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 29287776}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -951.63, y: -543.73}
+  m_SizeDelta: {x: 2.2, y: 2.2}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &794535647
 GameObject:
   m_ObjectHideFlags: 0
@@ -11921,7 +11927,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba59178b657e489392a8c5fba73dfc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  processing: {fileID: 777843631}
 --- !u!1 &5796732011264133490
 GameObject:
   m_ObjectHideFlags: 0
@@ -12537,4 +12542,3 @@ SceneRoots:
   - {fileID: 29287776}
   - {fileID: 794535651}
   - {fileID: 795756339}
-  - {fileID: 777843634}
