@@ -38,6 +38,8 @@ namespace digectsoft
 		private List<ActionEffectStatus> actionEffects;
 		[SerializeField]
 		private Button pauseButton;
+		[SerializeField]
+		private GameObject processing;
 		
 		private ActionPresenter actionPresenter;
 		private PanelAdapter panelAdapter;
@@ -54,6 +56,7 @@ namespace digectsoft
 		{
 			Init();
 			pauseButton.onClick.AddListener(() => panelAdapter.ShowPanel(PanelType.PAUSE));
+			ShowProcessing(false);
 		}
 		
 		public void Init() 
@@ -81,6 +84,11 @@ namespace digectsoft
 				status = effectStatus.Duration > 0;
 			}
 			actionEffect.Activate(status);
+		}
+		
+		public void ShowProcessing(bool active) 
+		{
+			processing.SetActive(active);
 		}
 	}
 }

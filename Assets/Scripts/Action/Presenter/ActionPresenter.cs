@@ -122,6 +122,16 @@ namespace digectsoft
 			sequence.AppendCallback(gameManager.RequestComplete);
 		}
 		
+		public void OnRequestStart() 
+		{
+			actionAdapter.ShowProcessing(true);
+		}
+		
+		public void OnRequestComplete() 
+		{
+			actionAdapter.ShowProcessing(false);
+		}
+		
 		public void OnError(Exception exception)
 		{
 			// Debug.Log(exception);

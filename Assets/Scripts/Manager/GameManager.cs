@@ -35,9 +35,6 @@ namespace digectsoft
 {
 	public class GameManager : MonoBehaviour
 	{
-		[SerializeField]
-		private GameObject processing;
-		
 		private IServerAdapter serverAdapter;
 		private ActionPresenter actionPresenter;
 		private bool initialized =  false;
@@ -53,7 +50,6 @@ namespace digectsoft
 		void Start()
 		{
 			DOTween.Init(true, true, LogBehaviour.Verbose);
-			processing.SetActive(false);
 		}
 
 		public async UniTask OnStart() 
@@ -90,13 +86,13 @@ namespace digectsoft
 		public void RequestStart() 
 		{
 			inAction = true;
-			processing.SetActive(inAction);
+			actionPresenter.OnRequestStart();
 		}
 
 		public void RequestComplete()
 		{
 			inAction = false;
-			processing.SetActive(inAction);
+			actionPresenter.OnRequestComplete();
 		}
 	}
 }
