@@ -191,7 +191,7 @@ MonoBehaviour:
   - type: 4
     clip: {fileID: 8300000, guid: 2cc43821e42c94819a86fa6de9ea16da, type: 3}
   - type: 5
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 5a5fc9e50eca04ad8b168836fd5ac5e8, type: 3}
   - type: 101
     clip: {fileID: 8300000, guid: 427a4eba45c914e7794db83aae6d944a, type: 3}
   - type: 102
