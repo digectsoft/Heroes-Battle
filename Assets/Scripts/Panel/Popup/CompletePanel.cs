@@ -34,7 +34,7 @@ namespace digectsoft
 		[Inject]
 		private ActionPresenter acitonPresenter;
 
-		protected override void InitPanel()
+		protected override void HideComplete()
 		{
 			acitonPresenter.BeginGame();
 		}

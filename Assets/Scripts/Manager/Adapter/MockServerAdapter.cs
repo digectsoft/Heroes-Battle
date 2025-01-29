@@ -106,13 +106,14 @@ namespace digectsoft
 			}
 			charachterActions[CharacterType.PLAYER] = playerAction;
 			charachterActions[CharacterType.ENEMY] = enemyAction;
+			// CheckWinner();
 			return charachterActions;
 		}
 
 		private void ApplyAction(EffectType effectType,
-								ref CharacterAction character1,
-								ref CharacterAction character2,
-								OnActionEffect OnAction = null) 
+								 ref CharacterAction character1,
+								 ref CharacterAction character2,
+								 OnActionEffect OnAction = null) 
 		{
 			switch (effectType)
 			{
@@ -255,7 +256,7 @@ namespace digectsoft
 		private void ChangeHealth(ref CharacterAction characterAction, int value)
 		{
 			int currentHealth = characterAction.characterValue.health + value;
-			characterAction.characterValue.health = Mathf.Clamp(currentHealth, 0, health);
+			characterAction.characterValue.health = currentHealth; //Mathf.Clamp(currentHealth, 0, health);
 		}
 		
 		private void UpdateEnemyEffect(EffectType effectType) 
@@ -309,6 +310,22 @@ namespace digectsoft
 								  charachterActions[CharacterType.ENEMY];
 			}
 			return characterAction;
+		}
+		
+		private void CheckWinner() 
+		{
+			CharacterAction playerAction = charachterActions[CharacterType.PLAYER];
+			CharacterAction enemyAction = charachterActions[CharacterType.ENEMY];
+			//First check the health of the enemy because the player begins an action first.
+			if (enemyAction.characterValue.health <= 0) 
+			{
+				//Write to a server that the enemy is a winner.
+				return;
+			}
+			if (playerAction.characterValue.health <= 0) 
+			{
+				//Write to a server that the player is a winner.
+			}
 		}
 	}
 }

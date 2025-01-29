@@ -89,8 +89,14 @@ namespace digectsoft
 			{
 				characterImpact.Init(scaleMultiplier, scaleDuration, fadeDuration);
 			}
+			animator.Rebind();
 		}
-		
+
+		public void Apply(EffectType effectType)
+		{
+			characterImpacts[effectType].Apply();
+		}
+
 		public void Attack() 
 		{
 			animator.SetBool(attackValue, true);
@@ -132,9 +138,9 @@ namespace digectsoft
 			animator.SetBool(hitValue, true);
 		}
 		
-		public void Apply(EffectType effectType) 
+		public void Death() 
 		{
-			characterImpacts[effectType].Apply();
+			animator.SetBool(deathValue, true);
 		}
 	}
 }

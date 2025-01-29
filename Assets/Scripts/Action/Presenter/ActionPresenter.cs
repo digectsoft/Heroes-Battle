@@ -121,10 +121,34 @@ namespace digectsoft
 			UpdateEffects(characterActoins, Enemy, Player);
 			Sequence sequence = DOTween.Sequence();
 			sequence.AppendCallback(() => Action(characterActoins, playerAction.effectType, Player, Enemy));
-			sequence.AppendInterval(stepInterval);
-			sequence.AppendCallback(() => Action(characterActoins, enemyAction.effectType, Enemy, Player));
+			if (IsAlive(enemyAction)) 
+			{
+				sequence.AppendInterval(stepInterval);
+				sequence.AppendCallback(() => Action(characterActoins, enemyAction.effectType, Enemy, Player));
+			}
 			sequence.AppendInterval(completeInterval);
 			sequence.AppendCallback(gameManager.RequestComplete);
+			sequence.AppendCallback(() => CheckWinner(playerAction, enemyAction));
+		}
+		
+		private void CheckWinner(CharacterAction playerAction, CharacterAction enemyAction) 
+		{
+			if (!IsAlive(enemyAction))
+			{
+				Enemy.Death();
+				panelAdapter.ShowPanel(PanelType.WIN);
+				return;
+			}
+			if (!IsAlive(playerAction))
+			{
+				Player.Death();
+				panelAdapter.ShowPanel(PanelType.GAME_OVER);
+			}
+		}
+		
+		private bool IsAlive(CharacterAction characterAction) 
+		{
+			return characterAction.characterValue.health > 0;
 		}
 		
 		public void OnRequestStart() 
