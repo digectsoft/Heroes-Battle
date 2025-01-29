@@ -32,8 +32,23 @@ namespace digectsoft
 {
 	public interface IServerAdapter
 	{
+		/// <summary>
+		/// Initializes character actions asynchronously.
+		/// </summary>
+		/// <returns>
+		/// A task that represents the asynchronous operation, returning a dictionary 
+		/// mapping character types to their corresponding actions.
+		///</returns>
 		UniTask<Dictionary<CharacterType, CharacterAction>> Init();
-		
+
+		/// <summary>
+		/// Executes an action based on the specified effect type asynchronously.
+		/// </summary>
+		/// <param name="type">The type of effect that influences the action.</param>
+		/// <returns>
+		/// A task that represents the asynchronous operation, returning a dictionary 
+		/// mapping character types to their corresponding actions.
+		/// </returns>
 		UniTask<Dictionary<CharacterType, CharacterAction>> Action(EffectType type);
 	}
 }

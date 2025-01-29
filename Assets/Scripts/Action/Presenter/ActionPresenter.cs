@@ -75,13 +75,22 @@ namespace digectsoft
 		{
 			BeginGame();
 		}
-		
+
+		/// <summary>
+		/// Begins the game by showing the gameplay panel and playing the background music.
+		/// </summary>
 		public void BeginGame() 
 		{
 			panelAdapter.ShowPanel(PanelType.PLAY);
 			audioManager?.PlayMusic(AudioMusicType.MUSIC_MENU);
 		}
 
+		/// <summary>
+		/// Starts the game asynchronously, initializing the game environment and processes.
+		/// </summary>
+		/// <exception cref="Exception">
+		/// Any exception thrown during the game start process will be caught and passed to the <see cref="OnError"/> method.
+		/// </exception>
 		public async void StartGame()
 		{
 			try 
@@ -94,6 +103,13 @@ namespace digectsoft
 			}
 		}
 
+		/// <summary>
+		/// Initiates an action based on the specified effect type asynchronously.
+		/// </summary>
+		/// <param name="effectType">The type of effect to apply during the action.</param>
+		/// <exception cref="Exception">
+		/// Any exception thrown during the action request will be caught and passed to the <see cref="OnError"/> method.
+		/// </exception>
 		public async void TakeAction(EffectType effectType)
 		{
 			try 
@@ -106,6 +122,10 @@ namespace digectsoft
 			}
 		}
 
+		/// <summary>
+		/// Initializes the character actions with the provided dictionary of character types and actions.
+		/// </summary>
+		/// <param name="characterActions">A dictionary mapping each character type to its corresponding action.</param>
 		public void OnInit(Dictionary<CharacterType, CharacterAction> characterActoins) 
 		{
 			actionAdapter.ShowFight(true);
@@ -118,6 +138,10 @@ namespace digectsoft
 			audioManager?.PlayMusic(AudioMusicType.MUSIC_BATTLE);
 		}
 
+		/// <summary>
+		/// Handles the actions of characters based on the provided dictionary of character types and actions.
+		/// </summary>
+		/// <param name="characterActions">A dictionary mapping each character type to its corresponding action.</param>
 		public void OnAction(Dictionary<CharacterType, CharacterAction> characterActoins)
 		{
 			CharacterAction playerAction = characterActoins[Player.CharacterType];
@@ -135,7 +159,12 @@ namespace digectsoft
 			sequence.AppendCallback(gameManager.RequestComplete);
 			sequence.AppendCallback(() => CheckWinner(playerAction, enemyAction));
 		}
-		
+
+		/// <summary>
+		/// Checks the winner based on the player’s and enemy’s actions.
+		/// </summary>
+		/// <param name="playerAction">The action performed by the player.</param>
+		/// <param name="enemyAction">The action performed by the enemy.</param>
 		private void CheckWinner(CharacterAction playerAction, CharacterAction enemyAction) 
 		{
 			if (!IsAlive(enemyAction))
@@ -150,28 +179,52 @@ namespace digectsoft
 				panelAdapter.ShowPanel(PanelType.GAME_OVER);
 			}
 		}
-		
+
+		/// <summary>
+		/// Checks if the character is still alive based on the given character action.
+		/// </summary>
+		/// <param name="characterAction">The action of the character to evaluate for life status.</param>
+		/// <returns>
+		/// <c>true</c> if the character is alive; otherwise, <c>false</c>.
+		/// </returns>
 		private bool IsAlive(CharacterAction characterAction) 
 		{
 			return characterAction.characterValue.health > 0;
 		}
-		
+
+		/// <summary>
+		/// Initiates the start of a request process.
+		/// </summary>
 		public void OnRequestStart() 
 		{
 			actionAdapter.ShowProcessing(true);
 		}
-		
+
+		/// <summary>
+		/// Finalizes the request process once it is complete.
+		/// </summary>
 		public void OnRequestComplete() 
 		{
 			actionAdapter.ShowProcessing(false);
 		}
-		
+
+		/// <summary>
+		/// Handles errors by processing the given exception.
+		/// </summary>
+		/// <param name="exception">The exception that occurred during the operation.</param>
 		public void OnError(Exception exception)
 		{
 			// Debug.Log(exception);
 			throw exception;
 		}
 
+		/// <summary>
+		/// Executes the specified action based on the character actions and effect type for two characters.
+		/// </summary>
+		/// <param name="characterActions">A dictionary mapping character types to their corresponding actions.</param>
+		/// <param name="effectType">The type of effect to apply during the action.</param>
+		/// <param name="character1">The first character involved in the action.</param>
+		/// <param name="character2">The second character involved in the action.</param>
 		private void Action(Dictionary<CharacterType, CharacterAction> characterActoins,
 							EffectType effectType,
 							Character character1,
@@ -201,6 +254,12 @@ namespace digectsoft
 			}
 		}
 
+		/// <summary>
+		/// Updates the effects for the specified characters based on the provided character actions.
+		/// </summary>
+		/// <param name="effectActions">A dictionary mapping character types to their corresponding effect actions.</param>
+		/// <param name="character1">The first character whose effects will be updated.</param>
+		/// <param name="character2">The second character whose effects will be updated.</param>
 		private void UpdateEffects(Dictionary<CharacterType, CharacterAction> effectActions,
 								   Character character1,
 								   Character character2) 

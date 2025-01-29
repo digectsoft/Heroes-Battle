@@ -110,6 +110,13 @@ namespace digectsoft
 			return charachterActions;
 		}
 
+		/// <summary>
+		/// Applies an effect to the specified character actions.
+		/// </summary>
+		/// <param name="effectType">The type of effect to apply.</param>
+		/// <param name="character1">A reference to the first character's action to modify.</param>
+		/// <param name="character2">A reference to the second character's action to modify.</param>
+		/// <param name="OnAction">An optional delegate invoked when the action is applied.</param>
 		private void ApplyAction(EffectType effectType,
 								 ref CharacterAction character1,
 								 ref CharacterAction character2,
@@ -149,7 +156,15 @@ namespace digectsoft
 			}
 			character1.effectType = effectType;
 		}
-		
+
+		/// <summary>
+		/// Applies the specified effect to the given character action.
+		/// </summary>
+		/// <param name="characterAction">A reference to the character action to modify.</param>
+		/// <param name="effectType">The type of effect to apply.</param>
+		/// <returns>
+		/// <c>true</c> if the effect was successfully applied; otherwise, <c>false</c>.
+		/// </returns>
 		private bool SetEffect(ref CharacterAction characterAction, EffectType effectType) 
 		{
 			EffectValue effectValue = characterAction.effects[effectType];
@@ -162,12 +177,23 @@ namespace digectsoft
 			}
 			return false;
 		}
-		
+
+		/// <summary>
+		/// Determines whether the specified effect has been completed.
+		/// </summary>
+		/// <param name="effectValue">The effect value to evaluate.</param>
+		/// <returns>
+		/// <c>true</c> if the effect is complete; otherwise, <c>false</c>.
+		/// </returns>
 		private bool IsEffectComplete(EffectValue effectValue) 
 		{
 			return effectValue.duration + effectValue.recharge == 0;
 		}
-		
+
+		/// <summary>
+		/// Applies all relevant effects to the specified character action.
+		/// </summary>
+		/// <param name="characterAction">A reference to the character action to modify.</param>
 		private void ApplyEffects(ref CharacterAction characterAction) 
 		{
 			Dictionary<EffectType, EffectValue> effects = new Dictionary<EffectType, EffectValue>(characterAction.effects);
@@ -204,7 +230,12 @@ namespace digectsoft
 				}
 			}
 		}
-		
+
+		/// <summary>
+		/// Updates the active effects on the specified character action.
+		/// </summary>
+		/// <param name="characterAction">A reference to the character action to modify.</param>
+		/// <param name="OnUpdate">An optional delegate invoked when an effect is updated.</param>
 		private void UpdateEffects(ref CharacterAction characterAction, OnUpdateEffect OnUpdate = null) 
 		{
 			Dictionary<EffectType, EffectValue> effects = new Dictionary<EffectType, EffectValue>(characterAction.effects);
@@ -225,12 +256,22 @@ namespace digectsoft
 				OnUpdate?.Invoke(effectType);
 			}
 		}
-		
+
+		/// <summary>
+		/// Increases the health value of the specified character action.
+		/// </summary>
+		/// <param name="characterAction">A reference to the character action to modify.</param>
+		/// <param name="value">The amount of health to add.</param>
 		private void IncreaseHealth(ref CharacterAction characterAction, int value)
 		{
 			ChangeHealth(ref characterAction, value);
 		}
-		
+
+		/// <summary>
+		/// Decreases the health value of the specified character action.
+		/// </summary>
+		/// <param name="characterAction">A reference to the character action to modify.</param>
+		/// <param name="value">The amount of health to subtract.</param>
 		private void DecreaseHealth(ref CharacterAction characterAction, int value) 
 		{
 			int damage = value;
@@ -252,14 +293,22 @@ namespace digectsoft
 			}
 			ChangeHealth(ref characterAction, -damage);
 		}
-		
+
+		/// <summary>
+		/// Changes the health value of the specified character action by the given amount.
+		/// </summary>
+		/// <param name="characterAction">A reference to the character action to modify.</param>
+		/// <param name="value">The amount to change the health by (can be positive or negative).</param>
 		private void ChangeHealth(ref CharacterAction characterAction, int value)
 		{
 			int currentHealth = characterAction.characterValue.health + value;
-			
 			characterAction.characterValue.health = currentHealth > health ? health : currentHealth;
 		}
-		
+
+		/// <summary>
+		/// Updates the effect on the enemy based on the specified effect type.
+		/// </summary>
+		/// <param name="effectType">The type of effect to apply to the enemy.</param>
 		private void UpdateEnemyEffect(EffectType effectType) 
 		{
 			CharacterAction characterAction = GetCharacterAction(CharacterType.ENEMY, effectType);
@@ -269,7 +318,12 @@ namespace digectsoft
 				enemyActions.Add(effectType);
 			}
 		}
-		
+
+		/// <summary>
+		/// Invokes the enemy's action in response to the player's action.
+		/// </summary>
+		/// <param name="playerAction">A reference to the player's action to consider when invoking the enemy's action.</param>
+		/// <param name="enemyAction">A reference to the enemy's action that will be updated.</param>
 		private void InvokeEnemyAction(ref CharacterAction playerAction, ref CharacterAction enemyAction) 
 		{
 			if (enemyActions.Count == 0) 
@@ -293,7 +347,15 @@ namespace digectsoft
 			}
 			ApplyAction(effectType, ref enemyAction, ref playerAction);
 		}
-		
+
+		/// <summary>
+		/// Retrieves the character action based on the specified character type and effect type.
+		/// </summary>
+		/// <param name="characterType">The type of character whose action is to be retrieved.</param>
+		/// <param name="effectType">The type of effect that influences the character's action.</param>
+		/// <returns>
+		/// The corresponding character action for the given character type and effect type.
+		/// </returns>
 		private CharacterAction GetCharacterAction(CharacterType characterType, EffectType effectType)
 		{
 			CharacterAction characterAction;
@@ -312,7 +374,10 @@ namespace digectsoft
 			}
 			return characterAction;
 		}
-		
+
+		/// <summary>
+		/// Checks the current state to determine the winner.
+		/// </summary>
 		private void CheckWinner() 
 		{
 			CharacterAction playerAction = charachterActions[CharacterType.PLAYER];
@@ -320,12 +385,12 @@ namespace digectsoft
 			//First check the health of the enemy because the player begins an action first.
 			if (enemyAction.characterValue.health <= 0) 
 			{
-				//Write to a server that the enemy is a winner.
+				//Write a data when the enemy is the winner.
 				return;
 			}
 			if (playerAction.characterValue.health <= 0) 
 			{
-				//Write to a server that the player is a winner.
+				//Write a data when the player is the winner.
 			}
 		}
 	}
