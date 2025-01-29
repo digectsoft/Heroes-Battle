@@ -51,6 +51,10 @@ namespace digectsoft
 		[Header("Presenter")]
 		[SerializeField]
 		private ActionPresenter actionPresenter;
+		
+		[Header("Audio")]
+		[SerializeField]
+		private AudioManager audioManager;
 
 		public override void InstallBindings()
 		{
@@ -62,6 +66,7 @@ namespace digectsoft
 			Container.Bind<Character>().WithId(CharacterType.PLAYER).FromInstance(player).AsCached();
 			Container.Bind<Character>().WithId(CharacterType.ENEMY).FromInstance(enemy).AsCached();
 			Container.Bind<ActionPresenter>().FromInstance(actionPresenter).AsSingle();
+			Container.Bind<AudioManager>().FromInstance(audioManager).AsSingle();
 		}
 	}
 }

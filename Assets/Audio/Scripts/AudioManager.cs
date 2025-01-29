@@ -25,61 +25,63 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using DG.Tweening;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 namespace digectsoft
 {
-	public class CharacterImpact : MonoBehaviour
+	public class AudioManager : MonoBehaviour
 	{
 		[SerializeField]
-		private EffectType effectType;
+		private AudioSource musicSource;
+		[SerializeField]
+		private AudioSource soundSource;
+		[SerializeField]
+		private List<AudioMusicValue> audioMusicValues;
+		[SerializeField]
+		private List<AudioSoundValue> audioSoundValues;
 
-		public EffectType EffectType { get { return effectType; } private set { } }
+		private Dictionary<AudioMusicType, AudioClip> musicClips = new Dictionary<AudioMusicType, AudioClip>();
+		private Dictionary<AudioSoundType, AudioClip> soundClips = new Dictionary<AudioSoundType, AudioClip>();
 		
-		private Vector2 baseScale;
-		private Vector2 targetScale;
-		private SpriteRenderer spriteRenderer;
-		private float scaleDuration;
-		private float fadeDuration;
-
-		[InjectOptional]
-		private AudioManager audioManager;
-
 		private void Awake()
 		{
-			spriteRenderer = GetComponent<SpriteRenderer>();
-		}
-		
-		public void Init(float scaleMultiplier, float scaleDuration, float fadeDuration) 
-		{
-			if (Vector2.zero == baseScale) 
+			foreach (AudioMusicValue musicValue in audioMusicValues) 
 			{
-				baseScale = transform.localScale;
+				musicClips.Add(musicValue.type, musicValue.clip);
 			}
-			targetScale = baseScale * scaleMultiplier;
-			transform.localScale = baseScale;
-			this.scaleDuration = scaleDuration;
-			this.fadeDuration = fadeDuration;
-			gameObject.SetActive(false);
+			foreach (AudioSoundValue soundValue in audioSoundValues) 
+			{
+				soundClips.Add(soundValue.type, soundValue.clip);
+			}
 		}
 		
-		public void Apply() 
+		public void PlayMusic(AudioMusicType musicType) 
 		{
-			gameObject.SetActive(true);
-			transform.localScale = baseScale;
-			Color spriteColor = spriteRenderer.color;
-			spriteColor.a = 1;
-			spriteRenderer.color = spriteColor;
-			transform.DOScale(targetScale, scaleDuration).OnComplete(() =>
+			if (musicClips.ContainsKey(musicType)) 
 			{
-				spriteRenderer.DOFade(0, fadeDuration).OnComplete(() =>
-				{
-					gameObject.SetActive(false);
-				});
-			});
-			audioManager?.PlayeEffect(effectType);
+				musicSource.clip = musicClips[musicType];
+				musicSource.Play();
+			}
+		}
+		
+		public void PlaySound(AudioSoundType audioType) 
+		{
+			if (soundClips.ContainsKey(audioType))
+			{
+				soundSource.PlayOneShot(soundClips[audioType]);
+			}
+		}
+		
+		public void PlayeEffect(EffectType effectType) 
+		{
+			int audioId = (int)effectType;
+			if (Enum.IsDefined(typeof(AudioSoundType), audioId))
+			{
+				AudioSoundType audioType = (AudioSoundType)audioId;
+				PlaySound(audioType);
+			}
 		}
 	}
 }

@@ -55,15 +55,18 @@ namespace digectsoft
 
 		private GameManager gameManager;
 		private PanelAdapter panelAdapter;
+		private AudioManager audioManager;
 
 		[Inject]
 		public void Init(GameManager gameManager,
 						 PanelAdapter panelAdapter,
+						 [InjectOptional] AudioManager audioManager,
 						 [Inject(Id = CharacterType.PLAYER)] Character player,
 					 	 [Inject(Id = CharacterType.ENEMY)] Character enemy)
 		{
 			this.gameManager = gameManager;
 			this.panelAdapter = panelAdapter;
+			this.audioManager = audioManager;
 			Player = player;
 			Enemy = enemy;
 		}
@@ -76,6 +79,7 @@ namespace digectsoft
 		public void BeginGame() 
 		{
 			panelAdapter.ShowPanel(PanelType.PLAY);
+			audioManager?.PlayMusic(AudioMusicType.MUSIC_MENU);
 		}
 
 		public async void StartGame()
@@ -111,6 +115,7 @@ namespace digectsoft
 			Enemy.Init(enemyAction.characterValue.health, Player.transform.position);
 			UpdateEffects(characterActoins, Player, Enemy);
 			UpdateEffects(characterActoins, Enemy, Player);
+			audioManager?.PlayMusic(AudioMusicType.MUSIC_BATTLE);
 		}
 
 		public void OnAction(Dictionary<CharacterType, CharacterAction> characterActoins)
@@ -137,12 +142,14 @@ namespace digectsoft
 			{
 				Enemy.Death();
 				panelAdapter.ShowPanel(PanelType.WIN);
+				audioManager.PlaySound(AudioSoundType.SOUND_WIN);
 				return;
 			}
 			if (!IsAlive(playerAction))
 			{
 				Player.Death();
 				panelAdapter.ShowPanel(PanelType.GAME_OVER);
+				audioManager.PlaySound(AudioSoundType.SOUND_GAME_OVER);
 			}
 		}
 		

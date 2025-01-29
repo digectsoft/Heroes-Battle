@@ -25,61 +25,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using DG.Tweening;
-using UnityEngine;
-using Zenject;
-
 namespace digectsoft
 {
-	public class CharacterImpact : MonoBehaviour
+	public enum AudioSoundType
 	{
-		[SerializeField]
-		private EffectType effectType;
-
-		public EffectType EffectType { get { return effectType; } private set { } }
-		
-		private Vector2 baseScale;
-		private Vector2 targetScale;
-		private SpriteRenderer spriteRenderer;
-		private float scaleDuration;
-		private float fadeDuration;
-
-		[InjectOptional]
-		private AudioManager audioManager;
-
-		private void Awake()
-		{
-			spriteRenderer = GetComponent<SpriteRenderer>();
-		}
-		
-		public void Init(float scaleMultiplier, float scaleDuration, float fadeDuration) 
-		{
-			if (Vector2.zero == baseScale) 
-			{
-				baseScale = transform.localScale;
-			}
-			targetScale = baseScale * scaleMultiplier;
-			transform.localScale = baseScale;
-			this.scaleDuration = scaleDuration;
-			this.fadeDuration = fadeDuration;
-			gameObject.SetActive(false);
-		}
-		
-		public void Apply() 
-		{
-			gameObject.SetActive(true);
-			transform.localScale = baseScale;
-			Color spriteColor = spriteRenderer.color;
-			spriteColor.a = 1;
-			spriteRenderer.color = spriteColor;
-			transform.DOScale(targetScale, scaleDuration).OnComplete(() =>
-			{
-				spriteRenderer.DOFade(0, fadeDuration).OnComplete(() =>
-				{
-					gameObject.SetActive(false);
-				});
-			});
-			audioManager?.PlayeEffect(effectType);
-		}
+		SOUND_ATTACK = EffectType.ATTACK,
+		SOUND_SHIELD = EffectType.SHIELD,
+		SOUND_REGENERATION = EffectType.REGENERATION,
+		SOUND_FIREBALL = EffectType.FIREBALL,
+		SOUND_CLEANUP = EffectType.CLEANUP,
+		SOUND_HIT = 101,
+		SOUND_WIN = 102,
+		SOUND_GAME_OVER = 103
 	}
 }

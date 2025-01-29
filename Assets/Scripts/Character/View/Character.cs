@@ -27,6 +27,7 @@
 // ---------------------------------------------------------------------------
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace digectsoft
 {
@@ -68,7 +69,9 @@ namespace digectsoft
 
 		public CharacterType CharacterType { get { return type; } private set { } }
 		public CharacterEffect CharacterEffect { get { return effect; } private set { } }
-		
+
+		[InjectOptional]
+		private AudioManager audioManager;
 		private Dictionary<EffectType, CharacterImpact> characterImpacts = new Dictionary<EffectType, CharacterImpact>();
 		private Animator animator;
 		
@@ -105,6 +108,7 @@ namespace digectsoft
 		public void Shot() 
 		{
 			arrow.Flight();
+			audioManager?.PlaySound(AudioSoundType.SOUND_ATTACK);
 		}
 		
 		public void Effect(EffectType effectType, int duration) 
@@ -127,20 +131,21 @@ namespace digectsoft
 			health.Set(value);
 		}
 		
-		public void UpdateHealth(int value) 
-		{
-			health.Set(value);
-		}
-		
 		public void Hit(int value) 
 		{
 			UpdateHealth(value);
 			animator.SetBool(hitValue, true);
+			audioManager?.PlaySound(AudioSoundType.SOUND_HIT);
 		}
 		
 		public void Death() 
 		{
 			animator.SetBool(deathValue, true);
+		}
+
+		public void UpdateHealth(int value)
+		{
+			health.Set(value);
 		}
 	}
 }
