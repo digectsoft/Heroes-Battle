@@ -1882,14 +1882,14 @@ MonoBehaviour:
   _effectActions:
   - type: 1
     value:
-      action: 8
+      action: 5
       rate: 0
       duration: 0
       recharge: 0
   - type: 2
     value:
       action: 0
-      rate: 5
+      rate: 3
       duration: 2
       recharge: 4
   - type: 3
@@ -1900,7 +1900,7 @@ MonoBehaviour:
       recharge: 5
   - type: 4
     value:
-      action: 5
+      action: 8
       rate: 1
       duration: 5
       recharge: 6
