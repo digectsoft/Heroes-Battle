@@ -41,6 +41,8 @@ namespace digectsoft
 		protected float showDelay = 0f;
 		[SerializeField]
 		protected bool pauseGame = true;
+		[SerializeField]
+		protected bool showAtPause = true;
 
 		[Header("Scale")]
 		[SerializeField]
@@ -71,16 +73,16 @@ namespace digectsoft
 			if (!gameObject.activeSelf)
 			{
 				InitPanel();
+				Pause(true);
 				DOTween.Sequence().AppendInterval(showDelay).OnComplete(() => 
 				{
 					gameObject.SetActive(true);
 					content.transform.localScale = new Vector3(startScale, startScale, startScale);
 					content.transform.DOScale(endScale, scaleTime).OnComplete(() => 
 					{
-						Pause(true);
 						ShowComplete();
-					}).SetUpdate(true);
-				}).SetUpdate(true);
+					}).SetUpdate(showAtPause);
+				}).SetUpdate(showAtPause);
 			}
 		}
 
@@ -94,7 +96,7 @@ namespace digectsoft
 					Pause(false);
 					HideComplete();
 					gameObject.SetActive(false);
-				}).SetUpdate(true);
+				}).SetUpdate(showAtPause);
 			}
 		}
 

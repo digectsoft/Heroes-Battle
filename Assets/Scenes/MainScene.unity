@@ -10459,9 +10459,10 @@ MonoBehaviour:
   content: {fileID: 1053652123}
   showDelay: 0
   pauseGame: 0
-  startScale: 1
+  showAtPause: 1
+  startScale: 1.2
   endScale: 1
-  scaleTime: 0
+  scaleTime: 0.1
 --- !u!1 &1550031024
 GameObject:
   m_ObjectHideFlags: 0
@@ -10970,8 +10971,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 4
   content: {fileID: 1302942255}
-  showDelay: 0
+  showDelay: 1.5
   pauseGame: 0
+  showAtPause: 0
   startScale: 1.2
   endScale: 1
   scaleTime: 0.1
@@ -11316,8 +11318,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 3
   content: {fileID: 297662109}
-  showDelay: 0
+  showDelay: 1.5
   pauseGame: 0
+  showAtPause: 0
   startScale: 1.2
   endScale: 1
   scaleTime: 0.1
@@ -11949,6 +11952,7 @@ MonoBehaviour:
   content: {fileID: 502697454}
   showDelay: 0
   pauseGame: 1
+  showAtPause: 1
   startScale: 1.2
   endScale: 1
   scaleTime: 0.1
