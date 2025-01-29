@@ -87,6 +87,14 @@ MonoBehaviour:
     m_Key: wrong
     m_Metadata:
       m_Items: []
+  - m_Id: 485518977523712
+    m_Key: player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 485656198373376
+    m_Key: enemy
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
