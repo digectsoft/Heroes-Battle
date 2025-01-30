@@ -98,6 +98,26 @@ MonoBehaviour:
     m_Localized: Enemy
     m_Metadata:
       m_Items: []
+  - m_Id: 710838297026560
+    m_Localized: Makes attack using a bow and an arrow.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 711235107545088
+    m_Localized: Protect from enemy actions.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 711480281391104
+    m_Localized: Heals a character.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 712709397012480
+    m_Localized: Makes fireball effect.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 713244237881344
+    m_Localized: Declines fireball effect.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
