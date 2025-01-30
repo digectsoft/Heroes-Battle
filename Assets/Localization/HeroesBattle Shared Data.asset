@@ -115,6 +115,26 @@ MonoBehaviour:
     m_Key: description.cleanup
     m_Metadata:
       m_Items: []
+  - m_Id: 808603354128384
+    m_Key: 'damage.:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 808724066197504
+    m_Key: 'damage.rate.:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 808811676819456
+    m_Key: 'heal.rate.:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 808874012565504
+    m_Key: 'protection.:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 809006644846592
+    m_Key: 'steps.left.:'
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

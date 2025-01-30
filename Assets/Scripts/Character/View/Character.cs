@@ -67,8 +67,8 @@ namespace digectsoft
 		[SerializeField]
 		private List<CharacterImpact> impacts;
 
-		public CharacterType CharacterType { get { return type; } private set { } }
-		public CharacterEffect CharacterEffect { get { return effect; } private set { } }
+		public CharacterType CharacterType { get { return type; } }
+		public CharacterEffect CharacterEffect { get { return effect; } }
 
 		[InjectOptional]
 		private AudioManager audioManager;
@@ -76,7 +76,7 @@ namespace digectsoft
 		private Animator animator;
 		
 		private void Awake()
-		{
+		{	
 			animator = GetComponent<Animator>();
 			foreach (CharacterImpact characterImpact in impacts) 
 			{

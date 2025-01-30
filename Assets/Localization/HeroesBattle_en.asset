@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 5c5d7cec1c0a347c7959d4196f7a1cd8, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 4849954172839133186
   m_TableData:
   - m_Id: 18374189056
     m_Localized: Heroes battle
@@ -25,7 +26,8 @@ MonoBehaviour:
   - m_Id: 2125315694592
     m_Localized: Attack
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 4849954172839133186
   - m_Id: 2335043477504
     m_Localized: Protection
     m_Metadata:
@@ -118,6 +120,32 @@ MonoBehaviour:
     m_Localized: Declines fireball effect.
     m_Metadata:
       m_Items: []
+  - m_Id: 808603354128384
+    m_Localized: 'Damage:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 808724066197504
+    m_Localized: 'Damage rate:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 808811676819456
+    m_Localized: 'Heal rate:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 808874012565504
+    m_Localized: 'Protection:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 809006644846592
+    m_Localized: 'Steps left:'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 4849954172839133186
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 2125315694592

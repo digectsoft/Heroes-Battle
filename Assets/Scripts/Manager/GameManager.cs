@@ -72,13 +72,13 @@ namespace digectsoft
 			Dictionary<CharacterType, CharacterAction> effectActions = await serverAdapter.Action(actionType);
 			if (initialized) 
 			{
-				if (EffectType.DEFAULT != effectActions[CharacterType.PLAYER].effectType)
+				// if (EffectType.DEFAULT != effectActions[CharacterType.PLAYER].effectType)
 				{
 					actionPresenter.OnAction(effectActions);
 				}
-				else
+				// else
 				{
-					RequestComplete();
+					// RequestComplete();
 				}
 			}
 		}

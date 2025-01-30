@@ -66,14 +66,11 @@ namespace digectsoft
 				if (EffectType.DEFAULT != effectAction.type)
 				{
 					effectActions.Add(effectAction.type, effectAction.value);
-					if (effectAction.value.duration > 0)
-					{
-						EffectValue effectValue = effectAction.value.Clone();
-						effectValue.duration = 0;
-						effectValue.recharge = 0;
-						charachterActions[CharacterType.PLAYER].effects.Add(effectAction.type, effectValue);
-						charachterActions[CharacterType.ENEMY].effects.Add(effectAction.type, effectValue);
-					}
+					EffectValue effectValue = effectAction.value.Clone();
+					effectValue.duration = 0;
+					effectValue.recharge = 0;
+					charachterActions[CharacterType.PLAYER].effects.Add(effectAction.type, effectValue);
+					charachterActions[CharacterType.ENEMY].effects.Add(effectAction.type, effectValue);
 					enemyActions.Add(effectAction.type);
 				}
 			}
@@ -89,11 +86,11 @@ namespace digectsoft
 			enemyAction.effectType = EffectType.DEFAULT;
 			//Select an appropriate action depending on an effect type.
 			CharacterAction testAction = GetCharacterAction(CharacterType.PLAYER, effectType);
-			bool inAction = testAction.effects.ContainsKey(effectType) && !IsEffectComplete(testAction.effects[effectType]);
+			bool inAction = testAction.effects.ContainsKey(effectType) && !testAction.effects[effectType].Complete;
 			if (EffectType.CLEANUP == effectType)
 			{
 				//For a cleanup it is required to check a fireball effect.
-				inAction = IsEffectComplete(testAction.effects[EffectType.FIREBALL]) || inAction;
+				inAction = testAction.effects[EffectType.FIREBALL].Complete || inAction;
 			}
 			if (!inAction)
 			{
@@ -168,7 +165,7 @@ namespace digectsoft
 		private bool SetEffect(ref CharacterAction characterAction, EffectType effectType) 
 		{
 			EffectValue effectValue = characterAction.effects[effectType];
-			if (IsEffectComplete(effectValue))
+			if (effectValue.Complete)
 			{
 				effectValue.duration = effectActions[effectType].duration;
 				effectValue.recharge = effectActions[effectType].recharge;
@@ -176,18 +173,6 @@ namespace digectsoft
 				return true;
 			}
 			return false;
-		}
-
-		/// <summary>
-		/// Determines whether the specified effect has been completed.
-		/// </summary>
-		/// <param name="effectValue">The effect value to evaluate.</param>
-		/// <returns>
-		/// <c>true</c> if the effect is complete; otherwise, <c>false</c>.
-		/// </returns>
-		private bool IsEffectComplete(EffectValue effectValue) 
-		{
-			return effectValue.duration + effectValue.recharge == 0;
 		}
 
 		/// <summary>
@@ -313,7 +298,7 @@ namespace digectsoft
 		{
 			CharacterAction characterAction = GetCharacterAction(CharacterType.ENEMY, effectType);
 			EffectValue effectValue = characterAction.effects[effectType]; 
-			if (!enemyActions.Contains(effectType) && IsEffectComplete(effectValue)) 
+			if (!enemyActions.Contains(effectType) && effectValue.Complete) 
 			{
 				enemyActions.Add(effectType);
 			}
@@ -333,13 +318,14 @@ namespace digectsoft
 			List<EffectType> effectTypes = new List<EffectType>(enemyActions);
 			//Check the fireball effect and remove the cleanup effect whether the fireball effect is complete.
 			EffectValue effectFireball = enemyAction.effects[EffectType.FIREBALL];
-			if (IsEffectComplete(effectFireball))
+			if (effectFireball.Complete)
 			{
 				effectTypes.Remove(EffectType.CLEANUP);
 			}
 			//Select a random effect.
 			int enemyIndex = Random.Range(0, effectTypes.Count);
 			EffectType effectType = effectTypes[enemyIndex];
+			// EffectType effectType = EffectType.FIREBALL;
 			//The attack should always be in actions.
 			if (EffectType.ATTACK != effectType)
 			{

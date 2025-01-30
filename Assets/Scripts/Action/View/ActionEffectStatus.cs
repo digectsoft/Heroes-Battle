@@ -41,7 +41,7 @@ namespace digectsoft
 		[SerializeField]
 		private TextMeshProUGUI textRecharge;
 		
-		public EffectType EffectType { get { return effectType; } private set { } }
+		public EffectType EffectType { get { return effectType; } }
 
 		private Button button;
 		private bool registered;

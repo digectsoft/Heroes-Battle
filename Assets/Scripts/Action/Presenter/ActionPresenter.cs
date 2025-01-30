@@ -128,9 +128,9 @@ namespace digectsoft
 		/// <param name="characterActions">A dictionary mapping each character type to its corresponding action.</param>
 		public void OnInit(Dictionary<CharacterType, CharacterAction> characterActoins) 
 		{
-			actionAdapter.ShowFight(true);
 			CharacterAction playerAction = characterActoins[Player.CharacterType];
 			CharacterAction enemyAction = characterActoins[Enemy.CharacterType];
+			actionAdapter.Init(playerAction.effects);
 			Player.Init(playerAction.characterValue.health, Enemy.transform.position);
 			Enemy.Init(enemyAction.characterValue.health, Player.transform.position);
 			UpdateEffects(characterActoins, Player, Enemy);
@@ -232,6 +232,10 @@ namespace digectsoft
 							Character character1,
 							Character character2)
 		{
+			if (EffectType.DEFAULT == effectType)
+			{
+				return;
+			}
 			Character characterEffect = character1;
 			switch (effectType)
 			{
@@ -268,6 +272,12 @@ namespace digectsoft
 		{
 			CharacterAction characterAction1 = effectActions[character1.CharacterType];
 			CharacterAction characterAction2 = effectActions[character2.CharacterType];
+			//Update status panel.
+			if (CharacterType.PLAYER == character1.CharacterType)
+			{
+				actionAdapter.UpdateStatusPanel(characterAction1.effectType);
+			}
+			//Update effect buttons.
 			foreach (KeyValuePair<EffectType, EffectValue> keyValues in characterAction1.effects) 
 			{
 				//Update character effects.

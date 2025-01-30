@@ -75,16 +75,11 @@ namespace digectsoft
 
 		private void Start()
 		{
-			Init();
 			pauseButton.onClick.AddListener(() => panelAdapter.ShowPanel(PanelType.PAUSE));
 			ShowProcessing(false);
 			ShowFight(false);
 			baseFightScale = transform.localScale;
 			targetFightScale = baseFightScale * scaleMultiplier;
-		}
-
-		public void Init() 
-		{
 			foreach (ActionEffectStatus actionEffect in actionEffects)
 			{
 				actionEffect.Init(() => actionPresenter.TakeAction(actionEffect.EffectType));
@@ -95,19 +90,36 @@ namespace digectsoft
 				}
 			}
 		}
+
+		public void Init(Dictionary<EffectType, EffectValue> effects) 
+		{
+			ShowFight(true);
+			statusPanel.Init(effects);
+		}
 		
 		public void SetStatus(EffectType effectType, EffectValue effectValue)
 		{
-			int recharge = effectValue.recharge + effectValue.duration;
-			ActionEffectStatus actionEffect = effectTypes[effectType];
-			actionEffect.UpdateRecharge(recharge);
-			bool status = recharge == 0;
-			if (EffectType.CLEANUP == effectType)
+			//Update action effect.
+			if (effectTypes.ContainsKey(effectType))
 			{
-				CharacterEffectStatus effectStatus = actionPresenter.Player.CharacterEffect.GetCharacterEffectStatus(EffectType.FIREBALL);
-				status = effectStatus.Duration > 0;
+				int recharge = effectValue.recharge + effectValue.duration;
+				bool status = recharge == 0;
+				if (EffectType.CLEANUP == effectType)
+				{
+					CharacterEffectStatus effectStatus = actionPresenter.Player.CharacterEffect.GetCharacterEffectStatus(EffectType.FIREBALL);
+					status = effectStatus.Duration > 0;
+				}
+				ActionEffectStatus actionEffect = effectTypes[effectType];
+				actionEffect.UpdateRecharge(recharge);
+				actionEffect.Activate(status);
 			}
-			actionEffect.Activate(status);
+			//Update status panel.
+			statusPanel.UpdateStatus(effectType, effectValue);
+		}
+		
+		public void UpdateStatusPanel(EffectType effectType) 
+		{
+			statusPanel.UpdateStatus(effectType);
 		}
 		
 		public void ShowProcessing(bool active) 

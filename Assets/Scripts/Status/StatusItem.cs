@@ -37,11 +37,17 @@ namespace digectsoft
 		[SerializeField]
 		private TextMeshProUGUI valueText;
 		
-		public StatusType StatusType { get { return statusType; } private set { } }
+		public StatusType StatusType { get { return statusType; } }
 		
 		public void UpdateValue(int value) 
 		{
+			Activate(true);
 			valueText.text = value.ToString();
+		}
+		
+		public void Activate(bool active) 
+		{
+			gameObject.SetActive(active);
 		}
 	}
 }

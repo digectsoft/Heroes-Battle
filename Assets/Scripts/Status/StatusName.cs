@@ -26,37 +26,14 @@
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
 using System;
-using UnityEngine;
+using UnityEngine.Localization;
 
 namespace digectsoft
 {
 	[Serializable]
-	public struct EffectValue
+	public struct StatusName
 	{
-		[Min(0)]
-		public int action;
-		[Min(0)]
-		public int rate;
-		[Min(0)]
-		public int duration;
-		[Min(0)]
-		public int recharge;
-		
-		public int Restore { get { return duration + recharge; } }
-		public bool Complete { get { return Restore == 0; } }
-		
-		public EffectValue(int action, int rate, int duration, int recharge)
-		{
-			this.action = action;
-			this.rate = rate;
-			this.duration = duration;
-			this.recharge = recharge;
-		}
-		
-		public EffectValue Clone() 
-		{
-			EffectValue cloneEffectValue = new EffectValue(action, rate, duration, recharge);
-			return cloneEffectValue;
-		}
+		public EffectType type;
+		public LocalizedString name;
 	}
 }

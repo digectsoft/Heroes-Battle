@@ -52,8 +52,8 @@ namespace digectsoft
 		[SerializeField]
 		protected float scaleTime = 0.1f;
 
-		public PanelType PanelType { get { return type; } private set { }}
-		public bool Visible { get { return gameObject.activeSelf; } private set { } }
+		public PanelType PanelType { get { return type; } }
+		public bool Visible { get { return gameObject.activeSelf; } }
 
 		private bool initialized;
 		private float timeScale = 1f;

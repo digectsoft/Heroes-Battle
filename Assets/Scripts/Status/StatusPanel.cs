@@ -26,35 +26,103 @@
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
 
 namespace digectsoft
 {
 	public class StatusPanel : MonoBehaviour
 	{
 		[SerializeField]
+		private LocalizeStringEvent statusNameLocale;
+		[SerializeField]
+		private List<StatusName> statusNames;
+		[SerializeField]
 		private List<StatusItem> statusItems;
-		
-		private Dictionary<StatusType, StatusItem> statusTypes = new Dictionary<StatusType, StatusItem>();
-		
+
+		private Dictionary<EffectType, EffectValue> effects;
+		private Dictionary<EffectType, LocalizedString> names = new Dictionary<EffectType, LocalizedString>();
+		private Dictionary<StatusType, StatusItem> items = new Dictionary<StatusType, StatusItem>();
+		private EffectType currentEffectType = EffectType.DEFAULT;
+
+		public LocalizeStringEvent StatusNameLocale { get => statusNameLocale; set => statusNameLocale = value; }
+
 		private void Awake()
 		{
+			foreach (StatusName statusName in statusNames) 
+			{
+				names.Add(statusName.type, statusName.name);
+			}
 			foreach (StatusItem statusItem in statusItems) 
 			{
-				statusTypes.Add(statusItem.StatusType, statusItem);
+				items.Add(statusItem.StatusType, statusItem);
 			}
 		}
 		
-		// Start is called before the first frame update
-		void Start()
+		public void Init(Dictionary<EffectType, EffectValue> effects) 
 		{
-		
+			this.effects = new Dictionary<EffectType, EffectValue>(effects);
 		}
-
-		// Update is called once per frame
-		void Update()
-		{
 		
+		public void UpdateStatus(EffectType effectType) 
+		{
+			bool updateStatus = EffectType.DEFAULT != effectType;
+			if (updateStatus) 
+			{
+				currentEffectType = effectType;
+				statusNameLocale.StringReference = names[effectType];
+			}
+			gameObject.SetActive(updateStatus);
+		}
+		
+		public void UpdateStatus(EffectType effectType, EffectValue effectValue) 
+		{
+			if (currentEffectType == effectType)
+			{
+				ResetStatusItems();
+				switch (effectType)
+				{
+					case EffectType.ATTACK:
+					{
+						items[StatusType.DAMAGE].UpdateValue(effects[effectType].action);
+						break;
+					}
+					case EffectType.SHIELD:
+					{
+						items[StatusType.PROTECTION].UpdateValue(effects[effectType].rate);
+						items[StatusType.STEP_LEFT].UpdateValue(effectValue.Restore);
+						break;
+					}
+					case EffectType.REGENERATION:
+					{
+						items[StatusType.HEAL_RATE].UpdateValue(effects[effectType].rate);
+						items[StatusType.STEP_LEFT].UpdateValue(effectValue.Restore);
+						break;
+					}
+					case EffectType.FIREBALL:
+					{
+						items[StatusType.DAMAGE].UpdateValue(effects[effectType].action);
+						items[StatusType.DAMAGE_RATE].UpdateValue(effects[effectType].rate);
+						items[StatusType.STEP_LEFT].UpdateValue(effectValue.Restore);
+						break;
+					}
+					case EffectType.CLEANUP:
+					{
+						items[StatusType.STEP_LEFT].UpdateValue(effectValue.Restore);
+						break;
+					}
+				}
+			}
+		}
+		
+		private void ResetStatusItems() 
+		{
+			foreach (StatusItem statusItem in statusItems)
+			{
+				statusItem.Activate(false);
+			}
 		}
 	}
 }
