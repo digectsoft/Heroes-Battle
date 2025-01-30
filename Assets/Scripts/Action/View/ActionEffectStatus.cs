@@ -37,16 +37,20 @@ namespace digectsoft
 		[SerializeField]
 		private EffectType effectType;
 		[SerializeField]
+		private Image icon;
+		[SerializeField]
 		private TextMeshProUGUI textRecharge;
 		
 		public EffectType EffectType { get { return effectType; } private set { } }
 
 		private Button button;
 		private bool registered;
+		private Color iconColor;
 
 		private void Awake()
 		{
 			button = GetComponent<Button>();
+			iconColor = icon.color;
 		}
 
 		public void Init(UnityAction call)
@@ -62,6 +66,7 @@ namespace digectsoft
 		public void Activate(bool status)
 		{
 			button.interactable = status;
+			icon.color = status ? iconColor : button.colors.disabledColor;
 		}
 
 		public void UpdateRecharge(int recharge)
