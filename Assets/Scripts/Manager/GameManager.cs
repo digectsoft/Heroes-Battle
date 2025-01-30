@@ -62,23 +62,23 @@ namespace digectsoft
 			InitComplete();
 		}
 
-		public async UniTask OnRequest(EffectType actionType)
+		public async UniTask OnRequest(EffectType effectType)
 		{
 			if (!initialized || inAction)
 			{
 				return;
 			}
 			RequestStart();
-			Dictionary<CharacterType, CharacterAction> effectActions = await serverAdapter.Action(actionType);
-			if (initialized) 
+			Dictionary<CharacterType, CharacterAction> effectActions = await serverAdapter.Action(effectType);
+			if (initialized)
 			{
-				// if (EffectType.DEFAULT != effectActions[CharacterType.PLAYER].effectType)
+				if (EffectType.DEFAULT != effectActions[CharacterType.PLAYER].effectType)
 				{
 					actionPresenter.OnAction(effectActions);
 				}
-				// else
+				else
 				{
-					// RequestComplete();
+					RequestComplete(effectType, effectActions);
 				}
 			}
 		}
@@ -89,12 +89,18 @@ namespace digectsoft
 			actionPresenter.OnRequestStart();
 		}
 
+		public void RequestComplete(EffectType effectType, Dictionary<CharacterType, CharacterAction> effectActions)
+		{
+			inAction = false;
+			actionPresenter.OnRequestComplete(effectType, effectActions);
+		}
+
 		public void RequestComplete()
 		{
 			inAction = false;
 			actionPresenter.OnRequestComplete();
 		}
-		
+
 		public void InitStart() 
 		{
 			initialized = false;

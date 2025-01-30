@@ -68,10 +68,10 @@ namespace digectsoft
 		public void Activate(bool status)
 		{
 			// button.interactable = status;
-			ColorBlock colors = button.colors; 
-			colors.normalColor = status ? buttonColor : button.colors.disabledColor;
-			button.colors = colors;
-			icon.color = status ? iconColor : button.colors.disabledColor;
+			// ColorBlock colors = button.colors; 
+			// colors.normalColor = status ? buttonColor : button.colors.disabledColor;
+			// button.colors = colors;
+			// icon.color = status ? iconColor : button.colors.disabledColor;
 		}
 
 		public void UpdateRecharge(int recharge)

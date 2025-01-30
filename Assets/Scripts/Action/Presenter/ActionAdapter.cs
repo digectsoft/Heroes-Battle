@@ -97,7 +97,7 @@ namespace digectsoft
 			statusPanel.Init(effects);
 		}
 		
-		public void SetStatus(EffectType effectType, EffectValue effectValue)
+		public void SetStatus(EffectType effectType, EffectValue effectValue, bool requireAction)
 		{
 			//Update action effect.
 			if (effectTypes.ContainsKey(effectType))
@@ -114,7 +114,7 @@ namespace digectsoft
 				actionEffect.Activate(status);
 			}
 			//Update status panel.
-			statusPanel.UpdateStatus(effectType, effectValue);
+			statusPanel.UpdateStatus(effectType, effectValue, requireAction);
 		}
 		
 		public void UpdateStatusPanel(EffectType effectType) 

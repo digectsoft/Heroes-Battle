@@ -133,8 +133,7 @@ namespace digectsoft
 			actionAdapter.Init(playerAction.effects);
 			Player.Init(playerAction.characterValue.health, Enemy.transform.position);
 			Enemy.Init(enemyAction.characterValue.health, Player.transform.position);
-			UpdateEffects(characterActoins, Player, Enemy);
-			UpdateEffects(characterActoins, Enemy, Player);
+			UpdateEffects(characterActoins);
 			audioManager?.PlayMusic(AudioMusicType.MUSIC_BATTLE);
 		}
 
@@ -146,8 +145,7 @@ namespace digectsoft
 		{
 			CharacterAction playerAction = characterActoins[Player.CharacterType];
 			CharacterAction enemyAction = characterActoins[Enemy.CharacterType];
-			UpdateEffects(characterActoins, Player, Enemy);
-			UpdateEffects(characterActoins, Enemy, Player);
+			UpdateEffects(characterActoins);
 			Sequence sequence = DOTween.Sequence();
 			sequence.AppendCallback(() => Action(characterActoins, playerAction.effectType, Player, Enemy));
 			if (IsAlive(enemyAction)) 
@@ -205,9 +203,26 @@ namespace digectsoft
 		/// <summary>
 		/// Finalizes the request process once it is complete.
 		/// </summary>
-		public void OnRequestComplete() 
+		public void OnRequestComplete()
 		{
 			actionAdapter.ShowProcessing(false);
+		}
+
+		/// <summary>
+		/// Finalizes the request process once it is complete.
+		/// </summary>
+		/// <param name="effectType">The type of effect to apply during the action.</param>
+		/// <param name="characterActions">A dictionary mapping each character type to its corresponding action.</param>
+		public void OnRequestComplete(EffectType effectType, Dictionary<CharacterType, CharacterAction> characterActoins) 
+		{
+			if (EffectType.DEFAULT != effectType) 
+			{
+				CharacterAction playerAction = characterActoins[Player.CharacterType];
+				playerAction.effectType = effectType;
+				characterActoins[Player.CharacterType] = playerAction;
+				UpdateEffects(characterActoins, false);
+			}
+			OnRequestComplete();
 		}
 
 		/// <summary>
@@ -263,12 +278,26 @@ namespace digectsoft
 		/// <summary>
 		/// Updates the effects for the specified characters based on the provided character actions.
 		/// </summary>
+		/// <param name="characterActoins">A dictionary mapping character types to their corresponding effect actions.</param>
+		/// <param name="updateEffects">Update effects for characters.</param>
+		private void UpdateEffects(Dictionary<CharacterType, CharacterAction> characterActoins,
+								   bool updateEffects = true) 
+		{
+			UpdateEffects(characterActoins, Player, Enemy, updateEffects);
+			UpdateEffects(characterActoins, Enemy, Player, updateEffects);
+		}
+
+		/// <summary>
+		/// Updates the effects for the specified characters based on the provided character actions.
+		/// </summary>
 		/// <param name="effectActions">A dictionary mapping character types to their corresponding effect actions.</param>
 		/// <param name="character1">The first character whose effects will be updated.</param>
 		/// <param name="character2">The second character whose effects will be updated.</param>
+		/// <param name="updateEffects">Update effects for characters.</param>
 		private void UpdateEffects(Dictionary<CharacterType, CharacterAction> effectActions,
 								   Character character1,
-								   Character character2) 
+								   Character character2,
+								   bool updateEffects = true) 
 		{
 			CharacterAction characterAction1 = effectActions[character1.CharacterType];
 			CharacterAction characterAction2 = effectActions[character2.CharacterType];
@@ -278,23 +307,26 @@ namespace digectsoft
 				actionAdapter.UpdateStatusPanel(characterAction1.effectType);
 			}
 			//Update effect buttons.
-			foreach (KeyValuePair<EffectType, EffectValue> keyValues in characterAction1.effects) 
+			foreach (KeyValuePair<EffectType, EffectValue> keyValues in characterAction1.effects)
 			{
-				//Update character effects.
 				EffectType effectType = keyValues.Key;
 				EffectValue effectValue = keyValues.Value;
-				character1.Effect(effectType, effectValue.duration);
-				if (effectValue.duration > 0)
+				//Update character effects.
+				if (updateEffects) 
 				{
-					if (EffectType.REGENERATION == effectType)
+					character1.Effect(effectType, effectValue.duration);
+					if (effectValue.duration > 0)
 					{
-						character1.Regeneration(effectValue.rate);
-					}
-					if (EffectType.FIREBALL == effectType)
-					{
-						if (characterAction2.effectType != effectType) 
+						if (EffectType.REGENERATION == effectType)
 						{
-							character1.Damage(effectValue.rate);
+							character1.Regeneration(effectValue.rate);
+						}
+						if (EffectType.FIREBALL == effectType)
+						{
+							if (characterAction2.effectType != effectType)
+							{
+								character1.Damage(effectValue.rate);
+							}
 						}
 					}
 				}
@@ -303,7 +335,7 @@ namespace digectsoft
 									 (CharacterType.ENEMY == character1.CharacterType && EffectType.FIREBALL == effectType);
 				if (updateAdapter)
 				{
-					actionAdapter.SetStatus(effectType, effectValue);
+					actionAdapter.SetStatus(effectType, effectValue, !updateEffects);
 				}
 			}
 		}
