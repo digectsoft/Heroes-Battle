@@ -55,6 +55,10 @@ namespace digectsoft
 		[SerializeField]
 		[Min(0)]
 		private float fadeDuration;
+		
+		[Header("Action status")]
+		[SerializeField]
+		private StatusPanel statusPanel;
 
 		private ActionPresenter actionPresenter;
 		private PanelAdapter panelAdapter;
@@ -78,7 +82,7 @@ namespace digectsoft
 			baseFightScale = transform.localScale;
 			targetFightScale = baseFightScale * scaleMultiplier;
 		}
-		
+
 		public void Init() 
 		{
 			foreach (ActionEffectStatus actionEffect in actionEffects)

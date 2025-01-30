@@ -25,68 +25,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using TMPro;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
-
 namespace digectsoft
 {
-	public class ActionEffectStatus : MonoBehaviour
+	public enum StatusType
 	{
-		[SerializeField]
-		private EffectType effectType;
-		[SerializeField]
-		private Image icon;
-		[SerializeField]
-		private TextMeshProUGUI textRecharge;
-		
-		public EffectType EffectType { get { return effectType; } private set { } }
-
-		private Button button;
-		private bool registered;
-		private Color buttonColor;
-		private Color iconColor;
-
-		private void Awake()
-		{
-			button = GetComponent<Button>();
-			buttonColor = button.colors.normalColor;
-			iconColor = icon.color;
-		}
-
-		public void Init(UnityAction call)
-		{
-			if (!registered)
-			{
-				button.onClick.AddListener(call);
-				registered = true;
-			}
-			UpdateRecharge(0);
-		}
-
-		public void Activate(bool status)
-		{
-			// button.interactable = status;
-			ColorBlock colors = button.colors; 
-			colors.normalColor = status ? buttonColor : button.colors.disabledColor;
-			button.colors = colors;
-			icon.color = status ? iconColor : button.colors.disabledColor;
-		}
-
-		public void UpdateRecharge(int recharge)
-		{
-			if (IsRechargable()) 
-			{
-				textRecharge.text = recharge.ToString();
-				bool status = recharge > 0;
-				textRecharge.gameObject.SetActive(status);
-			}
-		}
-		
-		public bool IsRechargable() 
-		{
-			return textRecharge != null;
-		}
+		DAMAGE,
+		DAMAGE_RATE,
+		HEAL_RATE,
+		PROTECTION,
+		STEP_LEFT
 	}
 }

@@ -25,68 +25,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace digectsoft
 {
-	public class ActionEffectStatus : MonoBehaviour
+	public class StatusPanel : MonoBehaviour
 	{
 		[SerializeField]
-		private EffectType effectType;
-		[SerializeField]
-		private Image icon;
-		[SerializeField]
-		private TextMeshProUGUI textRecharge;
+		private List<StatusItem> statusItems;
 		
-		public EffectType EffectType { get { return effectType; } private set { } }
-
-		private Button button;
-		private bool registered;
-		private Color buttonColor;
-		private Color iconColor;
-
+		private Dictionary<StatusType, StatusItem> statusTypes = new Dictionary<StatusType, StatusItem>();
+		
 		private void Awake()
 		{
-			button = GetComponent<Button>();
-			buttonColor = button.colors.normalColor;
-			iconColor = icon.color;
-		}
-
-		public void Init(UnityAction call)
-		{
-			if (!registered)
+			foreach (StatusItem statusItem in statusItems) 
 			{
-				button.onClick.AddListener(call);
-				registered = true;
-			}
-			UpdateRecharge(0);
-		}
-
-		public void Activate(bool status)
-		{
-			// button.interactable = status;
-			ColorBlock colors = button.colors; 
-			colors.normalColor = status ? buttonColor : button.colors.disabledColor;
-			button.colors = colors;
-			icon.color = status ? iconColor : button.colors.disabledColor;
-		}
-
-		public void UpdateRecharge(int recharge)
-		{
-			if (IsRechargable()) 
-			{
-				textRecharge.text = recharge.ToString();
-				bool status = recharge > 0;
-				textRecharge.gameObject.SetActive(status);
+				statusTypes.Add(statusItem.StatusType, statusItem);
 			}
 		}
 		
-		public bool IsRechargable() 
+		// Start is called before the first frame update
+		void Start()
 		{
-			return textRecharge != null;
+		
+		}
+
+		// Update is called once per frame
+		void Update()
+		{
+		
 		}
 	}
 }
