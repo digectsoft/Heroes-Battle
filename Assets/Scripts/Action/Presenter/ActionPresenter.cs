@@ -171,12 +171,14 @@ namespace digectsoft
 			{
 				Enemy.Death();
 				panelAdapter.ShowPanel(PanelType.WIN);
+				gameManager.InitReset();
 				return;
 			}
 			if (!IsAlive(playerAction))
 			{
 				Player.Death();
 				panelAdapter.ShowPanel(PanelType.GAME_OVER);
+				gameManager.InitReset();
 			}
 		}
 

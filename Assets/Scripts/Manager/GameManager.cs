@@ -54,12 +54,12 @@ namespace digectsoft
 
 		public async UniTask OnStart() 
 		{
-			initialized = false;
+			InitStart();
 			RequestStart();
 			Dictionary<CharacterType, CharacterAction> characterActoins = await serverAdapter.Init();
 			actionPresenter.OnInit(characterActoins);
-			initialized = true;
 			RequestComplete();
+			InitComplete();
 		}
 
 		public async UniTask OnRequest(EffectType actionType)
@@ -93,6 +93,21 @@ namespace digectsoft
 		{
 			inAction = false;
 			actionPresenter.OnRequestComplete();
+		}
+		
+		public void InitStart() 
+		{
+			initialized = false;
+		}
+		
+		public void InitComplete() 
+		{
+			initialized = true;
+		}
+		
+		public void InitReset() 
+		{
+			InitStart();
 		}
 	}
 }
