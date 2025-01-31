@@ -87,7 +87,7 @@ namespace digectsoft
 			gameObject.SetActive(updateStatus);
 		}
 		
-		public void UpdateStatus(EffectType effectType, EffectValue effectValue, bool requireAction) 
+		public void UpdateStatus(EffectType effectType, EffectValue effectValue) 
 		{
 			if (currentEffectType == effectType)
 			{

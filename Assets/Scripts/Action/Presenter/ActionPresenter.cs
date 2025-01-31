@@ -335,7 +335,7 @@ namespace digectsoft
 									 (CharacterType.ENEMY == character1.CharacterType && EffectType.FIREBALL == effectType);
 				if (updateAdapter)
 				{
-					actionAdapter.SetStatus(effectType, effectValue, !updateEffects);
+					actionAdapter.SetStatus(effectType, effectValue);
 				}
 			}
 		}
