@@ -90,7 +90,7 @@ namespace digectsoft
 			if (EffectType.CLEANUP == effectType)
 			{
 				//For a cleanup it is required to check a fireball effect.
-				inAction = testAction.effects[EffectType.FIREBALL].Complete || inAction;
+				inAction = !testAction.effects[EffectType.FIREBALL].Action || inAction;
 			}
 			if (!inAction)
 			{
@@ -350,7 +350,6 @@ namespace digectsoft
 				characterAction = EffectType.FIREBALL == effectType ?
 								  charachterActions[CharacterType.ENEMY] :
 								  charachterActions[CharacterType.PLAYER];
-
 			}
 			else
 			{

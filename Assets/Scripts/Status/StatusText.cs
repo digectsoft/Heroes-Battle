@@ -31,9 +31,9 @@ using UnityEngine.Localization;
 namespace digectsoft
 {
 	[Serializable]
-	public struct StatusName
+	public struct StatusText
 	{
 		public EffectType type;
-		public LocalizedString name;
+		public LocalizedString text;
 	}
 }

@@ -137,7 +137,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 809006644846592
-    m_Localized: 'Steps left:'
+    m_Localized: 'Steps to reuse:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1056907161755648
+    m_Localized: In action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1056962425905152
+    m_Localized: Unavailable
     m_Metadata:
       m_Items: []
   references:

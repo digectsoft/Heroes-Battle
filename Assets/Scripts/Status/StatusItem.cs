@@ -39,10 +39,13 @@ namespace digectsoft
 		
 		public StatusType StatusType { get { return statusType; } }
 		
-		public void UpdateValue(int value) 
+		public void UpdateValue(int value = 0) 
 		{
 			Activate(true);
-			valueText.text = value.ToString();
+			if (valueText != null) 
+			{
+				valueText.text = value.ToString();
+			}
 		}
 		
 		public void Activate(bool active) 

@@ -33,6 +33,8 @@ namespace digectsoft
 		DAMAGE_RATE,
 		HEAL_RATE,
 		PROTECTION,
-		STEP_LEFT
+		STEP_REUSE,
+		IN_ACTION,
+		UNAVAILABLE
 	}
 }

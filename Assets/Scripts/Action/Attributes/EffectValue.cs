@@ -44,6 +44,7 @@ namespace digectsoft
 		
 		public int Restore { get { return duration + recharge; } }
 		public bool Complete { get { return Restore == 0; } }
+		public bool Action { get { return duration > 0; } }
 		
 		public EffectValue(int action, int rate, int duration, int recharge)
 		{

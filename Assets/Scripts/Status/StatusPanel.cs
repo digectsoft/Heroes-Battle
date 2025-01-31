@@ -38,12 +38,17 @@ namespace digectsoft
 		[SerializeField]
 		private LocalizeStringEvent statusNameLocale;
 		[SerializeField]
-		private List<StatusName> statusNames;
+		private LocalizeStringEvent statusDescriptionLocale;
+		[SerializeField]
+		private List<StatusText> statusNames;
+		[SerializeField]
+		private List<StatusText> statusDescriptions;
 		[SerializeField]
 		private List<StatusItem> statusItems;
 
 		private Dictionary<EffectType, EffectValue> effects;
 		private Dictionary<EffectType, LocalizedString> names = new Dictionary<EffectType, LocalizedString>();
+		private Dictionary<EffectType, LocalizedString> descriptions = new Dictionary<EffectType, LocalizedString>();
 		private Dictionary<StatusType, StatusItem> items = new Dictionary<StatusType, StatusItem>();
 		private EffectType currentEffectType = EffectType.DEFAULT;
 
@@ -51,9 +56,13 @@ namespace digectsoft
 
 		private void Awake()
 		{
-			foreach (StatusName statusName in statusNames) 
+			foreach (StatusText statusName in statusNames) 
 			{
-				names.Add(statusName.type, statusName.name);
+				names.Add(statusName.type, statusName.text);
+			}
+			foreach (StatusText statusDescription in statusDescriptions)
+			{
+				descriptions.Add(statusDescription.type, statusDescription.text);
 			}
 			foreach (StatusItem statusItem in statusItems) 
 			{
@@ -73,6 +82,7 @@ namespace digectsoft
 			{
 				currentEffectType = effectType;
 				statusNameLocale.StringReference = names[effectType];
+				statusDescriptionLocale.StringReference = descriptions[effectType];
 			}
 			gameObject.SetActive(updateStatus);
 		}
@@ -92,25 +102,37 @@ namespace digectsoft
 					case EffectType.SHIELD:
 					{
 						items[StatusType.PROTECTION].UpdateValue(effects[effectType].rate);
-						items[StatusType.STEP_LEFT].UpdateValue(effectValue.Restore);
+						ActivateAction(effectValue);
 						break;
 					}
 					case EffectType.REGENERATION:
 					{
 						items[StatusType.HEAL_RATE].UpdateValue(effects[effectType].rate);
-						items[StatusType.STEP_LEFT].UpdateValue(effectValue.Restore);
+						ActivateAction(effectValue);
 						break;
 					}
 					case EffectType.FIREBALL:
 					{
 						items[StatusType.DAMAGE].UpdateValue(effects[effectType].action);
 						items[StatusType.DAMAGE_RATE].UpdateValue(effects[effectType].rate);
-						items[StatusType.STEP_LEFT].UpdateValue(effectValue.Restore);
+						ActivateAction(effectValue);
 						break;
 					}
 					case EffectType.CLEANUP:
 					{
-						items[StatusType.STEP_LEFT].UpdateValue(effectValue.Restore);
+						if (!effectValue.Action)
+						{
+							items[StatusType.UNAVAILABLE].UpdateValue();
+							if (!effectValue.Complete)
+							{
+								items[StatusType.STEP_REUSE].UpdateValue(effectValue.Restore);
+							}
+						}
+						else
+						{
+							items[StatusType.STEP_REUSE].UpdateValue(effectValue.Restore);
+							items[StatusType.IN_ACTION].UpdateValue();
+						}
 						break;
 					}
 				}
@@ -122,6 +144,19 @@ namespace digectsoft
 			foreach (StatusItem statusItem in statusItems)
 			{
 				statusItem.Activate(false);
+			}
+		}
+
+		private void ActivateAction(EffectValue effectValue)
+		{
+			items[StatusType.STEP_REUSE].UpdateValue(effectValue.Restore);
+			if (effectValue.Action)
+			{
+				items[StatusType.IN_ACTION].UpdateValue();
+			}
+			else if (!effectValue.Complete)
+			{
+				items[StatusType.UNAVAILABLE].UpdateValue();
 			}
 		}
 	}
