@@ -50,7 +50,7 @@ namespace digectsoft
 		{
 			startReplay = true;
 			Hide();
-			acitonPresenter.StartGame();
+			acitonPresenter.BeginGame();
 		}
 	}
 }

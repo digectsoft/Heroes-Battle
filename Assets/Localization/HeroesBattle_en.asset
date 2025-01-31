@@ -41,7 +41,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2862640783360
-    m_Localized: Cleanup
+    m_Localized: CoolFire
     m_Metadata:
       m_Items: []
   - m_Id: 3022884167680
@@ -101,23 +101,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 710838297026560
-    m_Localized: Makes attack using a bow and an arrow.
+    m_Localized: shoots arrows to damage the enemy
     m_Metadata:
       m_Items: []
   - m_Id: 711235107545088
-    m_Localized: Protect from enemy actions.
+    m_Localized: creates a shield to block damage
     m_Metadata:
       m_Items: []
   - m_Id: 711480281391104
-    m_Localized: Heals a character.
+    m_Localized: restores lost health
     m_Metadata:
       m_Items: []
   - m_Id: 712709397012480
-    m_Localized: Makes fireball effect.
+    m_Localized: throws a fireball
     m_Metadata:
       m_Items: []
   - m_Id: 713244237881344
-    m_Localized: Declines fireball effect.
+    m_Localized: removes the effect of Fireball
     m_Metadata:
       m_Items: []
   - m_Id: 808603354128384
