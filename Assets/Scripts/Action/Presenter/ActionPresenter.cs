@@ -155,7 +155,12 @@ namespace digectsoft
 			}
 			sequence.AppendInterval(completeInterval);
 			sequence.AppendCallback(gameManager.RequestComplete);
-			sequence.AppendCallback(() => CheckWinner(playerAction, enemyAction));
+			sequence.AppendCallback(() =>
+			{
+				Player.ActivateAction(false);
+				Enemy.ActivateAction(false);
+				CheckWinner(playerAction, enemyAction);
+			});
 		}
 
 		/// <summary>
@@ -251,6 +256,8 @@ namespace digectsoft
 			{
 				return;
 			}
+			character1.ActivateAction(true);
+			character2.ActivateAction(false);
 			Character characterEffect = character1;
 			switch (effectType)
 			{

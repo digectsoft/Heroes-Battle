@@ -26,6 +26,7 @@
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -40,6 +41,10 @@ namespace digectsoft
 		private CharacterHealth health;
 		[SerializeField]
 		private CharacterEffect effect;
+		[SerializeField]
+		private TextMeshProUGUI nameText;
+		[SerializeField]
+		private Color actionColor;
 		
 		[Header("Animations")]
 		[SerializeField]
@@ -74,6 +79,7 @@ namespace digectsoft
 		private AudioManager audioManager;
 		private Dictionary<EffectType, CharacterImpact> characterImpacts = new Dictionary<EffectType, CharacterImpact>();
 		private Animator animator;
+		private Color baseNameColor;
 		
 		private void Awake()
 		{	
@@ -82,6 +88,7 @@ namespace digectsoft
 			{
 				characterImpacts.Add(characterImpact.EffectType, characterImpact);
 			}
+			baseNameColor = nameText.color;
 		}
 		
 		public void Init(int healthValue, Vector2 targetPosition) 
@@ -93,6 +100,7 @@ namespace digectsoft
 				characterImpact.Init(scaleMultiplier, scaleDuration, fadeDuration);
 			}
 			animator.Rebind();
+			ActivateAction(false);
 		}
 
 		public void Apply(EffectType effectType)
@@ -146,6 +154,11 @@ namespace digectsoft
 		public void UpdateHealth(int value)
 		{
 			health.Set(value);
+		}
+		
+		public void ActivateAction(bool active) 
+		{
+			nameText.color = active ? actionColor : baseNameColor;
 		}
 	}
 }

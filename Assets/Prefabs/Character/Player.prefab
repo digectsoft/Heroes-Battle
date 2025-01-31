@@ -125,6 +125,8 @@ MonoBehaviour:
   type: 0
   health: {fileID: 7937238123485434974}
   effect: {fileID: 6407688100484755547}
+  nameText: {fileID: 3066480103101990376}
+  actionColor: {r: 0.5568628, g: 0, b: 0.043137256, a: 1}
   attackValue: Attack
   hitValue: Hit
   deathValue: Death
