@@ -1,4 +1,4 @@
-# Heroes Battle - Turn-Based Combat Game with Server Simulation
+# Heroes Battle - turn-based combat game with server simulation
 
 ## Overview
 
