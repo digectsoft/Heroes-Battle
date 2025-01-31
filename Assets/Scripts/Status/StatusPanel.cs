@@ -104,6 +104,7 @@ namespace digectsoft
 					case EffectType.ATTACK:
 					{
 						items[StatusType.DAMAGE].UpdateValue(effects[effectType].action);
+						items[StatusType.AVAILABLE].UpdateValue();
 						break;
 					}
 					case EffectType.SHIELD:
@@ -114,14 +115,14 @@ namespace digectsoft
 					}
 					case EffectType.REGENERATION:
 					{
-						items[StatusType.HEAL_RATE].UpdateValue(effects[effectType].rate);
+						items[StatusType.HEALING].UpdateValue(effects[effectType].rate);
 						ActivateAction(effectValue);
 						break;
 					}
 					case EffectType.FIREBALL:
 					{
 						items[StatusType.DAMAGE].UpdateValue(effects[effectType].action);
-						items[StatusType.DAMAGE_RATE].UpdateValue(effects[effectType].rate);
+						items[StatusType.HEALTH_LOSS].UpdateValue(effects[effectType].rate);
 						ActivateAction(effectValue);
 						break;
 					}

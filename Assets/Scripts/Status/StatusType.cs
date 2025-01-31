@@ -30,11 +30,12 @@ namespace digectsoft
 	public enum StatusType
 	{
 		DAMAGE,
-		DAMAGE_RATE,
-		HEAL_RATE,
+		HEALTH_LOSS,
+		HEALING,
 		PROTECTION,
 		STEP_REUSE,
-		IN_ACTION,
-		UNAVAILABLE
+		AVAILABLE,
+		UNAVAILABLE,
+		IN_ACTION
 	}
 }

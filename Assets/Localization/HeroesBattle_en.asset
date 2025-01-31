@@ -105,7 +105,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 711235107545088
-    m_Localized: creates a shield to block damage
+    m_Localized: creates a shield to block the damage
     m_Metadata:
       m_Items: []
   - m_Id: 711480281391104
@@ -125,11 +125,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 808724066197504
-    m_Localized: 'Damage rate:'
+    m_Localized: 'Health loss:'
     m_Metadata:
       m_Items: []
   - m_Id: 808811676819456
-    m_Localized: 'Heal rate:'
+    m_Localized: 'Healing:'
     m_Metadata:
       m_Items: []
   - m_Id: 808874012565504
@@ -150,6 +150,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 1097908312072192
     m_Localized: Select action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1134603438907392
+    m_Localized: Available
     m_Metadata:
       m_Items: []
   references:
