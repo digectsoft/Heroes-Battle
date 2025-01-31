@@ -26,7 +26,6 @@
 // THE SOFTWARE.
 // ---------------------------------------------------------------------------
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
@@ -35,6 +34,13 @@ namespace digectsoft
 {
 	public class StatusPanel : MonoBehaviour
 	{
+		[Header("Containers")]
+		[SerializeField]
+		private GameObject selectContainer;
+		[SerializeField]
+		private GameObject actionContainer;
+		
+		[Header("Actions")]
 		[SerializeField]
 		private LocalizeStringEvent statusNameLocale;
 		[SerializeField]
@@ -84,7 +90,8 @@ namespace digectsoft
 				statusNameLocale.StringReference = names[effectType];
 				statusDescriptionLocale.StringReference = descriptions[effectType];
 			}
-			gameObject.SetActive(updateStatus);
+			selectContainer.SetActive(!updateStatus);
+			actionContainer.SetActive(updateStatus);
 		}
 		
 		public void UpdateStatus(EffectType effectType, EffectValue effectValue) 

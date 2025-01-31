@@ -143,6 +143,10 @@ MonoBehaviour:
     m_Key: unavailable
     m_Metadata:
       m_Items: []
+  - m_Id: 1097908312072192
+    m_Key: select.action
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

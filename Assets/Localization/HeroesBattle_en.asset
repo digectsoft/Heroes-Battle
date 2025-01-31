@@ -148,6 +148,10 @@ MonoBehaviour:
     m_Localized: Unavailable
     m_Metadata:
       m_Items: []
+  - m_Id: 1097908312072192
+    m_Localized: Select action
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
