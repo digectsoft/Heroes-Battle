@@ -27,14 +27,7 @@
 // ---------------------------------------------------------------------------
 namespace digectsoft
 {
-	public enum PanelType 
-	{
-		DEFAULT,
-		PLAY,
-		PAUSE,
-		HELP,
-		WIN,
-		GAME_OVER,
-		ERROR
-	}
+    public class HelpPanel : BasePanel
+    {
+    }
 }

@@ -42,6 +42,8 @@ namespace digectsoft
 		[SerializeField]
 		private Button pauseButton;
 		[SerializeField]
+		private Button helpButton;
+		[SerializeField]
 		private GameObject processing;
 		
 		[Header("Battle notification")]
@@ -76,6 +78,7 @@ namespace digectsoft
 		private void Start()
 		{
 			pauseButton.onClick.AddListener(() => panelAdapter.ShowPanel(PanelType.PAUSE));
+			helpButton.onClick.AddListener(() => panelAdapter.ShowPanel(PanelType.HELP));
 			ShowProcessing(false);
 			ShowFight(false);
 			baseFightScale = transform.localScale;
