@@ -975,7 +975,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectType: 4
-  icon: {fileID: 2139248893}
   textRecharge: {fileID: 1525658984}
 --- !u!1 &118976305
 GameObject:
@@ -4462,7 +4461,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Shoots arrows to damage the enemy
+  m_text: description
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8184,7 +8183,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectType: 1
-  icon: {fileID: 847200678}
   textRecharge: {fileID: 0}
 --- !u!1 &841391288
 GameObject:
@@ -14624,7 +14622,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectType: 5
-  icon: {fileID: 2027776184}
   textRecharge: {fileID: 1694100068}
 --- !u!1 &1786663092
 GameObject:
@@ -15760,7 +15757,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectType: 3
-  icon: {fileID: 1190877356}
   textRecharge: {fileID: 1765409051}
 --- !u!1 &1991922187
 GameObject:
@@ -15934,7 +15930,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectType: 2
-  icon: {fileID: 435733111}
   textRecharge: {fileID: 884723308}
 --- !u!1 &2027776182
 GameObject:

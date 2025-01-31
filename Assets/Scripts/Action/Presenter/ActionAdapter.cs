@@ -83,7 +83,6 @@ namespace digectsoft
 			foreach (ActionEffectStatus actionEffect in actionEffects)
 			{
 				actionEffect.Init(() => actionPresenter.TakeAction(actionEffect.EffectType));
-				actionEffect.Activate(EffectType.CLEANUP != actionEffect.EffectType);
 				if (actionEffect.IsRechargable())
 				{
 					effectTypes.Add(actionEffect.EffectType, actionEffect);
@@ -91,12 +90,21 @@ namespace digectsoft
 			}
 		}
 
+		/// <summary>
+		/// Initializes with the specified effect values.
+		/// </summary>
+		/// <param name="effects">A dictionary mapping effect types to their corresponding values.</param>
 		public void Init(Dictionary<EffectType, EffectValue> effects) 
 		{
 			ShowFight(true);
 			statusPanel.Init(effects);
 		}
-		
+
+		/// <summary>
+		/// Sets the status based on the provided effect type and value.
+		/// </summary>
+		/// <param name="effectType">The type of effect to apply.</param>
+		/// <param name="effectValue">The value associated with the effect.</param>
 		public void SetStatus(EffectType effectType, EffectValue effectValue)
 		{
 			//Update action effect.
@@ -111,22 +119,33 @@ namespace digectsoft
 				}
 				ActionEffectStatus actionEffect = effectTypes[effectType];
 				actionEffect.UpdateRecharge(recharge);
-				actionEffect.Activate(status);
 			}
 			//Update status panel.
 			statusPanel.UpdateStatus(effectType, effectValue);
 		}
-		
+
+		/// <summary>
+		/// Updates the status panel based on the specified effect type.
+		/// </summary>
+		/// <param name="effectType">The type of effect to update the status panel with.</param>
 		public void UpdateStatusPanel(EffectType effectType) 
 		{
 			statusPanel.UpdateStatus(effectType);
 		}
-		
+
+		/// <summary>
+		/// Shows or hides the processing indicator based on the provided active state.
+		/// </summary>
+		/// <param name="active">A boolean indicating whether to show (true) or hide (false) the processing indicator.</param>
 		public void ShowProcessing(bool active) 
 		{
 			processing.SetActive(active);
 		}
-		
+
+		/// <summary>
+		/// Shows or hides the fight UI based on the provided active state.
+		/// </summary>
+		/// <param name="active">A boolean indicating whether to show (true) or hide (false) the fight UI.</param>
 		public void ShowFight(bool active) 
 		{
 			fightText.gameObject.SetActive(active);

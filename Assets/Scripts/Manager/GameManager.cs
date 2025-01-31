@@ -51,8 +51,12 @@ namespace digectsoft
 		{
 			DOTween.Init(true, true, LogBehaviour.Verbose);
 		}
-
-		public async UniTask OnStart() 
+		
+		/// <summary>
+		/// Asynchronously initializes and starts the game.
+		/// </summary>
+		/// <returns>A <see cref="UniTask"/> representing the asynchronous operation.</returns>
+		public async UniTask OnStart()
 		{
 			InitStart();
 			RequestStart();
@@ -62,6 +66,11 @@ namespace digectsoft
 			InitComplete();
 		}
 
+		/// <summary>
+		/// Processes a request based on the specified effect type asynchronously.
+		/// </summary>
+		/// <param name="effectType">The type of effect to apply in the request.</param>
+		/// <returns>A <see cref="UniTask"/> representing the asynchronous operation.</returns>
 		public async UniTask OnRequest(EffectType effectType)
 		{
 			if (!initialized || inAction)
@@ -82,36 +91,56 @@ namespace digectsoft
 				}
 			}
 		}
-		
+
+		/// <summary>
+		/// Initiates the start of a request process.
+		/// </summary>
 		public void RequestStart() 
 		{
 			inAction = true;
 			actionPresenter.OnRequestStart();
 		}
 
+		/// <summary>
+		/// Marks the request as complete and processes the resulting effect actions.
+		/// </summary>
+		/// <param name="effectType">The type of effect applied in the request.</param>
+		/// <param name="effectActions">A dictionary mapping character types to their corresponding effect actions.</param>
 		public void RequestComplete(EffectType effectType, Dictionary<CharacterType, CharacterAction> effectActions)
 		{
 			inAction = false;
 			actionPresenter.OnRequestComplete(effectType, effectActions);
 		}
-
+		
+		/// <summary>
+		/// Marks the request as complete.
+		/// </summary>
 		public void RequestComplete()
 		{
 			inAction = false;
 			actionPresenter.OnRequestComplete();
 		}
 
+		/// <summary>
+		/// Initiates the start of the initialization process.
+		/// </summary>
 		public void InitStart() 
 		{
 			initialized = false;
 		}
 		
+		/// <summary>
+		/// Marks the initialization process as complete.
+		/// </summary>
 		public void InitComplete() 
 		{
 			initialized = true;
 		}
 		
-		public void InitReset() 
+		/// <summary>
+		/// Resets the initialization process.
+		/// </summary>
+		public void InitReset()
 		{
 			InitStart();
 		}
