@@ -19,18 +19,12 @@ The game uses an interface `IServerAdapter` to connect to the server. In the cur
 
 Server delay can be configured in the Unity editor:
 
-1. Navigate to the project scene.
+1. Navigate to the project scene in the Hierarchy window.
 2. Find the `MockServerAdapter` object at the path `Context/MockServerAdapter`.
 3. Adjust the `Delay Ms` parameter to set the desired delay time in milliseconds for the server response.
+4. Play the game in the Unity editor or make a build to experience the server communication simulation.
 
 This allows for simulation of different server latencies and shows how the game responds.
-
-## How to Run
-
-1. Open the project in Unity.
-2. Navigate to the `Context/MockServerAdapter` in the scene.
-3. Adjust the `Delay Ms` to your preference.
-4. Play the game in the Unity editor to experience the server communication simulation.
 
 ## Usage
 
