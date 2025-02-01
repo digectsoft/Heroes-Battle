@@ -32,4 +32,4 @@ This allows for simulation of different server latencies and shows how the game 
 
 ## License
 
-This project is intended for demonstration purposes and is not for commercial use.
+This project is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/). It is intended for demonstration purposes and may not be used for commercial purposes, nor may it be modified or built upon.
