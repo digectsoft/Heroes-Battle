@@ -113,12 +113,6 @@ namespace digectsoft
 			if (effectTypes.ContainsKey(effectType))
 			{
 				int recharge = effectValue.recharge + effectValue.duration;
-				bool status = recharge == 0;
-				if (EffectType.CLEANUP == effectType)
-				{
-					CharacterEffectStatus effectStatus = servicePresenter.Player.CharacterEffect.GetCharacterEffectStatus(EffectType.FIREBALL);
-					status = effectStatus.Duration > 0;
-				}
 				ActionEffectStatus actionEffect = effectTypes[effectType];
 				actionEffect.UpdateRecharge(recharge);
 			}
