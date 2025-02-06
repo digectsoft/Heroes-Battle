@@ -31,11 +31,11 @@ namespace digectsoft
 	public class PlayPanel : BasePanel
 	{
 		[Inject]
-		private ActionPresenter actionPresenter;
+		private ServicePresenter servicePresenter;
 
 		protected override void HideComplete()
 		{
-			actionPresenter.StartGame();
+			servicePresenter.StartGame();
 		}
 	}
 }

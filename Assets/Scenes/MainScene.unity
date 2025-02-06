@@ -200,12 +200,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverAdapter: {fileID: 498502835}
-  gameManager: {fileID: 5763302061357293444}
-  actionAdapter: {fileID: 29287778}
+  gameModel: {fileID: 5763302061357293444}
+  actionView: {fileID: 29287778}
   panelAdapter: {fileID: 794535652}
   player: {fileID: 8610642897298324430}
   enemy: {fileID: 1507692393}
-  actionPresenter: {fileID: 1817487260}
+  servicePresenter: {fileID: 1817487260}
   audioManager: {fileID: 599012413}
 --- !u!1 &21321833
 GameObject:
@@ -18492,7 +18492,7 @@ GameObject:
   - component: {fileID: 1817487259}
   - component: {fileID: 1817487260}
   m_Layer: 0
-  m_Name: ActionPresenter
+  m_Name: ServicePresenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18528,7 +18528,6 @@ MonoBehaviour:
   hitInterval: 1
   stepInterval: 1.5
   completeInterval: 1
-  actionAdapter: {fileID: 29287778}
 --- !u!1 &1847451824
 GameObject:
   m_ObjectHideFlags: 0
@@ -21347,7 +21346,7 @@ GameObject:
   - component: {fileID: 8273891931497292400}
   - component: {fileID: 5763302061357293444}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: GameModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

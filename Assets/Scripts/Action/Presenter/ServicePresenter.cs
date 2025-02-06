@@ -32,7 +32,7 @@ using Zenject;
 
 namespace digectsoft
 {
-	public class ActionPresenter : MonoBehaviour
+	public class ServicePresenter : MonoBehaviour
 	{
 		[Header("Gameplay")]
 		[SerializeField]
@@ -44,26 +44,25 @@ namespace digectsoft
 		[SerializeField]
 		[Min(0)]
 		private float completeInterval = 1;
-		
-		[Header("Control")]
-		[SerializeField]
-		private ActionAdapter actionAdapter;
 
 		public Character Player { get; private set; }
 		public Character Enemy { get; private set; }
 
-		private GameManager gameManager;
+		private GameModel gameModel;
+		private ActionView actionView;
 		private PanelAdapter panelAdapter;
 		private AudioManager audioManager;
 
 		[Inject]
-		public void Init(GameManager gameManager,
+		public void Init(GameModel gameModel,
+						 ActionView actionView,
 						 PanelAdapter panelAdapter,
 						 [InjectOptional] AudioManager audioManager,
 						 [Inject(Id = CharacterType.PLAYER)] Character player,
 					 	 [Inject(Id = CharacterType.ENEMY)] Character enemy)
 		{
-			this.gameManager = gameManager;
+			this.gameModel = gameModel;
+			this.actionView = actionView;
 			this.panelAdapter = panelAdapter;
 			this.audioManager = audioManager;
 			Player = player;
@@ -94,7 +93,7 @@ namespace digectsoft
 		{
 			try 
 			{
-				await gameManager.OnStart();
+				await gameModel.OnStart();
 			}
 			catch (Exception ex) 
 			{
@@ -113,7 +112,7 @@ namespace digectsoft
 		{
 			try 
 			{
-				await gameManager.OnRequest(effectType);
+				await gameModel.OnRequest(effectType);
 			}
 			catch (Exception ex)
 			{
@@ -129,7 +128,7 @@ namespace digectsoft
 		{
 			CharacterAction playerAction = characterActoins[Player.CharacterType];
 			CharacterAction enemyAction = characterActoins[Enemy.CharacterType];
-			actionAdapter.Init(playerAction.effects);
+			actionView.Init(playerAction.effects);
 			Player.Init(playerAction.characterValue.health, Enemy.transform.position);
 			Enemy.Init(enemyAction.characterValue.health, Player.transform.position);
 			UpdateEffects(characterActoins);
@@ -153,7 +152,7 @@ namespace digectsoft
 				sequence.AppendCallback(() => Action(characterActoins, enemyAction.effectType, Enemy, Player));
 			}
 			sequence.AppendInterval(completeInterval);
-			sequence.AppendCallback(gameManager.RequestComplete);
+			sequence.AppendCallback(gameModel.RequestComplete);
 			sequence.AppendCallback(() =>
 			{
 				Player.ActivateAction(false);
@@ -173,14 +172,14 @@ namespace digectsoft
 			{
 				Enemy.Death();
 				panelAdapter.ShowPanel(PanelType.WIN);
-				gameManager.InitReset();
+				gameModel.InitReset();
 				return;
 			}
 			if (!IsAlive(playerAction))
 			{
 				Player.Death();
 				panelAdapter.ShowPanel(PanelType.GAME_OVER);
-				gameManager.InitReset();
+				gameModel.InitReset();
 			}
 		}
 
@@ -201,7 +200,7 @@ namespace digectsoft
 		/// </summary>
 		public void OnRequestStart() 
 		{
-			actionAdapter.ShowProcessing(true);
+			actionView.ShowProcessing(true);
 		}
 
 		/// <summary>
@@ -209,7 +208,7 @@ namespace digectsoft
 		/// </summary>
 		public void OnRequestComplete()
 		{
-			actionAdapter.ShowProcessing(false);
+			actionView.ShowProcessing(false);
 		}
 
 		/// <summary>
@@ -310,7 +309,7 @@ namespace digectsoft
 			//Update status panel.
 			if (CharacterType.PLAYER == character1.CharacterType)
 			{
-				actionAdapter.UpdateStatusPanel(characterAction1.effectType);
+				actionView.UpdateStatusPanel(characterAction1.effectType);
 			}
 			//Update effect buttons.
 			foreach (KeyValuePair<EffectType, EffectValue> keyValues in characterAction1.effects)
@@ -341,7 +340,7 @@ namespace digectsoft
 									 (CharacterType.ENEMY == character1.CharacterType && EffectType.FIREBALL == effectType);
 				if (updateAdapter)
 				{
-					actionAdapter.SetStatus(effectType, effectValue);
+					actionView.SetStatus(effectType, effectValue);
 				}
 			}
 		}

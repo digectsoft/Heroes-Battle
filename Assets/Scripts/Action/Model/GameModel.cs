@@ -32,18 +32,18 @@ using Zenject;
 
 namespace digectsoft 
 {
-	public class GameManager : MonoBehaviour
+	public class GameModel : MonoBehaviour
 	{
 		private IServerAdapter serverAdapter;
-		private ActionPresenter actionPresenter;
+		private ServicePresenter servicePresenter;
 		private bool initialized =  false;
 		private bool inAction = false;
 
 		[Inject]
-		public void Init(IServerAdapter serverAdapter, ActionPresenter actionPresenter)
+		public void Init(IServerAdapter serverAdapter, ServicePresenter servicePresenter)
 		{
 			this.serverAdapter = serverAdapter;
-			this.actionPresenter = actionPresenter;
+			this.servicePresenter = servicePresenter;
 		}
 
 		void Start()
@@ -60,7 +60,7 @@ namespace digectsoft
 			InitStart();
 			RequestStart();
 			Dictionary<CharacterType, CharacterAction> characterActoins = await serverAdapter.Init();
-			actionPresenter.OnInit(characterActoins);
+			servicePresenter.OnInit(characterActoins);
 			RequestComplete();
 			InitComplete();
 		}
@@ -82,7 +82,7 @@ namespace digectsoft
 			{
 				if (EffectType.DEFAULT != effectActions[CharacterType.PLAYER].effectType)
 				{
-					actionPresenter.OnAction(effectActions);
+					servicePresenter.OnAction(effectActions);
 				}
 				else
 				{
@@ -97,7 +97,7 @@ namespace digectsoft
 		public void RequestStart() 
 		{
 			inAction = true;
-			actionPresenter.OnRequestStart();
+			servicePresenter.OnRequestStart();
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace digectsoft
 		public void RequestComplete(EffectType effectType, Dictionary<CharacterType, CharacterAction> effectActions)
 		{
 			inAction = false;
-			actionPresenter.OnRequestComplete(effectType, effectActions);
+			servicePresenter.OnRequestComplete(effectType, effectActions);
 		}
 		
 		/// <summary>
@@ -117,7 +117,7 @@ namespace digectsoft
 		public void RequestComplete()
 		{
 			inAction = false;
-			actionPresenter.OnRequestComplete();
+			servicePresenter.OnRequestComplete();
 		}
 
 		/// <summary>

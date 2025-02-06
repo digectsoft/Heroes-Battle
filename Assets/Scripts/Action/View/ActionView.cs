@@ -33,7 +33,7 @@ using Zenject;
 
 namespace digectsoft
 {
-	public class ActionAdapter : MonoBehaviour
+	public class ActionView : MonoBehaviour
 	{	
 		[Header("Actions")]
 		[SerializeField]
@@ -61,16 +61,16 @@ namespace digectsoft
 		[SerializeField]
 		private StatusPanel statusPanel;
 
-		private ActionPresenter actionPresenter;
+		private ServicePresenter servicePresenter;
 		private PanelAdapter panelAdapter;
 		private Dictionary<EffectType, ActionEffectStatus> effectTypes = new Dictionary<EffectType, ActionEffectStatus>();
 		private Vector2 baseFightScale;
 		private Vector2 targetFightScale;
 
 		[Inject]
-		public void Init(ActionPresenter actionPresenter, PanelAdapter panelAdapter) 
+		public void Init(ServicePresenter servicePresenter, PanelAdapter panelAdapter) 
 		{
-			this.actionPresenter = actionPresenter;
+			this.servicePresenter = servicePresenter;
 			this.panelAdapter = panelAdapter;
 		}
 
@@ -84,7 +84,7 @@ namespace digectsoft
 			targetFightScale = baseFightScale * scaleMultiplier;
 			foreach (ActionEffectStatus actionEffect in actionEffects)
 			{
-				actionEffect.Init(() => actionPresenter.TakeAction(actionEffect.EffectType));
+				actionEffect.Init(() => servicePresenter.TakeAction(actionEffect.EffectType));
 				if (actionEffect.IsRechargable())
 				{
 					effectTypes.Add(actionEffect.EffectType, actionEffect);
@@ -116,7 +116,7 @@ namespace digectsoft
 				bool status = recharge == 0;
 				if (EffectType.CLEANUP == effectType)
 				{
-					CharacterEffectStatus effectStatus = actionPresenter.Player.CharacterEffect.GetCharacterEffectStatus(EffectType.FIREBALL);
+					CharacterEffectStatus effectStatus = servicePresenter.Player.CharacterEffect.GetCharacterEffectStatus(EffectType.FIREBALL);
 					status = effectStatus.Duration > 0;
 				}
 				ActionEffectStatus actionEffect = effectTypes[effectType];

@@ -32,7 +32,7 @@ namespace digectsoft
 	public class PausePanel : BasePanel
 	{
 		[Inject]
-		private ActionPresenter acitonPresenter;
+		private ServicePresenter acitonPresenter;
 		
 		private bool startReplay = false;
 

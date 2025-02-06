@@ -31,7 +31,7 @@ namespace digectsoft
 	public class CompletePanel : BasePanel
 	{
 		[Inject]
-		private ActionPresenter acitonPresenter;
+		private ServicePresenter acitonPresenter;
 
 		protected override void HideComplete()
 		{

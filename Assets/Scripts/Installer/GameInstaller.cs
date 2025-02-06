@@ -27,7 +27,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace digectsoft 
+namespace digectsoft
 {
 	public class GameInstaller : MonoInstaller
 	{
@@ -35,22 +35,22 @@ namespace digectsoft
 		[SerializeField]
 		private MockServerAdapter serverAdapter;
 		[SerializeField]
-		private GameManager gameManager;
-		
+		private GameModel gameModel;
+
 		[Header("View")]
 		[SerializeField]
-		private ActionAdapter actionAdapter;
+		private ActionView actionView;
 		[SerializeField]
 		private PanelAdapter panelAdapter;
 		[SerializeField]
 		private Character player;
 		[SerializeField]
 		private Character enemy;
-		
+
 		[Header("Presenter")]
 		[SerializeField]
-		private ActionPresenter actionPresenter;
-		
+		private ServicePresenter servicePresenter;
+
 		[Header("Audio")]
 		[SerializeField]
 		private AudioManager audioManager;
@@ -59,12 +59,12 @@ namespace digectsoft
 		{
 			Container.Bind<IServerAdapter>().To<MockServerAdapter>().FromInstance(serverAdapter).AsSingle();
 			//Container.Bind<IServerAdapter>().To<NetworkServerAdapter>().AsSingle(); //Implement NetworkServerAdapter for a backend server.
-			Container.Bind<GameManager>().FromInstance(gameManager).AsSingle();
-			Container.Bind<ActionAdapter>().FromInstance(actionAdapter).AsSingle();
+			Container.Bind<GameModel>().FromInstance(gameModel).AsSingle();
+			Container.Bind<ActionView>().FromInstance(actionView).AsSingle();
 			Container.Bind<PanelAdapter>().FromInstance(panelAdapter).AsSingle();
 			Container.Bind<Character>().WithId(CharacterType.PLAYER).FromInstance(player).AsCached();
 			Container.Bind<Character>().WithId(CharacterType.ENEMY).FromInstance(enemy).AsCached();
-			Container.Bind<ActionPresenter>().FromInstance(actionPresenter).AsSingle();
+			Container.Bind<ServicePresenter>().FromInstance(servicePresenter).AsSingle();
 			Container.Bind<AudioManager>().FromInstance(audioManager).AsSingle();
 		}
 	}

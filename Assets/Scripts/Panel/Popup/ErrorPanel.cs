@@ -31,7 +31,7 @@ namespace digectsoft
     public class ErrorPanel : BasePanel
     {
         [Inject]
-        private ActionPresenter acitonPresenter;
+        private ServicePresenter acitonPresenter;
 
         protected override void HideComplete()
         {
