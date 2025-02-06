@@ -316,8 +316,8 @@ namespace digectsoft
 			}
 			List<EffectType> effectTypes = new List<EffectType>(enemyActions);
 			//Check the fireball effect and remove the cleanup effect whether the fireball effect is complete.
-			EffectValue effectFireball = playerAction.effects[EffectType.FIREBALL];
-			if (effectFireball.Complete)
+			EffectValue effectFireball = enemyAction.effects[EffectType.FIREBALL];
+			if (!effectFireball.Action)
 			{
 				effectTypes.Remove(EffectType.CLEANUP);
 			}
