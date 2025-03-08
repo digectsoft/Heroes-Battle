@@ -13,7 +13,7 @@
 
 ## Server Simulation
 
-The game uses an interface `/Assets/Scripts/App/Model/NetworkIServerAdapter.cs` to connect to the server. In the current setup, a `/Assets/Scripts/App/Model/MockServerAdapter.cs` class simulates the server connection and communication. This mock class is ideal for testing and demonstrating server communication without needing an actual server.
+The game uses an interface `/Assets/Scripts/App/Model/IServerAdapter.cs` to connect to the server. In the current setup, a `/Assets/Scripts/App/Model/MockServerAdapter.cs` class simulates the server connection and communication. This mock class is ideal for testing and demonstrating server communication without needing an actual server.
 
 ### Configuring Server Delay
 
